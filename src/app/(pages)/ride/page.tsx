@@ -1,11 +1,11 @@
 import React from 'react'
 
-const SignInPage = () => {
+const Ridespage = () => {
   return (
     <div className="">
-      SignInPage 
+        Ridespage
     </div>
   )
 }
 
-export default SignInPage
+export default Ridespage

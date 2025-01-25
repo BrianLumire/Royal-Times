@@ -1,11 +1,11 @@
 import React from 'react'
 
-const SignInPage = () => {
+const FinancePage = () => {
   return (
     <div className="">
-      SignInPage 
+        FinancePage
     </div>
   )
 }
 
-export default SignInPage
+export default FinancePage
