@@ -54,15 +54,18 @@ export default function Navbars({
       </div>
       {/* right div */}
         <div className="flex items-center gap-2 md:pr-6">
-        
-      <Image src="/notification.png" alt="" width={20} height={20}/>
-      <div className="flex items-center gap-1 md:pl-4 ">
+        <button>
+        <Image src="/notification.png" alt="" width={20} height={20}/>
+        </button>
+     
+      <button className="flex items-center gap-1 md:pl-4 ">
         <div className="p-1 rounded-full">
         <Image src="/profile-pic.svg" alt="" width={34} height={34}/>
         </div>
         <span className="font-sans text-sm hidden md:block">Richard Kyuli</span>
-      </div>
-      <Image src="/dropdown.svg" alt="" width={11} height={11}/>
+        <Image src="/dropdown.svg" alt="" width={11} height={11}/>
+      </button>
+      
         </div>
      
     </div>

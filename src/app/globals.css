@@ -6,30 +6,37 @@ body {
   font-family: var(--font-dm-sans), sans-serif;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-}
-
 @layer base {
   :root {
     --background: 0 0% 100%; /* Light theme background */
-    --foreground: 20 14.3% 4.1%; /* Light theme text color */
-    /* Other light theme variables */
+    --foreground: 20 14.3% 4.1%; /* Light theme text */
+    --border: 220 14% 96%; /* Light theme border */
+    --input: 0 0% 100%; /* Light theme input background */
+    --ring: 220 14% 84%; /* Light theme ring */
+    --card: 0 0% 100%; /* Light theme card */
+    --card-foreground: 20 14.3% 4.1%;
+    --primary: 220 60% 50%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 200 50% 40%;
+    --secondary-foreground: 0 0% 100%;
+    /* Add other variables as required */
   }
 
   .dark {
     --background: 20 14.3% 4.1%; /* Dark theme background */
-    --foreground: 60 9.1% 97.8%; /* Dark theme text color */
-    /* Other dark theme variables */
+    --foreground: 60 9.1% 97.8%; /* Dark theme text */
+    --border: 220 10% 20%; /* Dark theme border */
+    --input: 20 14.3% 4.1%; /* Dark theme input background */
+    --ring: 220 14% 30%; /* Dark theme ring */
+    --card: 20 14.3% 4.1%; /* Dark theme card */
+    --card-foreground: 60 9.1% 97.8%;
+    --primary: 220 60% 50%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 200 50% 40%;
+    --secondary-foreground: 0 0% 100%;
+    /* Add other variables as required */
   }
-}
 
-@layer base {
-  * {
-    @apply border-border;
-  }
   body {
     @apply bg-background text-foreground;
   }

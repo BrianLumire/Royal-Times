@@ -2,7 +2,8 @@
 "use client";
 
 import MainCard from "@/components/MainCard";
-import DriversTable from "@/components/DriverTable"; // No need to import TableControls here
+import DriversTable from "@/components/DriverTable";
+import TableControls from "@/components/TableControls";
 import { renderRow } from "@/utils/renderRow";
 import { filterData } from "@/utils/filterData";
 import { sortData } from "@/utils/sortData";
@@ -22,9 +23,7 @@ import {
   blockedColumns,
 } from "@/mockdata/data";
 import Image from "next/image";
-import Pagination from "@/components/Pagination";
 
-// app/driver/page.tsx
 const DriverPage = () => {
   const [selectedButton, setSelectedButton] = useState("Online");
   const [searchTerm, setSearchTerm] = useState("");
@@ -35,26 +34,26 @@ const DriverPage = () => {
 
   const buttons = ["Online", "Offline", "Un-approved", "Inactive", "Deleted", "Blocked"];
 
-  const getTableData = () => {
-    switch (selectedButton) {
-      case "Online":
-        return { data: onlineDrivers, columns: onlineColumns };
-      case "Offline":
-        return { data: offlineDrivers, columns: offlineColumns };
-      case "Un-approved":
-        return { data: unapprovedDrivers, columns: unapprovedColumns };
-      case "Inactive":
-        return { data: inactiveDrivers, columns: inactiveColumns };
-      case "Deleted":
-        return { data: deletedDrivers, columns: deletedColumns };
-      case "Blocked":
-        return { data: blockedDrivers, columns: blockedColumns };
-      default:
-        return { data: [], columns: [] };
-    }
-  };
-
-  const { data, columns } = getTableData();
+    const getTableData = () => {
+      switch (selectedButton) {
+        case "Online":
+          return { data: onlineDrivers, columns: onlineColumns };
+        case "Offline":
+          return { data: offlineDrivers, columns: offlineColumns };
+        case "Un-approved":
+          return { data: unapprovedDrivers, columns: unapprovedColumns };
+        case "Inactive":
+          return { data: inactiveDrivers, columns: inactiveColumns };
+        case "Deleted":
+          return { data: deletedDrivers, columns: deletedColumns };
+        case "Blocked":
+          return { data: blockedDrivers, columns: blockedColumns };
+        default:
+          return { data: [], columns: [] };
+      }
+    };
+  
+    const { data, columns } = getTableData();
 
   // Filter and sort data
   const filteredData = filterData(data, searchTerm, filters);
@@ -85,21 +84,20 @@ const DriverPage = () => {
 
   return (
     <div className="mx-2">
-    {/* Top section with Cards */}
-    <div className="flex flex-col md:flex-row gap-4 md:justify-between mb-6">
-      {/* Card 1: Driver Earnings */}
-      <MainCard title="Driver Earnings/Month" value="Ksh 200,000" imageSrc="/earnings.svg" imageBgColor="#E5E4FF" />
+      {/* Top section with Cards */}
+      <div className="flex flex-col md:flex-row gap-4 md:justify-between mb-6">
+        {/* Card 1: Driver Earnings */}
+        <MainCard title="Driver Earnings/Month" value="Ksh 200,000" imageSrc="/earnings.svg" imageBgColor="#E5E4FF" />
 
-      {/* Card 2: Total Rides */}
-      <MainCard title="Total Rides" value="200" imageSrc="/total-rides.svg" imageBgColor="#FFF3D6" />
+        {/* Card 2: Total Rides */}
+        <MainCard title="Total Rides" value="200" imageSrc="/total-rides.svg" imageBgColor="#FFF3D6" />
 
-      {/* Card 3: Active Drivers */}
-      <MainCard title="Served Customers" value="1000" imageSrc="/served-customers.svg" imageBgColor="#D9F7E8" />
+        {/* Card 3: Active Drivers */}
+        <MainCard title="Served Customers" value="1000" imageSrc="/served-customers.svg" imageBgColor="#D9F7E8" />
 
-      {/* Card 4: Customer Satisfaction */}
-      <MainCard title="Total drivers" value="406" imageSrc="/total-drivers.svg" imageBgColor="#FEF9C3" />
-    </div>
-
+        {/* Card 4: Customer Satisfaction */}
+        <MainCard title="Total drivers" value="406" imageSrc="/total-drivers.svg" imageBgColor="#FEF9C3" />
+      </div>
 
       {/* Bottom section */}
       <div className="mb-5">
@@ -127,14 +125,6 @@ const DriverPage = () => {
           </button>
         </div>
 
-        {/* Reset button */}
-        <button
-          onClick={resetFilters}
-          className="mb-4 px-4 py-2 bg-[#F58735] text-white rounded-[10px]"
-        >
-          Reset Filters
-        </button>
-
         {/* Loading State or DriversTable Component */}
         {loading ? (
           <div className="flex justify-center items-center h-64">
@@ -154,7 +144,6 @@ const DriverPage = () => {
           />
         )}
       </div>
-      <Pagination/>
     </div>
   );
 };
