@@ -34,9 +34,9 @@ const DashboardPage = () => {
               value="5,656"
             />
             <CardDashboard2
-              iconSrc="/driver-all.svg"
-              bgColor="#C1FFCB66"
-              title="Total Drivers"
+              iconSrc="/spent.svg"
+              bgColor="#FFF3D6"
+              title="Spent on Promotions"
               value="2,345"
             />
           </div>
@@ -47,13 +47,13 @@ const DashboardPage = () => {
           {/* CardDashboard2 */}
           <div className="flex flex-col gap-3 w-full md:w-1/2 h-full">
             <CardDashboard2
-              iconSrc="/spent.svg"
-              bgColor="#FFF3D6"
-              title="Spent on Promotions"
+              iconSrc="/driver-all.svg"
+              bgColor="#C1FFCB66"
+              title="Total drivers"
               value="3,000"
             />
             <CardDashboard2
-              iconSrc="/total-profits.svg"
+             iconSrc="/cumulative.svg"
               bgColor="#E5E4FF"
               title="Total Customers"
               value="5,000"
