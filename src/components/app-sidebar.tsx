@@ -136,7 +136,7 @@ export default function Sidebar({
           <div className="flex flex-col space-y-2 pb-24">
             <Link href="/dashboard" onClick={handleLinkClick}>
               <div
-                className={`flex items-center space-x-4 p-2 rounded-r-xl hover:bg-[#FFF8F5]  ${
+                className={`flex items-center space-x-4 p-2 rounded-r-xl  ${
                   pathname === "/dashboard" ? "text-white bg-[#F58735]" : ""
                 }`}
               >
@@ -153,7 +153,7 @@ export default function Sidebar({
             </Link>
             <Link href="/ride" onClick={handleLinkClick}>
               <div
-                className={`flex items-center space-x-4 p-2 rounded-r-xl hover:bg-[#FFF8F5]  ${
+                className={`flex items-center space-x-4 p-2 rounded-r-xl  ${
                   pathname === "/ride" ? "text-white bg-[#F58735]" : ""
                 }`}
               >
@@ -163,7 +163,7 @@ export default function Sidebar({
             </Link>
             <Link href="/parcels-delivery" onClick={handleLinkClick}>
               <div
-                className={`flex items-center space-x-4 p-2 rounded-r-xl hover:bg-[#FFF8F5]  ${
+                className={`flex items-center space-x-4 p-2 rounded-r-xl  ${
                   pathname === "/parcels-delivery" ? "text-white bg-[#F58735]" : ""
                 }`}
               >
@@ -180,7 +180,7 @@ export default function Sidebar({
             </Link>
             <Link href="/driver" onClick={handleLinkClick}>
               <div
-                className={`flex items-center space-x-4 p-2 rounded-r-xl hover:bg-[#FFF8F5]  ${
+                className={`flex items-center space-x-4 p-2 rounded-r-xl  ${
                   pathname === "/driver" ? "text-white bg-[#F58735]" : ""
                 }`}
               >
@@ -190,7 +190,7 @@ export default function Sidebar({
             </Link>
             <Link href="/customer" onClick={handleLinkClick}>
               <div
-                className={`flex items-center space-x-4 p-2 rounded-r-xl hover:bg-[#FFF8F5]  ${
+                className={`flex items-center space-x-4 p-2 rounded-r-xl  ${
                   pathname === "/customer" ? "text-white bg-[#F58735]" : ""
                 }`}
               >
@@ -205,7 +205,7 @@ export default function Sidebar({
             </Link>
             <Link href="/finances" onClick={handleLinkClick}>
               <div
-                className={`flex items-center space-x-4 p-2 rounded-r-xl hover:bg-[#FFF8F5]  ${
+                className={`flex items-center space-x-4 p-2 rounded-r-xl  ${
                   pathname === "/finances" ? "text-white bg-[#F58735]" : ""
                 }`}
               >
@@ -220,7 +220,7 @@ export default function Sidebar({
             </Link>
             <Link href="/analytics" onClick={handleLinkClick}>
               <div
-                className={`flex items-center space-x-4 p-2 rounded-r-xl hover:bg-[#FFF8F5]  ${
+                className={`flex items-center space-x-4 p-2 rounded-r-xl  ${
                   pathname === "/analytics" ? "text-white bg-[#F58735]" : ""
                 }`}
               >
@@ -242,7 +242,7 @@ export default function Sidebar({
           <div className="flex flex-col space-y-2">
             <Link href="/profiles" onClick={handleLinkClick}>
               <div
-                className={`flex items-center space-x-4 p-2 rounded-r-xl hover:bg-[#FFF8F5]  ${
+                className={`flex items-center space-x-4 p-2 rounded-r-xl  ${
                   pathname === "/profiles" ? "text-white bg-[#F58735]" : ""
                 }`}
               >
@@ -257,7 +257,7 @@ export default function Sidebar({
             </Link>
             <button onClick={handleLogoutClick}>
               <div
-                className={`flex items-center space-x-4 p-2 rounded-r-xl hover:bg-[#FFF8F5]  ${
+                className={`flex items-center space-x-4 p-2 rounded-r-xl  ${
                   pathname === "/logout" ? "text-white bg-[#F58735]" : ""
                 }`}
               >

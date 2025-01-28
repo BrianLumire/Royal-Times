@@ -2,7 +2,6 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import TableControls from "@/components/TableControls"; // Import TableControls
 
 interface Column {
@@ -39,7 +38,7 @@ const DriversTable: React.FC<DriversTableProps> = ({
         <p className="pl-4 font-sans font-semibold text-sm md:text-base text-black dark:text-white">
           {selectedButton} Drivers
         </p>
-
+        
         {/* Use TableControls component */}
         <TableControls
           searchTerm={searchTerm}
