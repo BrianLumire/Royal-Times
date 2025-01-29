@@ -1,27 +1,40 @@
 "use client";
 
-import React, { useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import Image from 'next/image';
+import React, { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import Image from "next/image";
+import { createClient } from "../../../utils/supabase/client";
 
 const EnterOtpPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [otp, setOtp] = useState(['', '', '', '', '']); // State for OTP input
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]); // State for OTP input
 
   // Retrieve the email from the query parameters
-  const email = searchParams.get('email') || '';
+  const email = searchParams.get("email") || "";
 
   const handleBack = () => {
-    router.push('/auth/confirm-email'); // Navigate back to the confirm-email page
+    router.push("/auth/confirm-email"); // Navigate back to the confirm-email page
   };
 
-  const handleContinue = (e: React.FormEvent) => {
+  const handleContinue = async (e: React.FormEvent) => {
     e.preventDefault();
-    const enteredOtp = otp.join(''); // Combine OTP digits into a single string
-    if (enteredOtp.length === 5) {
-      router.push('/auth/enter-password'); 
-      alert('Please enter a valid OTP.'); // Show error if OTP is incomplete
+    const enteredOtp = otp.join(""); // Combine OTP digits into a single string
+
+    const supabase = await createClient();
+
+    const email = localStorage.getItem("email") as string;
+    const { data, error } = await supabase.auth.verifyOtp({
+      email,
+      token: enteredOtp,
+      type: "email",
+    });
+
+    console.log(data, error);
+
+    if (enteredOtp.length === 6) {
+      router.push("/auth/enter-password");
+      alert("Please enter a valid OTP."); // Show error if OTP is incomplete
     }
   };
 
@@ -33,7 +46,7 @@ const EnterOtpPage = () => {
       setOtp(newOtp);
 
       // Auto-focus the next input
-      if (value && index < 4) {
+      if (value && index < 5) {
         const nextInput = document.getElementById(`otp-${index + 1}`);
         if (nextInput) nextInput.focus();
       }
@@ -56,15 +69,20 @@ const EnterOtpPage = () => {
 
           {/* Heading */}
           <div className="text-center mb-6">
-            <h1 className="mb-1 font-sans text-2xl font-semibold">Enter Verification Code</h1>
+            <h1 className="mb-1 font-sans text-2xl font-semibold">
+              Enter Verification Code
+            </h1>
             <p className="font-sans text-xs text-[#202224]">
-              Enter the code sent to <span className="font-semibold">{email}</span>
+              Enter the code sent to{" "}
+              <span className="font-semibold">{email}</span>
             </p>
           </div>
 
           {/* OTP Input */}
           <div className="mb-2">
-            <label className="font-sans text-base font-semibold">Enter Code:</label>
+            <label className="font-sans text-base font-semibold">
+              Enter Code:
+            </label>
             <div className="flex gap-2 mt-1">
               {otp.map((digit, index) => (
                 <input
@@ -84,7 +102,7 @@ const EnterOtpPage = () => {
           {/* Request Code Link */}
           <div className=" mb-48">
             <p className="font-sans text-xs text-[#202224]">
-              Didn&apos;t get the code?{' '}
+              Didn&apos;t get the code?{" "}
               <span className="text-[#F58735BF] font-semibold hover:underline cursor-pointer">
                 Request Code
               </span>

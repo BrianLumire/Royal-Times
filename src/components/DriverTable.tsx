@@ -2,7 +2,7 @@
 "use client";
 
 import React from "react";
-import TableControls from "@/components/TableControls"; // Import TableControls
+import TableControls from "./TableControls"; // Import TableControls
 
 interface Column {
   header: string;

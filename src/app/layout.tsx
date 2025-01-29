@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, DM_Sans } from "next/font/google"; // Import DM Sans
 import "./globals.css"; // Ensure this is imported
-import { ThemeProvider } from "@/components/Theme-provider";
+import { ThemeProvider } from "../components/Theme-provider";
 
 // Import Toastify
 import { ToastContainer } from 'react-toastify';

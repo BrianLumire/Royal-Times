@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
+import { createClient } from '../../../utils/supabase/client';
 
 const EnterEmailPage = () => {
   const router = useRouter();
@@ -23,11 +24,21 @@ const EnterEmailPage = () => {
     router.push('/'); // Navigate back to the sign-in page
   };
 
-  const handleConfirmEmail = (e: React.FormEvent) => {
+  const handleConfirmEmail = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    const supabase = await createClient();
+
+    const { data, error } = await supabase.auth.signInWithOtp({
+      email: email,
+    });
+
+    localStorage.setItem("email", email);
+
+    console.log(data, error);
+
     // Validate that the entered email matches the initial email
-    if (email === initialEmail) {
+    if (data.user == null) {
       router.push('/auth/enter-otp'); // Navigate to the OTP page
     } else {
       alert('Please enter the email address used for sign-in.'); // Show error if emails don't match

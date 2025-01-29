@@ -1,22 +1,23 @@
 "use client";
 
-import React, { useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import Image from 'next/image';
+import React, { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import Image from "next/image";
+import { createClient } from "../../../utils/supabase/client";
 
 const EnterPasswordPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Retrieve the email from the query parameters
-  const email = searchParams.get('email') || '';
+  const email = searchParams.get("email") || "";
 
   const handleBack = () => {
-    router.push('/auth/enter-otp'); // Navigate back to the OTP page
+    router.push("/auth/enter-otp"); // Navigate back to the OTP page
   };
 
   const togglePasswordVisibility = () => {
@@ -27,20 +28,31 @@ const EnterPasswordPage = () => {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
-  const handleComplete = (e: React.FormEvent) => {
+  const handleComplete = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const supabase = await createClient();
 
     // Validate passwords
     if (password !== confirmPassword) {
-      alert('Passwords do not match.');
+      alert("Passwords do not match.");
       return;
+    } else {
+      const { data, error } = await supabase.rpc("change_user_password_web", {
+        new_plain_password: password,
+      });
+      console.log(data, error);
+      if (error) {
+        alert(error.message);
+        return;
+      } else if (data) {
+        // TODO: Add logic to update the password (e.g., API call)
+        alert("Password updated successfully!");
+        router.push("/dashboard"); // Redirect to the sign-in page after successful password update
+        return;
+      }
     }
-
-    // TODO: Add logic to update the password (e.g., API call)
-    alert('Password updated successfully!');
-    router.push('/'); // Redirect to the sign-in page after successful password update
   };
-
   return (
     <div className="h-screen flex">
       {/* Left side */}
@@ -57,7 +69,9 @@ const EnterPasswordPage = () => {
 
           {/* Heading */}
           <div className="text-center mb-6">
-            <h1 className="mb-1 font-sans text-2xl font-semibold">Enter a New Password</h1>
+            <h1 className="mb-1 font-sans text-2xl font-semibold">
+              Enter a New Password
+            </h1>
             <p className="font-sans text-xs text-[#202224]">
               Enter and repeat a new password to use from now on
             </p>
@@ -65,10 +79,12 @@ const EnterPasswordPage = () => {
 
           {/* Password Input */}
           <div className="mb-4">
-            <label className="font-sans text-base font-semibold">Password:</label>
+            <label className="font-sans text-base font-semibold">
+              Password:
+            </label>
             <div className="relative">
               <input
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 placeholder="Enter your new password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -81,9 +97,19 @@ const EnterPasswordPage = () => {
                 className="absolute inset-y-0 right-2 flex items-center text-sm text-gray-500"
               >
                 {showPassword ? (
-                  <Image src="/invisible.png" alt="Hide password" width={20} height={20} />
+                  <Image
+                    src="/invisible.png"
+                    alt="Hide password"
+                    width={20}
+                    height={20}
+                  />
                 ) : (
-                  <Image src="/View-password.svg" alt="Show password" width={20} height={20} />
+                  <Image
+                    src="/View-password.svg"
+                    alt="Show password"
+                    width={20}
+                    height={20}
+                  />
                 )}
               </button>
             </div>
@@ -91,10 +117,12 @@ const EnterPasswordPage = () => {
 
           {/* Confirm Password Input */}
           <div className="mb-20">
-            <label className="font-sans text-base font-semibold">Confirm Password:</label>
+            <label className="font-sans text-base font-semibold">
+              Confirm Password:
+            </label>
             <div className="relative">
               <input
-                type={showConfirmPassword ? 'text' : 'password'}
+                type={showConfirmPassword ? "text" : "password"}
                 placeholder="Confirm your new password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
@@ -107,9 +135,19 @@ const EnterPasswordPage = () => {
                 className="absolute inset-y-0 right-2 flex items-center text-sm text-gray-500"
               >
                 {showConfirmPassword ? (
-                  <Image src="/invisible.png" alt="Hide password" width={20} height={20} />
+                  <Image
+                    src="/invisible.png"
+                    alt="Hide password"
+                    width={20}
+                    height={20}
+                  />
                 ) : (
-                  <Image src="/View-password.svg" alt="Show password" width={20} height={20} />
+                  <Image
+                    src="/View-password.svg"
+                    alt="Show password"
+                    width={20}
+                    height={20}
+                  />
                 )}
               </button>
             </div>

@@ -1,11 +1,11 @@
 // app/driver/page.tsx
 "use client";
 
-import MainCard from "@/components/MainCard";
-import DriversTable from "@/components/DriverTable"; // No need to import TableControls here
-import { renderRow } from "@/utils/renderRow";
-import { filterData } from "@/utils/filterData";
-import { sortData } from "@/utils/sortData";
+import MainCard from "../../../components/MainCard";
+import DriversTable from "../../../components/DriverTable"; // No need to import TableControls here
+import { renderRow } from "../../../utils/renderRow";
+import { filterData } from "../../../utils/filterData";
+import { sortData } from "../../../utils/sortData";
 import { useState } from "react";
 import {
   onlineDrivers,
@@ -20,9 +20,9 @@ import {
   inactiveColumns,
   deletedColumns,
   blockedColumns,
-} from "@/mockdata/data";
+} from "../../../mockdata/data";
 import Image from "next/image";
-import Pagination from "@/components/Pagination";
+import Pagination from "../../../components/Pagination";
 
 // app/driver/page.tsx
 const DriverPage = () => {

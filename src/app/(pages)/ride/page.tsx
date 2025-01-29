@@ -1,5 +1,5 @@
 import React from 'react'
-import MainCard from "@/components/MainCard";
+import MainCard from "../../../components/MainCard";
 
 
 const Ridespage = () => {

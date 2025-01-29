@@ -1,5 +1,5 @@
-import CardDashboard2 from "@/components/CardDashboard-Two";
-import DashboardCard1 from "@/components/DashboardCard-One";
+import CardDashboard2 from "../../../components/CardDashboard-Two";
+import DashboardCard1 from "../../../components/DashboardCard-One";
 
 const DashboardPage = () => {
   return (
