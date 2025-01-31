@@ -5,6 +5,7 @@ import { X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+import { signOutAction } from "@/app/actions";
 
 interface SidebarProps {
   isMobileSidebarOpen: boolean;
@@ -86,14 +87,14 @@ export default function Sidebar({
   };
 
   // Handle Confirm Logout
-  const handleConfirmLogout = () => {
-    // Clear tokens from localStorage
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
+  // const handleConfirmLogout = () => {
+  //   // Clear tokens from localStorage
+  //   localStorage.removeItem("accessToken");
+  //   localStorage.removeItem("refreshToken");
 
-    // Redirect to the login page
-    window.location.href = "/"; // Redirect to the root path (or your login page)
-  };
+  //   // Redirect to the login page
+  //   window.location.href = "/"; // Redirect to the root path (or your login page)
+  // };
 
   // Handle Cancel Logout
   const handleCancelLogout = () => {
@@ -147,7 +148,9 @@ export default function Sidebar({
                   height={25}
                 />
                 {!isCollapsed && (
-                  <span className="text-sm font-medium font-sans">Dashboard</span>
+                  <span className="text-sm font-medium font-sans">
+                    Dashboard
+                  </span>
                 )}
               </div>
             </Link>
@@ -157,14 +160,23 @@ export default function Sidebar({
                   pathname === "/ride" ? "text-white bg-[#F58735]" : ""
                 }`}
               >
-                <Image src={getIconForPage("/ride")} alt="Ride" width={25} height={25} />
-                {!isCollapsed && <span className="text-sm font-medium font-sans">Ride</span>}
+                <Image
+                  src={getIconForPage("/ride")}
+                  alt="Ride"
+                  width={25}
+                  height={25}
+                />
+                {!isCollapsed && (
+                  <span className="text-sm font-medium font-sans">Ride</span>
+                )}
               </div>
             </Link>
             <Link href="/parcels-delivery" onClick={handleLinkClick}>
               <div
                 className={`flex items-center space-x-4 p-2 rounded-r-xl  ${
-                  pathname === "/parcels-delivery" ? "text-white bg-[#F58735]" : ""
+                  pathname === "/parcels-delivery"
+                    ? "text-white bg-[#F58735]"
+                    : ""
                 }`}
               >
                 <Image
@@ -174,7 +186,9 @@ export default function Sidebar({
                   height={25}
                 />
                 {!isCollapsed && (
-                  <span className="text-sm font-medium font-sans">Parcel Delivery</span>
+                  <span className="text-sm font-medium font-sans">
+                    Parcel Delivery
+                  </span>
                 )}
               </div>
             </Link>
@@ -184,8 +198,15 @@ export default function Sidebar({
                   pathname === "/driver" ? "text-white bg-[#F58735]" : ""
                 }`}
               >
-                <Image src={getIconForPage("/driver")} alt="Driver" width={25} height={25} />
-                {!isCollapsed && <span className="text-sm font-medium font-sans">Driver</span>}
+                <Image
+                  src={getIconForPage("/driver")}
+                  alt="Driver"
+                  width={25}
+                  height={25}
+                />
+                {!isCollapsed && (
+                  <span className="text-sm font-medium font-sans">Driver</span>
+                )}
               </div>
             </Link>
             <Link href="/customer" onClick={handleLinkClick}>
@@ -200,7 +221,11 @@ export default function Sidebar({
                   width={25}
                   height={25}
                 />
-                {!isCollapsed && <span className="text-sm font-medium font-sans">Customer</span>}
+                {!isCollapsed && (
+                  <span className="text-sm font-medium font-sans">
+                    Customer
+                  </span>
+                )}
               </div>
             </Link>
             <Link href="/finances" onClick={handleLinkClick}>
@@ -215,7 +240,11 @@ export default function Sidebar({
                   width={25}
                   height={25}
                 />
-                {!isCollapsed && <span className="text-sm font-medium font-sans">Finances</span>}
+                {!isCollapsed && (
+                  <span className="text-sm font-medium font-sans">
+                    Finances
+                  </span>
+                )}
               </div>
             </Link>
             <Link href="/analytics" onClick={handleLinkClick}>
@@ -230,7 +259,11 @@ export default function Sidebar({
                   width={25}
                   height={25}
                 />
-                {!isCollapsed && <span className="text-sm font-medium font-sans">Analytics</span>}
+                {!isCollapsed && (
+                  <span className="text-sm font-medium font-sans">
+                    Analytics
+                  </span>
+                )}
               </div>
             </Link>
           </div>
@@ -252,7 +285,11 @@ export default function Sidebar({
                   width={25}
                   height={25}
                 />
-                {!isCollapsed && <span className="text-sm font-medium font-sans">Profiles</span>}
+                {!isCollapsed && (
+                  <span className="text-sm font-medium font-sans">
+                    Profiles
+                  </span>
+                )}
               </div>
             </Link>
             <button onClick={handleLogoutClick}>
@@ -261,8 +298,15 @@ export default function Sidebar({
                   pathname === "/logout" ? "text-white bg-[#F58735]" : ""
                 }`}
               >
-                <Image src={getIconForPage("/logout")} alt="Logout" width={25} height={25} />
-                {!isCollapsed && <span className="text-sm font-medium font-sans">Logout</span>}
+                <Image
+                  src={getIconForPage("/logout")}
+                  alt="Logout"
+                  width={25}
+                  height={25}
+                />
+                {!isCollapsed && (
+                  <span className="text-sm font-medium font-sans">Logout</span>
+                )}
               </div>
             </button>
           </div>
@@ -297,12 +341,14 @@ export default function Sidebar({
               >
                 Cancel
               </button>
-              <button
-                onClick={handleConfirmLogout}
-                className="px-4 font-sans text-base py-2 bg-red-600 text-white rounded"
-              >
-                Logout
-              </button>
+              <form action={signOutAction}>
+                <button
+                  // onClick={handleConfirmLogout}
+                  className="px-4 font-sans text-base py-2 bg-red-600 text-white rounded"
+                >
+                  Logout
+                </button>
+              </form>
             </div>
           </div>
         </div>

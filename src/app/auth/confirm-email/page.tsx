@@ -1,47 +1,90 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import Image from 'next/image';
-import { createClient } from '../../../utils/supabase/client';
+import React, { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import Image from "next/image";
+import { createClient } from "../../../utils/supabase/client";
 
 const EnterEmailPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [email, setEmail] = useState('');
-  const [initialEmail, setInitialEmail] = useState('');
+  const [email, setEmail] = useState("");
+  // const [initialEmail, setInitialEmail] = useState("");
+  const [canResend, setCanResend] = useState(true);
+  const [timer, setTimer] = useState(0);
 
   // Retrieve the email from the query parameters
   useEffect(() => {
-    const emailFromQuery = searchParams.get('email');
+    const emailFromQuery = searchParams.get("email");
     if (emailFromQuery) {
-      setInitialEmail(decodeURIComponent(emailFromQuery));
+      // setInitialEmail(decodeURIComponent(emailFromQuery));
       setEmail(decodeURIComponent(emailFromQuery)); // Pre-fill the email input
     }
   }, [searchParams]);
 
-  const handleBack = () => {
-    router.push('/'); // Navigate back to the sign-in page
-  };
+  // const handleBack = () => {
+  //   router.push("/"); // Navigate back to the sign-in page
+  // };
+
+  //get timer from localstorage
+  useEffect(() => {
+    const savedTime = localStorage.getItem("otpResendTime");
+    if (savedTime) {
+      const remainingTime = Math.max(
+        0,
+        Math.floor((parseInt(savedTime) - Date.now()) / 1000)
+      );
+      if (remainingTime > 0) {
+        setTimer(remainingTime);
+        setCanResend(false);
+      }
+    }
+  }, []);
+
+  // start countdown
+  useEffect(() => {
+    let interval: ReturnType<typeof setTimeout>;
+    if (timer > 0) {
+      interval = setInterval(() => {
+        setTimer((prev) => {
+          if (prev <= 1) {
+            setCanResend(true);
+            localStorage.removeItem("otpResendTime");
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [timer]);
 
   const handleConfirmEmail = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const supabase = await createClient();
-
-    const { data, error } = await supabase.auth.signInWithOtp({
-      email: email,
-    });
-
-    localStorage.setItem("email", email);
-
-    console.log(data, error);
-
-    // Validate that the entered email matches the initial email
-    if (data.user == null) {
-      router.push('/auth/enter-otp'); // Navigate to the OTP page
+    if (!canResend) {
+      // redirect to enter otp if cannt resend
+      router.push("/auth/enter-otp");
     } else {
-      alert('Please enter the email address used for sign-in.'); // Show error if emails don't match
+      setCanResend(false);
+      const cooldownTime = 30; // Cooldown in seconds
+      setTimer(cooldownTime);
+      const expiration = Date.now() + cooldownTime * 1000;
+      const supabase = await createClient();
+
+      const { data, error } = await supabase.auth.signInWithOtp({
+        email: email,
+      });
+
+      localStorage.setItem("otpResendTime", expiration.toString());
+      localStorage.setItem("email", email);
+
+      // Validate that the entered email matches the initial email
+      if (data.user == null) {
+        router.push("/auth/enter-otp"); // Navigate to the OTP page
+      } else {
+        alert(error?.message);
+      }
     }
   };
 
@@ -53,7 +96,7 @@ const EnterEmailPage = () => {
         <div className="rounded-xl bg-white flex flex-col p-8 pb-12 w-[90%] max-w-md">
           {/* Back Button */}
           <button
-            onClick={handleBack}
+            onClick={() => router.push("/")}
             className="self-start mb-12 text-sm font-sans font-semibold text-[#F58735BF] hover:underline"
           >
             <Image src="/back-arrow icon.svg" alt="" width={20} height={20} />
@@ -61,7 +104,9 @@ const EnterEmailPage = () => {
 
           {/* Heading */}
           <div className="text-center mb-6">
-            <h1 className="mb-4 font-sans text-2xl font-semibold">Confirm Your Email</h1>
+            <h1 className="mb-4 font-sans text-2xl font-semibold">
+              Confirm Your Email
+            </h1>
             <p className="font-sans text-xs text-[#202224]">
               Confirm that this address is the one registered as platform admin.
             </p>
@@ -69,7 +114,9 @@ const EnterEmailPage = () => {
 
           {/* Email Input */}
           <div className="mb-52">
-            <label className="font-sans text-base font-semibold">Email address:</label>
+            <label className="font-sans text-base font-semibold">
+              Email address:
+            </label>
             <input
               type="email"
               placeholder="Enter your email"

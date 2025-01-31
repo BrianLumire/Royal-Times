@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { createClient } from "../../../utils/supabase/client";
@@ -9,6 +9,8 @@ const EnterOtpPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [otp, setOtp] = useState(["", "", "", "", "", ""]); // State for OTP input
+  const [canResend, setCanResend] = useState(true);
+  const [timer, setTimer] = useState(0);
 
   // Retrieve the email from the query parameters
   const email = searchParams.get("email") || "";
@@ -24,18 +26,20 @@ const EnterOtpPage = () => {
     const supabase = await createClient();
 
     const email = localStorage.getItem("email") as string;
-    const { data, error } = await supabase.auth.verifyOtp({
+    const { error } = await supabase.auth.verifyOtp({
       email,
       token: enteredOtp,
       type: "email",
     });
 
-    console.log(data, error);
-
-    if (enteredOtp.length === 6) {
-      router.push("/auth/enter-password");
-      alert("Please enter a valid OTP."); // Show error if OTP is incomplete
+    if (error) {
+      alert(error.message);
     }
+
+    // if (enteredOtp.length === 6) {
+    //   router.push("/auth/enter-password");
+    //   alert("Please enter a valid OTP."); // Show error if OTP is incomplete
+    // }
   };
 
   const handleOtpChange = (index: number, value: string) => {
@@ -50,6 +54,71 @@ const EnterOtpPage = () => {
         const nextInput = document.getElementById(`otp-${index + 1}`);
         if (nextInput) nextInput.focus();
       }
+    }
+  };
+
+  //get timer from localstorage
+  useEffect(() => {
+    const savedTime = localStorage.getItem("otpResendTime");
+    if (savedTime) {
+      const remainingTime = Math.max(
+        0,
+        Math.floor((parseInt(savedTime) - Date.now()) / 1000)
+      );
+      if (remainingTime > 0) {
+        setTimer(remainingTime);
+        setCanResend(false);
+      }
+    }
+  }, []);
+
+  // start countdown
+  useEffect(() => {
+    let interval: ReturnType<typeof setTimeout>;
+    if (timer > 0) {
+      interval = setInterval(() => {
+        setTimer((prev) => {
+          if (prev <= 1) {
+            setCanResend(true);
+            localStorage.removeItem("otpResendTime");
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [timer]);
+
+  const resendCode = async () => {
+    if (!canResend) return;
+
+    try {
+      setCanResend(false);
+      const cooldownTime = 30; // Cooldown in seconds
+      setTimer(cooldownTime);
+      const expiration = Date.now() + cooldownTime * 1000;
+
+      localStorage.setItem("otpResendTime", expiration.toString());
+      const email = localStorage.getItem("email");
+
+      if (email == null) {
+        router.push("/auth/confirm-email");
+      }
+
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithOtp({
+        email: email as string,
+      });
+
+      if (error) {
+        alert(error.message);
+      } else alert("OTP sent.");
+
+      alert("OTP resent successfully!");
+    } catch (error) {
+      console.error("Error resending OTP:", error);
+      setCanResend(true); // Allow retry if failed
     }
   };
 
@@ -103,9 +172,13 @@ const EnterOtpPage = () => {
           <div className=" mb-48">
             <p className="font-sans text-xs text-[#202224]">
               Didn&apos;t get the code?{" "}
-              <span className="text-[#F58735BF] font-semibold hover:underline cursor-pointer">
-                Request Code
-              </span>
+              <button
+                onClick={resendCode}
+                disabled={!canResend}
+                className="text-[#F58735BF] font-semibold hover:underline cursor-pointer"
+              >
+                {canResend ? "Request Code" : `Wait for ${timer}s`}
+              </button>
             </p>
           </div>
 
