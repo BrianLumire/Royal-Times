@@ -1,20 +1,21 @@
-// app/driver/page.tsx
 "use client";
 
-import MainCard from "../../../components/MainCard";
-import DriversTable from "../../../components/DriverTable"; // No need to import TableControls here
+import MainCard from "@/components/MainCard";
+import { DriversTable } from "@/components/DriverTable"; // Use named import
 import { renderRow } from "../../../utils/renderRow";
 import { filterData } from "../../../utils/filterData";
 import { sortData } from "../../../utils/sortData";
 import { useState } from "react";
 import {
-  onlineDrivers,
+  occupiedDrivers,
+  freeDrivers,
   offlineDrivers,
   unapprovedDrivers,
   inactiveDrivers,
   deletedDrivers,
   blockedDrivers,
-  onlineColumns,
+  occupiedColumns,
+  freeColumns,
   offlineColumns,
   unapprovedColumns,
   inactiveColumns,
@@ -24,21 +25,22 @@ import {
 import Image from "next/image";
 import Pagination from "../../../components/Pagination";
 
-// app/driver/page.tsx
 const DriverPage = () => {
-  const [selectedButton, setSelectedButton] = useState("Online");
+  const [selectedButton, setSelectedButton] = useState("Occupied");
   const [searchTerm, setSearchTerm] = useState("");
   const [sortColumn, setSortColumn] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [filters, setFilters] = useState<any>({});
   const [loading, setLoading] = useState(false);
 
-  const buttons = ["Online", "Offline", "Un-approved", "Inactive", "Deleted", "Blocked"];
+  const buttons = ["Occupied", "Free", "Offline", "Un-approved", "Inactive", "Deleted", "Blocked"];
 
   const getTableData = () => {
     switch (selectedButton) {
-      case "Online":
-        return { data: onlineDrivers, columns: onlineColumns };
+      case "Occupied":
+        return { data: occupiedDrivers, columns: occupiedColumns };
+      case "Free":
+        return { data: freeDrivers, columns: freeColumns };
       case "Offline":
         return { data: offlineDrivers, columns: offlineColumns };
       case "Un-approved":
@@ -76,37 +78,23 @@ const DriverPage = () => {
     setFilters(filter);
   };
 
-  const resetFilters = () => {
-    setSearchTerm("");
-    setSortColumn(null);
-    setSortOrder("asc");
-    setFilters({});
-  };
+  // Ensure that isAnyFilterApplied is strictly a boolean
+  const isAnyFilterApplied = Boolean(searchTerm || sortColumn || Object.keys(filters).length > 0);
 
   return (
     <div className="mx-2">
-    {/* Top section with Cards */}
-    <div className="flex flex-col md:flex-row gap-4 md:justify-between mb-6">
-   {/* Card 1: Total Drivers */}
-   <MainCard title="Total Drivers" value="406" imageSrc="/total-drivers.svg" imageBgColor="#FEF9C3" />
-
-{/* Card 2: Total Driver Earnings */}
-<MainCard title="Total Driver Earnings" value="Ksh 200,000" imageSrc="/earnings.svg" imageBgColor="#E5E4FF" />
-
-{/* Card 3: Total Rides */}
-<MainCard title="Total Rides" value="200" imageSrc="/total-rides.svg" imageBgColor="#FFF3D6" />
-
-{/* Card 4: Served Customers */}
-<MainCard title="Served Customers" value="1000" imageSrc="/served-customers.svg" imageBgColor="#D9F7E8" />
-
-    </div>
-
+      {/* Top section with Cards */}
+      <div className="flex flex-col md:flex-row gap-4 md:justify-between mb-6">
+        <MainCard title="Total Drivers" value="406" imageSrc="/total-drivers.svg" imageBgColor="#FEF9C3" />
+        <MainCard title="Total Driver Earnings" value="Ksh 200,000" imageSrc="/earnings.svg" imageBgColor="#E5E4FF" />
+        <MainCard title="Total Rides" value="200" imageSrc="/total-rides.svg" imageBgColor="#FFF3D6" />
+        <MainCard title="Served Customers" value="1000" imageSrc="/served-customers.svg" imageBgColor="#D9F7E8" />
+      </div>
 
       {/* Bottom section */}
       <div className="mb-5">
         {/* Buttons and Add Driver button */}
         <div className="flex flex-col mb-4 md:flex-row justify-between items-center gap-3">
-          {/* Scrollable buttons container */}
           <div className="bg-[#F5F5F5] flex gap-3 lg:gap-6 items-center px-3 lg:px-5 py-2 rounded-[10px] overflow-x-auto w-full md:w-auto">
             {buttons.map((button) => (
               <button
@@ -121,20 +109,11 @@ const DriverPage = () => {
             ))}
           </div>
 
-          {/* Add Driver button */}
           <button className="flex items-center px-4 py-2 border-[#F58735] border-2 rounded-[10px] gap-3">
             <Image src="/plus icon.svg" alt="" width={11} height={11} />
             <span className="font-san text-[#F58735] text-sm font-medium">Add Driver</span>
           </button>
         </div>
-
-        {/* Reset button */}
-        <button
-          onClick={resetFilters}
-          className="mb-4 px-4 py-2 bg-[#F58735] text-white rounded-[10px]"
-        >
-          Reset Filters
-        </button>
 
         {/* Loading State or DriversTable Component */}
         {loading ? (
@@ -152,10 +131,18 @@ const DriverPage = () => {
             onFilterClick={handleFilterClick}
             onSortClick={handleSortClick}
             selectedButton={selectedButton}
+            resetFilters={() => {
+              setSearchTerm("");
+              setSortColumn(null);
+              setSortOrder("asc");
+              setFilters({});
+            }}
+            isAnyFilterApplied={isAnyFilterApplied} // Pass the boolean value
           />
         )}
       </div>
-      <Pagination/>
+
+      <Pagination />
     </div>
   );
 };

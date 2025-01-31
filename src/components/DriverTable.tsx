@@ -1,4 +1,3 @@
-// components/DriverTable.tsx
 "use client";
 
 import React from "react";
@@ -9,18 +8,28 @@ interface Column {
   accessor: string;
 }
 
+// Define a more specific type for the data (replace 'any' with Driver if you have a model)
+interface Driver {
+  id: number;
+  name: string;
+  status: string;
+  // Add other properties that are part of your data
+}
+
 interface DriversTableProps {
   columns: Column[];
-  data: any[];
-  renderRow: (item: any) => React.ReactNode;
+  data: Driver[];
+  renderRow: (item: Driver) => React.ReactNode;
   searchTerm: string;
   onSearchChange: (value: string) => void;
   onFilterClick: (filter: any) => void;
   onSortClick: (column: string) => void;
   selectedButton: string;
+  resetFilters: () => void;
+  isAnyFilterApplied: boolean;
 }
 
-const DriversTable: React.FC<DriversTableProps> = ({
+export const DriversTable: React.FC<DriversTableProps> = ({
   columns,
   data,
   renderRow,
@@ -29,6 +38,8 @@ const DriversTable: React.FC<DriversTableProps> = ({
   onFilterClick,
   onSortClick,
   selectedButton,
+  resetFilters,
+  isAnyFilterApplied
 }) => {
   return (
     <div className="rounded-lg bg-white dark:bg-[#1E1E1E] shadow-lg">
@@ -38,8 +49,15 @@ const DriversTable: React.FC<DriversTableProps> = ({
         <p className="pl-4 font-sans font-semibold text-sm md:text-base text-black dark:text-white">
           {selectedButton} Drivers
         </p>
-        
-        {/* Use TableControls component */}
+        {/* Conditionally render reset button */}
+      {isAnyFilterApplied && (
+        <button
+          onClick={resetFilters}
+          className=" px-4 py-1 text-sm bg-[#F58735] text-white rounded-[10px] "
+        >
+          Reset Filters
+        </button>
+      )}
         <TableControls
           searchTerm={searchTerm}
           onSearchChange={onSearchChange}
@@ -48,6 +66,8 @@ const DriversTable: React.FC<DriversTableProps> = ({
           selectedButton={selectedButton}
         />
       </div>
+
+      
 
       {/* Table */}
       <div className="overflow-x-auto">
@@ -58,7 +78,7 @@ const DriversTable: React.FC<DriversTableProps> = ({
               {columns.map((col) => (
                 <th
                   key={col.accessor}
-                  className="px-1 py-3 text-left font-sans text-sm font-medium text-black "
+                  className="px-1 py-3 text-left font-sans text-sm font-medium text-black"
                 >
                   {col.header}
                 </th>
@@ -69,14 +89,14 @@ const DriversTable: React.FC<DriversTableProps> = ({
           {/* Table Body */}
           <tbody>
             {data.length > 0 ? (
-              data.map((item) => renderRow(item))
+              data.map((item) => renderRow(item)) // Use the renderRow function passed as a prop
             ) : (
               <tr>
                 <td
                   colSpan={columns.length}
                   className="px-4 py-6 text-center text-red-400 dark:text-red-4000"
                 >
-                  No results found !
+                  No results found!
                 </td>
               </tr>
             )}
@@ -86,5 +106,3 @@ const DriversTable: React.FC<DriversTableProps> = ({
     </div>
   );
 };
-
-export default DriversTable;

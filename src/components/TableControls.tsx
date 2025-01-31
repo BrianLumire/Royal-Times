@@ -26,16 +26,17 @@ const TableControls: React.FC<TableControlsProps> = ({
 
   // Define filterable tables and their filter options
   const filterableTables: Record<string, string[]> = {
-    Online: ["busy", "free"],
-    "Un-approved": ["electric", "gas", "sedan", "SUV"],
-    Inactive: ["No activity", "Account suspended"],
-    Deleted: ["User request", "Policy violation"],
-    Blocked: ["suspended", "pending", "declined application"],
+    Occupied: ["Deliveries", "Rides"],
+    Free: ["Deliveries", "Rides"],
+    "Un-approved": ["Electrical", "Fuel"],
+    Inactive: ["Due commission", "At rest"],
+    Blocked: ["suspended", "declined application"],
   };
 
   // Define sortable columns for each table
   const sortableColumns: Record<string, string[]> = {
-    Online: ["name", "completed rides", "rating"],
+    Occupied: ["name", "completed rides", "rating"],
+    Free: ["name", "completed rides", "rating"],
     Offline: ["name", "completed rides", "rating"],
     "Un-approved": ["name", "age"],
     Inactive: ["name", "completed rides", "rating"],
