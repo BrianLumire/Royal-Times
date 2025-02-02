@@ -1,25 +1,25 @@
 "use client";
 
 import React from "react";
-import TableControlsDriver from "./TableControlsDriver"; // Import TableControlsDriver
+import TableControlsRides from "./TableControlsRides"; // Import TableControlsRides
 
 interface Column {
   header: string;
   accessor: string;
 }
 
-// Define a more specific type for the data (replace 'any' with Driver if you have a model)
-interface Driver {
+// Define a more specific type for the data (replace 'any' with Rides if you have a model)
+interface Rides {
   id: number;
   name: string;
   status: string;
   // Add other properties that are part of your data
 }
 
-interface DriversTableProps {
+interface RidesTableProps {
   columns: Column[];
-  data: Driver[];
-  renderRowDriver: (item: Driver) => React.ReactNode;
+  data: Rides[];
+  renderRowRides: (item: Rides) => React.ReactNode;
   searchTerm: string;
   onSearchChange: (value: string) => void;
   onFilterClick: (filter: any) => void;
@@ -29,10 +29,10 @@ interface DriversTableProps {
   isAnyFilterApplied: boolean;
 }
 
-export const DriversTable: React.FC<DriversTableProps> = ({
+export const RidesTable: React.FC<RidesTableProps> = ({
   columns,
   data,
-  renderRowDriver,
+  renderRowRides,
   searchTerm,
   onSearchChange,
   onFilterClick,
@@ -47,7 +47,7 @@ export const DriversTable: React.FC<DriversTableProps> = ({
       <div className="flex flex-col md:flex-row gap-2 items-center justify-between bg-[#F5F5F5] dark:bg-[#2A2A2A] rounded-[10px] px-2 py-3 mb-4">
         {/* Dynamic Table Title */}
         <p className="pl-4 font-sans font-semibold text-sm md:text-base text-black dark:text-white">
-          {selectedButton} Drivers
+          {selectedButton}
         </p>
         {/* Conditionally render reset button */}
       {isAnyFilterApplied && (
@@ -58,7 +58,7 @@ export const DriversTable: React.FC<DriversTableProps> = ({
           Clear filters
         </button>
       )}
-        <TableControlsDriver
+        <TableControlsRides
           searchTerm={searchTerm}
           onSearchChange={onSearchChange}
           onFilterClick={onFilterClick}
@@ -71,7 +71,7 @@ export const DriversTable: React.FC<DriversTableProps> = ({
 
       {/* Table */}
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[950px] ">
+        <table className="w-full min-w-[920px]  ">
           {/* Table Header */}
           <thead className="bg-[#F5F5F5] dark:bg-[#2A2A2A]">
             <tr className="py-4">
@@ -89,7 +89,7 @@ export const DriversTable: React.FC<DriversTableProps> = ({
           {/* Table Body */}
           <tbody>
             {data.length > 0 ? (
-              data.map((item) => renderRowDriver(item)) // Use the renderRow function passed as a prop
+              data.map((item) => renderRowRides(item)) // Use the renderRow function passed as a prop
             ) : (
               <tr>
                 <td

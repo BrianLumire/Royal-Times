@@ -2,9 +2,9 @@
 
 import MainCard from "@/components/MainCard";
 import { DriversTable } from "@/components/DriverTable"; // Use named import
-import { renderRow } from "../../../utils/renderRow";
-import { filterData } from "../../../utils/filterData";
-import { sortData } from "../../../utils/sortData";
+import { renderRowDriver } from "@/utils/renderRowDriver";
+import { filterData } from "@/utils/filterData";
+import { sortData } from "@/utils/sortData";
 import { useState } from "react";
 import {
   occupiedDrivers,
@@ -21,9 +21,9 @@ import {
   inactiveColumns,
   deletedColumns,
   blockedColumns,
-} from "../../../mockdata/data";
+} from "@/mockdata/data";
 import Image from "next/image";
-import Pagination from "../../../components/Pagination";
+import Pagination from "@/components/Pagination";
 
 const DriverPage = () => {
   const [selectedButton, setSelectedButton] = useState("Occupied");
@@ -125,7 +125,7 @@ const DriverPage = () => {
             key={selectedButton}
             columns={columns}
             data={sortedData}
-            renderRow={(item) => renderRow(item, selectedButton)}
+            renderRowDriver={(item) => renderRowDriver(item, selectedButton)}
             searchTerm={searchTerm}
             onSearchChange={setSearchTerm}
             onFilterClick={handleFilterClick}

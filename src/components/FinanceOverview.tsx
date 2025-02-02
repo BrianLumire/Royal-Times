@@ -2,21 +2,21 @@ import Image from "next/image";
 import React from "react";
 
 // Define props interface
-interface CardDashboard2Props {
+interface FinanceOverviewProps {
   iconSrc: string; // e.g., "/cumulative.svg"
   bgColor: string; // e.g., "#E5E4FF"
   title: string; // e.g., "Cumulative Drivers Revenue"
   value: string; // e.g., "5,656"
 }
 
-const CardDashboard2: React.FC<CardDashboard2Props> = ({
+const FinanceOverview: React.FC<FinanceOverviewProps> = ({
   iconSrc,
   bgColor,
   title,
   value,
 }) => {
   return (
-    <div className="flex items-center gap-4 border border-gray-100  shadow-lg rounded-xl p-4 h-full">
+    <div className="flex items-center gap-5 border border-gray-200 rounded-xl p-4 ">
       {/* Icon section */}
       <div className="flex items-center">
         <div
@@ -36,4 +36,4 @@ const CardDashboard2: React.FC<CardDashboard2Props> = ({
   );
 };
 
-export default CardDashboard2;
+export default FinanceOverview;

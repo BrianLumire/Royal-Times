@@ -1,11 +1,22 @@
-import CardDashboard2 from "../../../components/CardDashboard-Two";
-import DashboardCard1 from "../../../components/DashboardCard-One";
+import CancelReasons from "@/components/CancelReasons";
+import CardDashboard2 from "@/components/CardDashboard-Two";
+import DashboardCard1 from "@/components/DashboardCard-One";
+import FinanceOverview from "@/components/FinanceOverview";
+import TripCancelGraph from "@/components/TripCancelGraph";
+import TripTrendsGraph from "@/components/TripTrendsGraph";
+import Image from "next/image";
 
 const DashboardPage = () => {
   return (
     <div className="mx-2">
+      <div className="flex items-center justify-end mb-3">
+      <button className="flex items-center gap-3 px-4  py-1 border border-[#F58735] rounded-xl">
+              <span className="font-sans font-medium text-sm text-[#F58735]">December</span>
+              <Image src="/drop-icon-color.svg" alt="" width={12} height={12}/>
+            </button>
+      </div>
       {/* Cards sections */}
-      <div className="flex flex-col md:flex-row gap-3">
+      <div className="flex flex-col md:flex-row gap-3 mb-5">
         {/* Left sections */}
         <div className="w-full md:w-1/2 flex flex-col md:flex-row gap-3">
           {/* DashboardCard1 */}
@@ -78,6 +89,70 @@ const DashboardPage = () => {
           </div>
         </div>
       </div>
+      {/*second section */}
+      <div className="flex flex-col mb-5 md:flex-row gap-3">
+        {/*Finance overview section */}
+        <div className="flex flex-col border gap-3 border-gray-200 shadow-lg rounded-xl p-4 w-full md:w-1/3">
+          <h1 className="font-sans font-bold text-lg mb-3">Finance Overview</h1>
+          <FinanceOverview
+           iconSrc="/finance-icon-1.svg"
+           bgColor="#E5E4FF"
+           title="Cancelled Trips Loss"
+           value="KES 8,465,900"
+          />
+            <FinanceOverview
+           iconSrc="/finance-icon-2.svg"
+           bgColor="#FFDED0"
+           title="Pending Payouts"
+           value="KES 2,465,800"
+          />
+            <FinanceOverview
+           iconSrc="/finance-icon-3.svg"
+           bgColor="#C1FFCB66"
+           title="Expected Commission Income"
+          value="KES 7,325,430"
+          />
+        </div>
+        {/*Trip request Graph */}
+        <div className="shadow-lg rounded-xl border  border-gray-200  p-4 w-full md:w-2/3">
+        <div className="flex flex-col md:flex-row  items-center justify-between">
+          <h1 className="font-sans font-bold text-lg mb-3 ">Trips Request Trends</h1>
+          <div className="flex items-center gap-3">
+            <button className="flex items-center gap-3 px-3 py-1 border border-[#F58735] rounded-xl">
+              <span className="font-sans font-medium text-sm text-[#F58735]">2024</span>
+              <Image src="/drop-icon-color.svg" alt="" width={12} height={12}/>
+            </button>
+            <button className="flex items-center gap-3 px-4 py-1 border border-[#F58735] rounded-xl">
+            <span className="font-sans font-medium text-sm text-[#F58735]">Deliveries</span>
+            <Image src="/drop-icon-color.svg" alt="" width={12} height={12}/>
+            </button>
+          </div>
+        </div>
+        <TripTrendsGraph/>
+        </div>
+      </div>
+       {/*bottom section */}
+       <div className="flex flex-col mb-5 md:flex-row gap-2 p-3 shadow-lg rounded-xl border  border-gray-200">
+        {/*Trip cancell reasons section */}
+          <div className="flex flex-col gap-4 w-full md:w-1/4">
+            <h1 className="font-sans text-base font-medium">Trip Cancellation Reasons</h1>
+            <div className="md:border-r border-gray-300 p-1 flex flex-col gap-4 md:p-2">
+              <p className="mb-4 font-sans text-sm text-center font-medium">Cancellation Reasons</p>
+              <CancelReasons iconSrc="/identifier-1.svg" reasonText="Driver asked me to cancel or rider off the app" count="48,000" />
+              <CancelReasons iconSrc="/identifier-2.svg" reasonText="Disagreement" count="2,500" />
+              <CancelReasons iconSrc="/identifier-3.svg" reasonText="Requested by mistake" count="0" />
+              <CancelReasons iconSrc="/identifier-5.svg" reasonText="Driver asked me to cancel or rider off the app" count="22,000" />
+              <CancelReasons iconSrc="/identifier-6.svg" reasonText="Driver took too long" count="2,000" />
+              <CancelReasons iconSrc="/identifier-7.svg" reasonText="Other" count="0" />
+
+            </div>
+          </div>
+          {/*graph section */}
+          <div className="w-full md:w-3/4">
+          <TripCancelGraph/>
+          </div>
+       </div>
+
     </div>
   );
 };

@@ -187,7 +187,7 @@ export default function Sidebar({
                 />
                 {!isCollapsed && (
                   <span className="text-sm font-medium font-sans">
-                    Parcel Delivery
+                    Parcels Delivery
                   </span>
                 )}
               </div>
