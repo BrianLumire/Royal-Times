@@ -22,7 +22,7 @@ interface RidesTableProps {
   renderRowRides: (item: Rides) => React.ReactNode;
   searchTerm: string;
   onSearchChange: (value: string) => void;
-  onFilterClick: (filter: any) => void;
+  onFilterClick: (filter: Record<string, unknown>) => void;
   onSortClick: (column: string) => void;
   selectedButton: string;
   resetFilters: () => void;

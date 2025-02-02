@@ -30,7 +30,7 @@ const DriverPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortColumn, setSortColumn] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
-  const [filters, setFilters] = useState<any>({});
+  const [filters, setFilters] = useState<Record<string, unknown>>({});
   const [loading, setLoading] = useState(false);
 
   const buttons = ["Occupied", "Free", "Offline", "Un-approved", "Inactive", "Deleted", "Blocked"];
@@ -74,9 +74,10 @@ const DriverPage = () => {
     setSortOrder(order);
   };
 
-  const handleFilterClick = (filter: any) => {
+  const handleFilterClick = (filter: Record<string, unknown>) => {
     setFilters(filter);
   };
+  
 
   // Ensure that isAnyFilterApplied is strictly a boolean
   const isAnyFilterApplied = Boolean(searchTerm || sortColumn || Object.keys(filters).length > 0);

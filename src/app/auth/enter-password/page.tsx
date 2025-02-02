@@ -7,14 +7,12 @@ import { createClient } from "../../../utils/supabase/client";
 
 const EnterPasswordPage = () => {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // Retrieve the email from the query parameters
-  const email = searchParams.get("email") || "";
+  
 
   const handleBack = () => {
     router.push("/auth/enter-otp"); // Navigate back to the OTP page

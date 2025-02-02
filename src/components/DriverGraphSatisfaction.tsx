@@ -9,6 +9,7 @@ import {
   YAxis,
   Tooltip,
   Cell,
+  BarProps, // Import BarProps
 } from "recharts";
 
 // Define the data structure
@@ -26,7 +27,7 @@ const data: SatisfactionData[] = [
 ];
 
 // Define the props for the custom bar shape
-interface CustomBarShapeProps {
+interface CustomBarShapeProps extends BarProps {
   x: number;
   y: number;
   width: number;
@@ -60,7 +61,7 @@ const CustomBarShape = (props: CustomBarShapeProps) => {
   );
 };
 
-const DriverSatisfactionGraph = () => {
+const DriverGraphSatisfaction = () => {
   const [screenWidth, setScreenWidth] = useState(0);
 
   useEffect(() => {
@@ -102,11 +103,23 @@ const DriverSatisfactionGraph = () => {
           <Tooltip />
           <Bar
             dataKey="value"
-            shape={(props: any) => <CustomBarShape {...props} />} // Pass props correctly
+            shape={(props: BarProps) => {
+              // Ensure x, y, width, and height are numbers
+              const { x = 0, y = 0, width = 0, height = 0 } = props;
+              return (
+                <CustomBarShape
+                  {...props}
+                  x={x as number}
+                  y={y as number}
+                  width={width as number}
+                  height={height as number}
+                />
+              );
+            }}
             barSize={screenWidth <= 640 ? 20 : 30}
           >
             {data.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill="#F58735" />
+              <Cell key={`cell-${index}`} fill="#8280FF" />
             ))}
           </Bar>
         </BarChart>
@@ -115,4 +128,4 @@ const DriverSatisfactionGraph = () => {
   );
 };
 
-export default DriverSatisfactionGraph;
+export default DriverGraphSatisfaction;
