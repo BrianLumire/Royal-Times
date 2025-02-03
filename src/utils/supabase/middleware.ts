@@ -61,7 +61,7 @@ export const updateSession = async (request: NextRequest) => {
       return NextResponse.redirect(new URL("/", request.url));
     } else if (pathname.startsWith("/auth")) {
       // redirects to specific role if in /auth
-      return NextResponse.redirect(new URL(`/${role}`, request.url));
+      return NextResponse.redirect(new URL(`/dashboard`, request.url));
     } else {
       // redirects executives from / to /executive
       if (pathname === "/" && role === "executive") {
@@ -80,24 +80,25 @@ export const updateSession = async (request: NextRequest) => {
 
       // redirects non-executives to their role
       if (pathname.startsWith("/executive") && role !== "executive") {
-        return NextResponse.redirect(new URL(`/${role}`, request.url));
+        return NextResponse.redirect(new URL(`/dashboard`, request.url));
       }
 
       // redirects non-supervisors to their role
       if (pathname.startsWith("/supervisor") && role !== "supervisor") {
-        return NextResponse.redirect(new URL(`/${role}`, request.url));
+        return NextResponse.redirect(new URL(`/dashboard`, request.url));
       }
 
       // redirects non-operators to their role
       if (pathname.startsWith("/operator") && role !== "operator") {
-        return NextResponse.redirect(new URL(`/${role}`, request.url));
+        return NextResponse.redirect(new URL(`/dashboard`, request.url));
       }
     }
   } else if (user === null) {
     if (
       pathname.startsWith("/executive") ||
       pathname.startsWith("/supervisor") ||
-      pathname.startsWith("/operator")
+      pathname.startsWith("/operator") ||
+      pathname.startsWith("/dashboard")
     ) {
       return NextResponse.redirect(new URL("/", request.url));
     }
@@ -105,3 +106,51 @@ export const updateSession = async (request: NextRequest) => {
 
   return response;
 };
+
+//   // check if a user is a customer or driver
+//   if (role === "customer" || role === "driver") {
+//     return NextResponse.redirect(new URL("/", request.url));
+//   } else if (pathname.startsWith("/auth")) {
+//     // redirects to specific role if in /auth
+//     return NextResponse.redirect(new URL(`/${role}`, request.url));
+//   } else {
+//     // redirects executives from / to /executive
+//     if (pathname === "/" && role === "executive") {
+//       return NextResponse.redirect(new URL("/executive", request.url));
+//     }
+
+//     // redirects supervisors from / to /supervisor
+//     if (pathname === "/" && role === "supervisor") {
+//       return NextResponse.redirect(new URL("/supervisor", request.url));
+//     }
+
+//     // redirects operators from / to /operator
+//     if (pathname === "/" && role === "operator") {
+//       return NextResponse.redirect(new URL("/operator", request.url));
+//     }
+
+//     // redirects non-executives to their role
+//     if (pathname.startsWith("/executive") && role !== "executive") {
+//       return NextResponse.redirect(new URL(`/${role}`, request.url));
+//     }
+
+//     // redirects non-supervisors to their role
+//     if (pathname.startsWith("/supervisor") && role !== "supervisor") {
+//       return NextResponse.redirect(new URL(`/${role}`, request.url));
+//     }
+
+//     // redirects non-operators to their role
+//     if (pathname.startsWith("/operator") && role !== "operator") {
+//       return NextResponse.redirect(new URL(`/${role}`, request.url));
+//     }
+//   }
+// } else if (user === null) {
+//   if (
+//     pathname.startsWith("/executive") ||
+//     pathname.startsWith("/supervisor") ||
+//     pathname.startsWith("/operator") ||
+//     pathname.startsWith("/dashboard")
+//   ) {
+//     return NextResponse.redirect(new URL("/", request.url));
+//   }
+// }
