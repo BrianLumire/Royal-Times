@@ -2,22 +2,40 @@
 import Image from "next/image";
 import React from "react";
 
-interface Delivery {
+interface BaseDelivery {
   id: number | string;
   photo: string;
   driver: string;
-  customer?: string;
   recepient?: string;
   deliverycost?: number | string;
   route?: string;
   distance?: number | string;
   date?: string;
-  paymentmethod?: string;
+}
+
+// Live Deliveries Structure
+interface LiveDelivery extends BaseDelivery {
+  customer: string; // Required in Live Deliveries
+}
+
+// Completed Deliveries Structure
+interface CompletedDelivery extends BaseDelivery {
+  sender: string; // Used instead of `customer`
+  paymentmethod: string;
   ratingphoto: string;
   rating?: number | string;
-  sender?: string; // used in "Completed Deliveries"
-  reason?: string;
 }
+
+// Cancelled Deliveries Structure
+interface CancelledDelivery extends BaseDelivery {
+  customer: string;
+  paymentmethod?: string;
+  reason: string; // Used in Cancelled Deliveries
+}
+
+// Define a type that allows multiple structures
+type Delivery = LiveDelivery | CompletedDelivery | CancelledDelivery;
+
 
 
 export const renderRowDeliveries = (item: Delivery, selectedButton: string) => {

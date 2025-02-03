@@ -8,18 +8,27 @@ interface Column {
   accessor: string;
 }
 
-// Define a more specific type for the data (replace 'any' with Rides if you have a model)
-interface Rides {
-  id: number;
-  name: string;
-  status: string;
-  // Add other properties that are part of your data
+interface Ride {
+  id: string;
+  photo: string;
+  driver: string;
+  customer: string;
+  paymentmethod: string;
+  tripcost: string;
+  ratingphoto: string;
+  rating?: string;
+  route: string;
+  datecompleted?: string;
+  date?: string;
+  reason?: string;
+  noofstops?: string;
+  pickuptime?: string;
 }
 
-interface RidesTableProps {
+interface RideTableProps {
   columns: Column[];
-  data: Rides[];
-  renderRowRides: (item: Rides) => React.ReactNode;
+  data: Ride[];
+  renderRowRides: (item: Ride) => React.ReactNode;
   searchTerm: string;
   onSearchChange: (value: string) => void;
   onFilterClick: (filter: Record<string, unknown>) => void;
@@ -29,7 +38,7 @@ interface RidesTableProps {
   isAnyFilterApplied: boolean;
 }
 
-export const RidesTable: React.FC<RidesTableProps> = ({
+export const RidesTable: React.FC<RideTableProps> = ({
   columns,
   data,
   renderRowRides,

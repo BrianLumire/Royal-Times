@@ -12,9 +12,19 @@ interface Column {
 interface Customer {
   id: number;
   name: string;
-  status: string;
-  // Add other properties that are part of your data
+  completedrides: number;
+  // Mark these as optional so that they can be missing in some cases:
+  completeddeliveries?: number;
+  inaride?: string;
+  photo: string;
+  rating: string;
+  ratingphoto: string;
+  // Include the extra property from the second branch, optionally:
+  reason?: string;
+  lastseen?: string;
+  date?: string;
 }
+
 
 interface CustomerTableProps {
   columns: Column[];

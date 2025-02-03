@@ -2,7 +2,7 @@
 import Image from "next/image";
 import React from "react";
 
-interface DriverItem {
+interface Driver {
   id: string | number;
   photo: string;
   name: string;
@@ -24,7 +24,7 @@ interface DriverItem {
   Status?: string; // Optional, used in "Blocked" case
 }
 
-export const renderRowDriver = (item: DriverItem, selectedButton: string) => {
+export const renderRowDriver = (item: Driver, selectedButton: string) => {
   switch (selectedButton) {
 
     case "Free":

@@ -4,7 +4,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 
-interface TableControlsRidesProps {
+interface TableControlsRideProps {
   searchTerm: string;
   onSearchChange: (value: string) => void;
   onFilterClick: (filter: Record<string, unknown>) => void;
@@ -12,7 +12,7 @@ interface TableControlsRidesProps {
   selectedButton: string;
 }
 
-const TableControlsRides: React.FC<TableControlsRidesProps> = ({
+const TableControlsRides: React.FC<TableControlsRideProps> = ({
   searchTerm,
   onSearchChange,
   onFilterClick,

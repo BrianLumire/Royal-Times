@@ -8,13 +8,28 @@ interface Column {
   accessor: string;
 }
 
-// Define a more specific type for the data (replace 'any' with Driver if you have a model)
 interface Driver {
-  id: number;
+  id: string | number;
+  photo: string;
   name: string;
-  status: string;
-  // Add other properties that are part of your data
+  completedrides: number;
+  ratingphoto: string;
+  rating: number;
+  commissiondue: number;
+  pendingpayout: number;
+  vehicle: string;
+  availablefor?: string[]; // Optional, used in "Free" case
+  currentorder?: string[]; // Optional, used in "Occupied" case
+  lastseen?: string; // Optional, used in "Offline" and "Inactive" cases
+  vehicleclass?: string; // Optional, used in "Un-approved" case
+  propulsion?: string; // Optional, used in "Un-approved" case
+  age?: string; // Optional, used in "Un-approved" case
+  location?: string; // Optional, used in "Un-approved" case
+  date?: string; // Optional, used in "Un-approved" and "Deleted" cases
+  reason?: string; // Optional, used in "Inactive" and "Deleted" cases
+  Status?: string; // Optional, used in "Blocked" case
 }
+
 
 interface DriversTableProps {
   columns: Column[];

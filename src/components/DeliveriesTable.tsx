@@ -8,18 +8,27 @@ interface Column {
   accessor: string;
 }
 
-// Define a more specific type for the data (replace 'any' with Deliveries if you have a model)
-interface Deliveries {
-  id: number;
-  name: string;
-  status: string;
-  // Add other properties that are part of your data
+interface Delivery {
+  id: number | string;
+  photo: string;
+  driver: string;
+  customer?: string;
+  recepient?: string;
+  deliverycost?: number | string;
+  route?: string;
+  distance?: number | string;
+  date?: string;
+  paymentmethod?: string;
+  ratingphoto: string;
+  rating?: number | string;
+  sender?: string; // used in "Completed Deliveries"
+  reason?: string;
 }
 
 interface DeliveriesTableProps {
   columns: Column[];
-  data: Deliveries[];
-  renderRowDeliveries: (item: Deliveries) => React.ReactNode;
+  data: Delivery[];
+  renderRowDeliveries: (item: Delivery) => React.ReactNode;
   searchTerm: string;
   onSearchChange: (value: string) => void;
   onFilterClick: (filter: Record<string, unknown>) => void;

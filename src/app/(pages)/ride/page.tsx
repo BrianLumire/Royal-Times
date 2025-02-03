@@ -27,7 +27,7 @@ const RidePage = () => {
 
   const buttons = ["Live Trips", "Completed Trips", "Cancelled Trips"];
 
-  const getTableData = () => {
+  const getTableData = (): { data: Rides[]; columns: Column[] } => {
     switch (selectedButton) {
       case "Live Trips":
         return { data: liveTrips, columns: liveTripsColumns };
