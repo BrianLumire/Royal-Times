@@ -10,6 +10,8 @@ import {
   Tooltip,
   Cell,
   CartesianGrid,
+  TooltipProps,
+  BarProps,
 } from "recharts";
 
 // Define the data structure
@@ -28,30 +30,28 @@ const data: CancelReasonData[] = [
   { reasonText: "Other", count: 370000, iconSrc: "/identifier-7.svg" },
 ];
 
-// Define the props for the custom bar shape
-interface CustomBarShapeProps {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  fill: string;
-}
-
 // Custom shape for bars with rounded top only
-const CustomBarShape = (props: CustomBarShapeProps) => {
-  const { x, y, width, height, fill } = props;
+const CustomBarShape = (props: BarProps) => {
+  // Destructure props with default values to avoid undefined issues
+  const { x = 0, y = 0, width = 0, height = 0, fill } = props;
   const radius = 4;
+
+  // Ensure all values are numbers before performing arithmetic operations
+  const xNum = typeof x === 'number' ? x : 0;
+  const yNum = typeof y === 'number' ? y : 0;
+  const widthNum = typeof width === 'number' ? width : 0;
+  const heightNum = typeof height === 'number' ? height : 0;
 
   return (
     <g>
       <path
         d={`
-          M${x},${y + height}
-          V${y + radius}
+          M${xNum},${yNum + heightNum}
+          V${yNum + radius}
           a${radius},${radius} 0 0 1 ${radius},-${radius}
-          h${width - 2 * radius}
+          h${widthNum - 2 * radius}
           a${radius},${radius} 0 0 1 ${radius},${radius}
-          V${y + height}
+          V${yNum + heightNum}
           Z
         `}
         fill={fill}
@@ -61,7 +61,17 @@ const CustomBarShape = (props: CustomBarShapeProps) => {
 };
 
 // Custom Tooltip
-const CustomTooltip = ({ active, payload }: any) => {
+interface CustomTooltipProps extends TooltipProps<number, string> {
+  active?: boolean;
+  payload?: {
+    value: number;
+    payload: {
+      fill: string;
+    };
+  }[];
+}
+
+const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
   if (active && payload && payload.length) {
     return (
       <div
@@ -137,7 +147,11 @@ const TripCancelGraph = () => {
           {/* Tooltip */}
           <Tooltip content={<CustomTooltip />} />
           {/* Bars */}
-          <Bar dataKey="count" shape={(props: any) => <CustomBarShape {...props} />} barSize={screenWidth <= 640 ? 10 : 15}>
+          <Bar
+            dataKey="count"
+            shape={CustomBarShape}
+            barSize={screenWidth <= 640 ? 10 : 15}
+          >
             {data.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={barColors[index % barColors.length]} />
             ))}

@@ -2,7 +2,29 @@
 import Image from "next/image";
 import React from "react";
 
-export const renderRowDriver = (item: any, selectedButton: string) => {
+interface DriverItem {
+  id: string | number;
+  photo: string;
+  name: string;
+  completedrides: number;
+  ratingphoto: string;
+  rating: number;
+  commissiondue: number;
+  pendingpayout: number;
+  vehicle: string;
+  availablefor?: string[]; // Optional, used in "Free" case
+  currentorder?: string[]; // Optional, used in "Occupied" case
+  lastseen?: string; // Optional, used in "Offline" and "Inactive" cases
+  vehicleclass?: string; // Optional, used in "Un-approved" case
+  propulsion?: string; // Optional, used in "Un-approved" case
+  age?: string; // Optional, used in "Un-approved" case
+  location?: string; // Optional, used in "Un-approved" case
+  date?: string; // Optional, used in "Un-approved" and "Deleted" cases
+  reason?: string; // Optional, used in "Inactive" and "Deleted" cases
+  Status?: string; // Optional, used in "Blocked" case
+}
+
+export const renderRowDriver = (item: DriverItem, selectedButton: string) => {
   switch (selectedButton) {
 
     case "Free":
@@ -47,19 +69,19 @@ export const renderRowDriver = (item: any, selectedButton: string) => {
             {item.vehicle}
           </td>
           <td className="font-sans text-sm whitespace-nowrap font-medium sm:whitespace-normal">
-  <div className="flex gap-2">
-    {item.availablefor.map((service: string, index: number) => (
-      <span
-        key={index}
-        className={`px-3 py-[6px] text-center font-medium items-center justify-center text-white rounded-2xl ${
-          service === "Rides" ? "bg-[#FEC53D]" : "bg-[#3D42DF]"
-        }`}
-      >
-        {service}
-      </span>
-    ))}
-  </div>
-</td>
+            <div className="flex gap-2">
+              {item.availablefor?.map((service: string, index: number) => (
+                <span
+                  key={index}
+                  className={`px-3 py-[6px] text-center font-medium items-center justify-center text-white rounded-2xl ${
+                    service === "Rides" ? "bg-[#FEC53D]" : "bg-[#3D42DF]"
+                  }`}
+                >
+                  {service}
+                </span>
+              ))}
+            </div>
+          </td>
 
 
 
@@ -109,19 +131,19 @@ export const renderRowDriver = (item: any, selectedButton: string) => {
             </td>
       
             <td className="font-sans text-sm whitespace-nowrap font-medium sm:whitespace-normal">
-  <div className="flex gap-2">
-    {item.currentorder.map((service: string, index: number) => (
-      <span
-        key={index}
-        className={`px-3 py-[6px] text-center font-medium items-center justify-center text-white rounded-2xl ${
-          service === "Rides" ? "bg-[#FEC53D]" : "bg-[#3D42DF]"
-        }`}
-      >
-        {service}
-      </span>
-    ))}
-  </div>
-</td>
+            <div className="flex gap-2">
+              {item.currentorder?.map((service: string, index: number) => (
+                <span
+                  key={index}
+                  className={`px-3 py-[6px] text-center font-medium items-center justify-center text-white rounded-2xl ${
+                    service === "Rides" ? "bg-[#FEC53D]" : "bg-[#3D42DF]"
+                  }`}
+                >
+                  {service}
+                </span>
+              ))}
+            </div>
+          </td>
 
           </tr>
         );

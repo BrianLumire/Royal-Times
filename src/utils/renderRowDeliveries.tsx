@@ -2,7 +2,25 @@
 import Image from "next/image";
 import React from "react";
 
-export const renderRowDeliveries = (item: any, selectedButton: string) => {
+interface Delivery {
+  id: number | string;
+  photo: string;
+  driver: string;
+  customer?: string;
+  recepient?: string;
+  deliverycost?: number | string;
+  route?: string;
+  distance?: number | string;
+  date?: string;
+  paymentmethod?: string;
+  ratingphoto: string;
+  rating?: number | string;
+  sender?: string; // used in "Completed Deliveries"
+  reason?: string;
+}
+
+
+export const renderRowDeliveries = (item: Delivery, selectedButton: string) => {
   switch (selectedButton) {
 
     case "Live Deliveries":
@@ -14,7 +32,7 @@ export const renderRowDeliveries = (item: any, selectedButton: string) => {
           <td className="flex items-center gap-3 font-medium cursor-pointer ml-2 py-3 whitespace-nowrap sm:whitespace-normal">
             <Image
               src={item.photo}
-              alt={`${item.name}'s photo`}
+              alt={`${item.driver}'s photo`}
               height={40}
               width={40}
               className="object-cover w-10 h-10 rounded-full"
@@ -50,7 +68,7 @@ export const renderRowDeliveries = (item: any, selectedButton: string) => {
             <td className="flex items-center gap-3 font-medium cursor-pointer ml-2 py-3 whitespace-nowrap sm:whitespace-normal">
               <Image
                 src={item.photo}
-                alt={`${item.name}'s photo`}
+                alt={`${item.driver}'s photo`}
                 height={40}
                 width={40}
                 className="object-cover w-10 h-10 rounded-full"
