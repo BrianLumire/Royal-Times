@@ -1,9 +1,9 @@
 "use client";
 
 import MainCard from "@/components/MainCard";
-import { CustomerTable } from "@/components/CustomerTable"; // Use named import
+import { CustomerTable } from "@/components/CustomerTable"; // Named import
 import { renderRowCustomer } from "@/utils/renderRowCustomer";
-import { filterData } from "@/utils/filterData";
+import { filterData, FilterCriteria } from "@/utils/filterData";
 import { sortData } from "@/utils/sortData";
 import { useState } from "react";
 import {
@@ -15,7 +15,6 @@ import {
   OnlineColumnscustomers,
   inactiveColumnscustomers,
   deletedColumnscustomers,
-  
 } from "@/mockdata/data";
 import Image from "next/image";
 import Pagination from "@/components/Pagination";
@@ -25,7 +24,8 @@ const CustomerPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortColumn, setSortColumn] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
-  const [filters, setFilters] = useState<Record<string, unknown>>({});
+  // Use the exported FilterCriteria type for filters
+  const [filters, setFilters] = useState<FilterCriteria>({});
   const [loading, setLoading] = useState(false);
 
   const buttons = ["Online", "Inactive", "Deleted", "Blocked"];
@@ -48,7 +48,7 @@ const CustomerPage = () => {
   const { data, columns } = getTableData();
 
   // Filter and sort data
-  const filteredData = filterData(data, searchTerm, filters);
+  const filteredData = filterData<typeof data[number]>(data, searchTerm, filters);
   const sortedData = sortData(filteredData, sortColumn, sortOrder);
 
   const handleButtonClick = (button: string) => {
@@ -63,31 +63,49 @@ const CustomerPage = () => {
     setSortOrder(order);
   };
 
-  const handleFilterClick = (filter: Record<string, unknown>) => {
+  // Use FilterCriteria here so that the type matches the utility function
+  const handleFilterClick = (filter: FilterCriteria) => {
     setFilters(filter);
   };
-  
 
-  // Ensure that isAnyFilterApplied is strictly a boolean
-  const isAnyFilterApplied = Boolean(searchTerm || sortColumn || Object.keys(filters).length > 0);
+  // Boolean indicating if any filter/search is applied
+  const isAnyFilterApplied = Boolean(
+    searchTerm || sortColumn || Object.keys(filters).length > 0
+  );
 
   return (
-      <div className="mx-2">
-             {/* Top section with Cards */}
-       <div className="flex flex-col md:flex-row gap-4 md:justify-between mb-6">
-      {/* Card 1: Total Drivers */}
-      <MainCard title="Registered Customers" value="10,000" imageSrc="/reg-customers.svg" imageBgColor="#E5E4FF" />
-   {/* Card 2: Total Driver Earnings */}
-   <MainCard title="Active Customers" value="Ksh 200" imageSrc="/active-customers.svg" imageBgColor="#FFF3D6" />
-   {/* Card 3: Total Rides */}
-   <MainCard title="Customer Satisfaction" value="80%" imageSrc="/cus-satisfaction.svg" imageBgColor="#D9F7E8" />
-   {/* Card 4: Served Customers */}
-   <MainCard title="Total Rides Booked" value="15,000" imageSrc="/total-rides.svg" imageBgColor="#FFF3D6" />
-       </div>
+    <div className="mx-2">
+      {/* Top section with Cards */}
+      <div className="flex flex-col md:flex-row gap-4 md:justify-between mb-6">
+        <MainCard
+          title="Registered Customers"
+          value="10,000"
+          imageSrc="/reg-customers.svg"
+          imageBgColor="#E5E4FF"
+        />
+        <MainCard
+          title="Active Customers"
+          value="Ksh 200"
+          imageSrc="/active-customers.svg"
+          imageBgColor="#FFF3D6"
+        />
+        <MainCard
+          title="Customer Satisfaction"
+          value="80%"
+          imageSrc="/cus-satisfaction.svg"
+          imageBgColor="#D9F7E8"
+        />
+        <MainCard
+          title="Total Rides Booked"
+          value="15,000"
+          imageSrc="/total-rides.svg"
+          imageBgColor="#FFF3D6"
+        />
+      </div>
 
       {/* Bottom section */}
       <div className="mb-5">
-        {/* Buttons and Add Driver button */}
+        {/* Buttons and Add Customer button */}
         <div className="flex flex-col mb-4 md:flex-row justify-between items-center gap-3">
           <div className="bg-[#F5F5F5] flex gap-3 lg:gap-6 items-center px-3 lg:px-5 py-2 rounded-[10px] overflow-x-auto w-full md:w-auto">
             {buttons.map((button) => (
@@ -104,7 +122,7 @@ const CustomerPage = () => {
           </div>
 
           <button className="flex items-center px-4 py-2 border-[#F58735] border-2 rounded-[10px] gap-3">
-            <Image src="/plus icon.svg" alt="" width={11} height={11} />
+            <Image src="/plus icon.svg" alt="Add Customer Icon" width={11} height={11} />
             <span className="font-san text-[#F58735] text-sm font-medium">Add Customer</span>
           </button>
         </div>
@@ -131,7 +149,7 @@ const CustomerPage = () => {
               setSortOrder("asc");
               setFilters({});
             }}
-            isAnyFilterApplied={isAnyFilterApplied} // Pass the boolean value
+            isAnyFilterApplied={isAnyFilterApplied}
           />
         )}
       </div>

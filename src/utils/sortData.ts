@@ -1,4 +1,4 @@
-export const sortData = <T extends Record<string, string | number>>(
+export const sortData = <T extends Record<string, unknown>>(
   data: T[],
   sortColumn: string | null,
   sortOrder: "asc" | "desc"
