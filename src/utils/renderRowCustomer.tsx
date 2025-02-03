@@ -2,7 +2,21 @@
 import Image from "next/image";
 import React from "react";
 
-export const renderRowCustomer = (item: any, selectedButton: string) => {
+interface Customer {
+  id: string;
+  photo: string;
+  name: string;
+  completedrides: string;
+  completeddeliveries?: string; // Optional because it's only used in the "Online" case
+  ratingphoto: string;
+  rating: string;
+  inaride?: string; // Optional because it's only used in the "Online" case
+  lastseen?: string; // Optional because it's only used in the "Inactive" case
+  reason?: string; // Optional because it's used in multiple cases
+  date?: string; // Optional because it's only used in the "Deleted" case
+}
+
+export const renderRowCustomer = (item: Customer, selectedButton: string) => {
   switch (selectedButton) {
 
     case "Online":

@@ -2,7 +2,24 @@
 import Image from "next/image";
 import React from "react";
 
-export const renderRowRides = (item: any, selectedButton: string) => {
+interface Ride {
+  id: string;
+  photo: string;
+  driver: string;
+  customer: string;
+  paymentmethod: string;
+  tripcost: string;
+  ratingphoto: string;
+  rating?: string;
+  route: string;
+  datecompleted?: string;
+  date?: string;
+  reason?: string;
+  noofstops?: string;
+  pickuptime?: string;
+}
+
+export const renderRowRides = (item: Ride, selectedButton: string) => {
   switch (selectedButton) {
 
     case "Completed Trips":
@@ -14,7 +31,7 @@ export const renderRowRides = (item: any, selectedButton: string) => {
           <td className="flex items-center gap-3 font-medium cursor-pointer ml-2 py-3 whitespace-nowrap sm:whitespace-normal">
             <Image
               src={item.photo}
-              alt={`${item.name}'s photo`}
+              alt={`${item.driver}'s photo`}
               height={40}
               width={40}
               className="object-cover w-10 h-10 rounded-full"
@@ -61,7 +78,7 @@ export const renderRowRides = (item: any, selectedButton: string) => {
             <td className="flex items-center gap-3 font-medium cursor-pointer ml-2 py-3 whitespace-nowrap sm:whitespace-normal">
               <Image
                 src={item.photo}
-                alt={`${item.name}'s photo`}
+                alt={`${item.driver}'s photo`}
                 height={40}
                 width={40}
                 className="object-cover w-10 h-10 rounded-full"
