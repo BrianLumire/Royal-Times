@@ -1,4 +1,12 @@
-export const filterData = (data: any[], searchTerm: string, filters: any) => {
+interface FilterCriteria {
+  [key: string]: string | number | boolean | string[] | number[] | boolean[];
+}
+
+export const filterData = <T extends Record<string, any>>(
+  data: T[],
+  searchTerm: string,
+  filters: FilterCriteria
+): T[] => {
   return data.filter((item) => {
     // Search across all columns
     const matchesSearch = Object.values(item).some((value) =>
