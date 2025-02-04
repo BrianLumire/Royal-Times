@@ -138,12 +138,11 @@ const DashboardPage = () => {
             <h1 className="font-sans text-base font-medium">Trip Cancellation Reasons</h1>
             <div className="md:border-r border-gray-300 p-1 flex flex-col gap-4 md:p-2">
               <p className="mb-4 font-sans text-sm text-center font-medium">Cancellation Reasons</p>
-              <CancelReasons iconSrc="/identifier-1.svg" reasonText="Driver asked me to cancel or rider off the app" count="48,000" />
-              <CancelReasons iconSrc="/identifier-2.svg" reasonText="Disagreement" count="2,500" />
-              <CancelReasons iconSrc="/identifier-3.svg" reasonText="Requested by mistake" count="0" />
-              <CancelReasons iconSrc="/identifier-5.svg" reasonText="Driver asked me to cancel or rider off the app" count="22,000" />
-              <CancelReasons iconSrc="/identifier-6.svg" reasonText="Driver took too long" count="2,000" />
-              <CancelReasons iconSrc="/identifier-7.svg" reasonText="Other" count="0" />
+              <CancelReasons reasonText="Driver asked me to cancel or rider off the app" count="48,000" />
+<CancelReasons reasonText="Disagreement" count="2,500" />
+<CancelReasons reasonText="Requested by mistake" count="0" />
+<CancelReasons reasonText="Driver took too long" count="2,000" />
+<CancelReasons reasonText="Other" count="0" />
 
             </div>
           </div>
