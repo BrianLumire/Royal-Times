@@ -1,15 +1,15 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { createClient } from "../../../utils/supabase/client";
-export const dynamic = "force-dynamic";
 
-const EnterOtpPage = () => {
+// Main content of the Enter OTP page
+function EnterOtpContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [otp, setOtp] = useState(["", "", "", "", "", ""]); // State for OTP input
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]); // OTP state
   const [canResend, setCanResend] = useState(true);
   const [timer, setTimer] = useState(0);
 
@@ -25,10 +25,10 @@ const EnterOtpPage = () => {
     const enteredOtp = otp.join(""); // Combine OTP digits into a single string
 
     const supabase = await createClient();
-
-    const email = localStorage.getItem("email") as string;
+    // Retrieve email from localStorage (as saved on the previous page)
+    const emailFromLocal = localStorage.getItem("email") as string;
     const { error } = await supabase.auth.verifyOtp({
-      email,
+      email: emailFromLocal,
       token: enteredOtp,
       type: "email",
     });
@@ -36,11 +36,7 @@ const EnterOtpPage = () => {
     if (error) {
       alert(error.message);
     }
-
-    // if (enteredOtp.length === 6) {
-    //   router.push("/auth/enter-password");
-    //   alert("Please enter a valid OTP."); // Show error if OTP is incomplete
-    // }
+    // Optionally, navigate to the next page upon successful verification
   };
 
   const handleOtpChange = (index: number, value: string) => {
@@ -58,7 +54,7 @@ const EnterOtpPage = () => {
     }
   };
 
-  //get timer from localstorage
+  // Get timer from localStorage (if present)
   useEffect(() => {
     const savedTime = localStorage.getItem("otpResendTime");
     if (savedTime) {
@@ -73,7 +69,7 @@ const EnterOtpPage = () => {
     }
   }, []);
 
-  // start countdown
+  // Start the countdown timer
   useEffect(() => {
     let interval: ReturnType<typeof setTimeout>;
     if (timer > 0) {
@@ -101,21 +97,22 @@ const EnterOtpPage = () => {
       const expiration = Date.now() + cooldownTime * 1000;
 
       localStorage.setItem("otpResendTime", expiration.toString());
-      const email = localStorage.getItem("email");
+      const emailFromLocal = localStorage.getItem("email");
 
-      if (email == null) {
+      if (emailFromLocal == null) {
         router.push("/auth/confirm-email");
       }
 
       const supabase = createClient();
       const { error } = await supabase.auth.signInWithOtp({
-        email: email as string,
+        email: emailFromLocal as string,
       });
 
       if (error) {
         alert(error.message);
-      } else alert("OTP sent.");
-
+      } else {
+        alert("OTP sent.");
+      }
       alert("OTP resent successfully!");
     } catch (error) {
       console.error("Error resending OTP:", error);
@@ -134,7 +131,7 @@ const EnterOtpPage = () => {
             onClick={handleBack}
             className="self-start mb-12 text-sm font-sans font-semibold text-[#F58735BF] hover:underline"
           >
-            <Image src="/back-arrow icon.svg" alt="" width={20} height={20} />
+            <Image src="/back-arrow icon.svg" alt="Back" width={20} height={20} />
           </button>
 
           {/* Heading */}
@@ -170,7 +167,7 @@ const EnterOtpPage = () => {
           </div>
 
           {/* Request Code Link */}
-          <div className=" mb-48">
+          <div className="mb-48">
             <p className="font-sans text-xs text-[#202224]">
               Didn&apos;t get the code?{" "}
               <button
@@ -214,6 +211,13 @@ const EnterOtpPage = () => {
       </div>
     </div>
   );
-};
+}
 
-export default EnterOtpPage;
+// Default export wrapped in a Suspense boundary
+export default function EnterOtpPageWrapper() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <EnterOtpContent />
+    </Suspense>
+  );
+}

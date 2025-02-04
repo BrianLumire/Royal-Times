@@ -1,17 +1,15 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { createClient } from "../../../utils/supabase/client";
-export const dynamic = "force-dynamic";
 
-
-const EnterEmailPage = () => {
+// Create a component with your page content.
+function ConfirmEmailContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
-  // const [initialEmail, setInitialEmail] = useState("");
   const [canResend, setCanResend] = useState(true);
   const [timer, setTimer] = useState(0);
 
@@ -19,16 +17,11 @@ const EnterEmailPage = () => {
   useEffect(() => {
     const emailFromQuery = searchParams.get("email");
     if (emailFromQuery) {
-      // setInitialEmail(decodeURIComponent(emailFromQuery));
       setEmail(decodeURIComponent(emailFromQuery)); // Pre-fill the email input
     }
   }, [searchParams]);
 
-  // const handleBack = () => {
-  //   router.push("/"); // Navigate back to the sign-in page
-  // };
-
-  //get timer from localstorage
+  // Get timer from localStorage
   useEffect(() => {
     const savedTime = localStorage.getItem("otpResendTime");
     if (savedTime) {
@@ -43,7 +36,7 @@ const EnterEmailPage = () => {
     }
   }, []);
 
-  // start countdown
+  // Start countdown
   useEffect(() => {
     let interval: ReturnType<typeof setTimeout>;
     if (timer > 0) {
@@ -65,7 +58,7 @@ const EnterEmailPage = () => {
     e.preventDefault();
 
     if (!canResend) {
-      // redirect to enter otp if cannt resend
+      // Redirect to enter OTP if cannot resend
       router.push("/auth/enter-otp");
     } else {
       setCanResend(false);
@@ -81,9 +74,9 @@ const EnterEmailPage = () => {
       localStorage.setItem("otpResendTime", expiration.toString());
       localStorage.setItem("email", email);
 
-      // Validate that the entered email matches the initial email
+      // If user data is null, navigate to the OTP page
       if (data.user == null) {
-        router.push("/auth/enter-otp"); // Navigate to the OTP page
+        router.push("/auth/enter-otp");
       } else {
         alert(error?.message);
       }
@@ -101,7 +94,7 @@ const EnterEmailPage = () => {
             onClick={() => router.push("/")}
             className="self-start mb-12 text-sm font-sans font-semibold text-[#F58735BF] hover:underline"
           >
-            <Image src="/back-arrow icon.svg" alt="" width={20} height={20} />
+            <Image src="/back-arrow icon.svg" alt="Back" width={20} height={20} />
           </button>
 
           {/* Heading */}
@@ -160,6 +153,13 @@ const EnterEmailPage = () => {
       </div>
     </div>
   );
-};
+}
 
-export default EnterEmailPage;
+// Wrap ConfirmEmailContent in a Suspense boundary for useSearchParams
+export default function ConfirmEmailPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ConfirmEmailContent />
+    </Suspense>
+  );
+}
