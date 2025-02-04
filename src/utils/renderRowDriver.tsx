@@ -3,25 +3,25 @@ import Image from "next/image";
 import React from "react";
 
 interface Driver {
-  id: string | number;
+  id: number;
   photo: string;
   name: string;
-  completedrides: number;
-  ratingphoto: string;
-  rating: number;
-  commissiondue: number;
-  pendingpayout: number;
-  vehicle: string;
-  availablefor?: string[]; // Optional, used in "Free" case
-  currentorder?: string[]; // Optional, used in "Occupied" case
-  lastseen?: string; // Optional, used in "Offline" and "Inactive" cases
-  vehicleclass?: string; // Optional, used in "Un-approved" case
-  propulsion?: string; // Optional, used in "Un-approved" case
-  age?: string; // Optional, used in "Un-approved" case
-  location?: string; // Optional, used in "Un-approved" case
-  date?: string; // Optional, used in "Un-approved" and "Deleted" cases
-  reason?: string; // Optional, used in "Inactive" and "Deleted" cases
-  Status?: string; // Optional, used in "Blocked" case
+  completedrides?: number; // Optional
+  ratingphoto?: string; // Optional
+  rating?: number; // Optional
+  commissiondue?: number; // Optional
+  pendingpayout?: string; // Optional
+  vehicle?: string; // Optional
+  availablefor?: string[];
+  currentorder?: string[];
+  lastseen?: string;
+  vehicleclass?: string;
+  propulsion?: string;
+  age?: number;
+  location?: string;
+  date?: string;
+  reason?: string;
+  Status?: string;
 }
 
 export const renderRowDriver = (item: Driver, selectedButton: string) => {
@@ -50,12 +50,12 @@ export const renderRowDriver = (item: Driver, selectedButton: string) => {
           </td>
           <td className="whitespace-nowrap text-sm font-sans font-medium sm:whitespace-normal">
             <div className="flex items-center gap-2 text-[#1E1E1E] font-sans">
-              <Image
-                src={item.ratingphoto}
-                alt="Rating icon"
-                height={18}
-                width={18}
-              />
+               <Image
+                  src={item.ratingphoto || "/default-rating.svg"} // Fallback value
+                  alt="Rating icon"
+                  height={18}
+                 width={18}
+                 />
               {item.rating}
             </div>
           </td>
@@ -111,12 +111,12 @@ export const renderRowDriver = (item: Driver, selectedButton: string) => {
             </td>
             <td className="whitespace-nowrap text-sm font-sans font-medium sm:whitespace-normal">
               <div className="flex items-center gap-2 text-[#1E1E1E] font-sans">
-                <Image
-                  src={item.ratingphoto}
+              <Image
+                  src={item.ratingphoto || "/default-rating.svg"} // Fallback value
                   alt="Rating icon"
                   height={18}
-                  width={18}
-                />
+                 width={18}
+                 />
                 {item.rating}
               </div>
             </td>
@@ -172,12 +172,12 @@ export const renderRowDriver = (item: Driver, selectedButton: string) => {
           </td>
           <td className="whitespace-nowrap text-sm font-sans font-medium sm:whitespace-normal">
             <div className="flex items-center gap-2 text-[#1E1E1E] font-sans">
-              <Image
-                src={item.ratingphoto}
-                alt="Rating icon"
-                height={18}
-                width={18}
-              />
+            <Image
+                  src={item.ratingphoto || "/default-rating.svg"} // Fallback value
+                  alt="Rating icon"
+                  height={18}
+                 width={18}
+                 />
               {item.rating}
             </div>
           </td>
@@ -255,12 +255,12 @@ export const renderRowDriver = (item: Driver, selectedButton: string) => {
           </td>
           <td className="whitespace-nowrap text-sm font-sans font-medium sm:whitespace-normal">
             <div className="flex items-center gap-2 text-[#1E1E1E] font-sans">
-              <Image
-                src={item.ratingphoto}
-                alt="Rating icon"
-                height={18}
-                width={18}
-              />
+            <Image
+                  src={item.ratingphoto || "/default-rating.svg"} // Fallback value
+                  alt="Rating icon"
+                  height={18}
+                 width={18}
+                 />
               {item.rating}
             </div>
           </td>
@@ -305,12 +305,12 @@ export const renderRowDriver = (item: Driver, selectedButton: string) => {
           </td>
           <td className="whitespace-nowrap text-sm font-sans font-medium sm:whitespace-normal">
             <div className="flex items-center gap-2 text-[#1E1E1E] font-sans">
-              <Image
-                src={item.ratingphoto}
-                alt="Rating icon"
-                height={18}
-                width={18}
-              />
+            <Image
+                  src={item.ratingphoto || "/default-rating.svg"} // Fallback value
+                  alt="Rating icon"
+                  height={18}
+                 width={18}
+                 />
               {item.rating}
             </div>
           </td>
@@ -355,12 +355,12 @@ case "Blocked":
       </td>
       <td className="whitespace-nowrap text-sm font-sans font-medium sm:whitespace-normal">
         <div className="flex items-center gap-2 text-[#1E1E1E] font-sans">
-          <Image
-            src={item.ratingphoto}
-            alt="Rating icon"
-            height={18}
-            width={18}
-          />
+        <Image
+                  src={item.ratingphoto || "/default-rating.svg"} // Fallback value
+                  alt="Rating icon"
+                  height={18}
+                 width={18}
+                 />
           {item.rating}
         </div>
       </td>

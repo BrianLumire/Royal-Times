@@ -3,7 +3,7 @@
 import MainCard from "@/components/MainCard";
 import { DriversTable } from "@/components/DriverTable"; // Use named import
 import { renderRowDriver } from "@/utils/renderRowDriver";
-import { filterData } from "@/utils/filterData";
+import { filterData,FilterCriteria } from "@/utils/filterData";
 import { sortData } from "@/utils/sortData";
 import { useState } from "react";
 import {
@@ -30,7 +30,7 @@ const DriverPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortColumn, setSortColumn] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
-  const [filters, setFilters] = useState<Record<string, unknown>>({});
+  const [filters, setFilters] = useState<FilterCriteria>({});
   const [loading, setLoading] = useState(false);
 
   const buttons = ["Occupied", "Free", "Offline", "Un-approved", "Inactive", "Deleted", "Blocked"];
@@ -59,7 +59,7 @@ const DriverPage = () => {
   const { data, columns } = getTableData();
 
   // Filter and sort data
-  const filteredData = filterData(data, searchTerm, filters);
+  const filteredData = filterData<typeof data[number]>(data, searchTerm, filters);
   const sortedData = sortData(filteredData, sortColumn, sortOrder);
 
   const handleButtonClick = (button: string) => {
@@ -74,10 +74,10 @@ const DriverPage = () => {
     setSortOrder(order);
   };
 
-  const handleFilterClick = (filter: Record<string, unknown>) => {
+   // Use FilterCriteria here so that the type matches the utility function
+   const handleFilterClick = (filter: FilterCriteria) => {
     setFilters(filter);
   };
-  
 
   // Ensure that isAnyFilterApplied is strictly a boolean
   const isAnyFilterApplied = Boolean(searchTerm || sortColumn || Object.keys(filters).length > 0);

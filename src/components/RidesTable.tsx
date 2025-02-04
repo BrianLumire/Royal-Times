@@ -2,20 +2,20 @@
 
 import React from "react";
 import TableControlsRides from "./TableControlsRides"; // Import TableControlsRides
-
+import { FilterCriteria } from "@/utils/filterData"; // Import the type
 interface Column {
   header: string;
   accessor: string;
 }
 
 interface Ride {
-  id: string;
+  id: number;
   photo: string;
   driver: string;
   customer: string;
   paymentmethod: string;
-  tripcost: string;
-  ratingphoto: string;
+  tripcost: number; // Changed to number
+  ratingphoto?: string;
   rating?: string;
   route: string;
   datecompleted?: string;
@@ -31,7 +31,7 @@ interface RideTableProps {
   renderRowRides: (item: Ride) => React.ReactNode;
   searchTerm: string;
   onSearchChange: (value: string) => void;
-  onFilterClick: (filter: Record<string, unknown>) => void;
+  onFilterClick: (filter: FilterCriteria) => void; // Use FilterCriteria here
   onSortClick: (column: string) => void;
   selectedButton: string;
   resetFilters: () => void;

@@ -2,7 +2,7 @@
 
 import React from "react";
 import TableControlsDeliveries from "./TableControlsDeliveries"; // Import TableControlsDeliveries
-
+import { FilterCriteria } from "@/utils/filterData"; // Import the type
 interface Column {
   header: string;
   accessor: string;
@@ -19,7 +19,7 @@ interface Delivery {
   distance?: number | string;
   date?: string;
   paymentmethod?: string;
-  ratingphoto: string;
+  ratingphoto?: string; // Make this optional
   rating?: number | string;
   sender?: string; // used in "Completed Deliveries"
   reason?: string;
@@ -31,7 +31,7 @@ interface DeliveriesTableProps {
   renderRowDeliveries: (item: Delivery) => React.ReactNode;
   searchTerm: string;
   onSearchChange: (value: string) => void;
-  onFilterClick: (filter: Record<string, unknown>) => void;
+  onFilterClick: (filter: FilterCriteria) => void; // Use FilterCriteria here
   onSortClick: (column: string) => void;
   selectedButton: string;
   resetFilters: () => void;

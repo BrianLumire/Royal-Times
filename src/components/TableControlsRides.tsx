@@ -3,11 +3,12 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
+import { FilterCriteria } from "@/utils/filterData"; // Import the type
 
 interface TableControlsRideProps {
   searchTerm: string;
   onSearchChange: (value: string) => void;
-  onFilterClick: (filter: Record<string, unknown>) => void;
+  onFilterClick: (filter: FilterCriteria) => void; // Use FilterCriteria here
   onSortClick: (column: string) => void;
   selectedButton: string;
 }

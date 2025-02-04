@@ -3,7 +3,7 @@
 import MainCard from "@/components/MainCard";
 import { RidesTable } from "@/components/RidesTable"; // Use named import
 import { renderRowRides } from "@/utils/renderRowRides";
-import { filterData } from "@/utils/filterData";
+import { filterData, FilterCriteria } from "@/utils/filterData";
 import { sortData } from "@/utils/sortData";
 import { useState } from "react";
 import {
@@ -22,19 +22,19 @@ const RidePage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortColumn, setSortColumn] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
-  const [filters, setFilters] = useState<Record<string, unknown>>({});
+  const [filters, setFilters] = useState<FilterCriteria>({});
   const [loading, setLoading] = useState(false);
 
   const buttons = ["Live Trips", "Completed Trips", "Cancelled Trips"];
 
-  const getTableData = (): { data: Rides[]; columns: Column[] } => {
+const getTableData = () => {
     switch (selectedButton) {
       case "Live Trips":
         return { data: liveTrips, columns: liveTripsColumns };
-      case "Completed Trips":
-        return { data: completedTrips, columns: completedTripsColumns };
-      case "Cancelled Trips":
-        return { data: cancelledTrips, columns: cancelledTripsColumns };
+        case "Completed Trips":
+          return { data: completedTrips, columns: completedTripsColumns };
+          case "Cancelled Trips":
+            return { data: cancelledTrips, columns: cancelledTripsColumns };
       default:
         return { data: [], columns: [] };
     }
@@ -43,7 +43,7 @@ const RidePage = () => {
   const { data, columns } = getTableData();
 
   // Filter and sort data
-  const filteredData = filterData(data, searchTerm, filters);
+  const filteredData = filterData<typeof data[number]>(data, searchTerm, filters);
   const sortedData = sortData(filteredData, sortColumn, sortOrder);
 
   const handleButtonClick = (button: string) => {
@@ -58,7 +58,8 @@ const RidePage = () => {
     setSortOrder(order);
   };
 
-  const handleFilterClick = (filter: Record<string, unknown>) => {
+   // Use FilterCriteria here so that the type matches the utility function
+   const handleFilterClick = (filter: FilterCriteria) => {
     setFilters(filter);
   };
 
