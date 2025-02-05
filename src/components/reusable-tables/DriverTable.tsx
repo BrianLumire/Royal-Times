@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import TableControlsDriver from "./TableControlsDriver"; // Import TableControlsDriver
+import TableControlsDriver from "../tablecontrols/TableControlsDriver"; // Import TableControlsDriver
 import { FilterCriteria } from "@/utils/filterData"; // Import the type
 interface Column {
   header: string;
@@ -28,6 +28,7 @@ interface Driver {
   date?: string;
   reason?: string;
   Status?: string;
+  action?: string;
 }
 
 

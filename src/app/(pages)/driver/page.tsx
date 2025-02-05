@@ -1,11 +1,12 @@
 "use client";
 
 import MainCard from "@/components/MainCard";
-import { DriversTable } from "@/components/DriverTable"; // Use named import
-import { renderRowDriver } from "@/utils/renderRowDriver";
-import { filterData,FilterCriteria } from "@/utils/filterData";
+import { DriversTable } from "@/components/reusable-tables/DriverTable"; // Use named import
+import { renderRowDriver } from "@/utils/renderRow-functions/renderRowDriver";
+import { filterData, FilterCriteria } from "@/utils/filterData";
 import { sortData } from "@/utils/sortData";
 import { useState } from "react";
+import { useRouter } from "next/navigation"; // Corrected import for useRouter
 import {
   occupiedDrivers,
   freeDrivers,
@@ -32,6 +33,8 @@ const DriverPage = () => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [filters, setFilters] = useState<FilterCriteria>({});
   const [loading, setLoading] = useState(false);
+
+  const router = useRouter(); // Initialize router from next/navigation
 
   const buttons = ["Occupied", "Free", "Offline", "Un-approved", "Inactive", "Deleted", "Blocked"];
 
@@ -74,13 +77,19 @@ const DriverPage = () => {
     setSortOrder(order);
   };
 
-   // Use FilterCriteria here so that the type matches the utility function
-   const handleFilterClick = (filter: FilterCriteria) => {
+  const handleFilterClick = (filter: FilterCriteria) => {
     setFilters(filter);
   };
 
-  // Ensure that isAnyFilterApplied is strictly a boolean
   const isAnyFilterApplied = Boolean(searchTerm || sortColumn || Object.keys(filters).length > 0);
+
+  const handleApproveClick = (driverId: number) => {
+    console.log("Approve driver with ID:", driverId);
+  };
+
+  const handleAddDriverClick = () => {
+    router.push("/add-driver"); // Navigate to the Add Driver page
+  };
 
   return (
     <div className="mx-2">
@@ -110,7 +119,11 @@ const DriverPage = () => {
             ))}
           </div>
 
-          <button className="flex items-center px-4 py-2 border-[#F58735] border-2 rounded-[10px] gap-3">
+          {/* Add Driver Button */}
+          <button
+            className="flex items-center px-4 py-2 border-[#F58735] border-2 rounded-[10px] gap-3"
+            onClick={handleAddDriverClick} // Navigate to the add driver page
+          >
             <Image src="/plus icon.svg" alt="" width={11} height={11} />
             <span className="font-san text-[#F58735] text-sm font-medium">Add Driver</span>
           </button>

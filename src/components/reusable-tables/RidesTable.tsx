@@ -1,34 +1,34 @@
 "use client";
 
 import React from "react";
-import TableControlsDeliveries from "./TableControlsDeliveries"; // Import TableControlsDeliveries
+import TableControlsRides from "../tablecontrols/TableControlsRides"; // Import TableControlsRides
 import { FilterCriteria } from "@/utils/filterData"; // Import the type
 interface Column {
   header: string;
   accessor: string;
 }
 
-interface Delivery {
-  id: number | string;
+interface Ride {
+  id: number;
   photo: string;
   driver: string;
-  customer?: string;
-  recepient?: string;
-  deliverycost?: number | string;
-  route?: string;
-  distance?: number | string;
+  customer: string;
+  paymentmethod: string;
+  tripcost: number; // Changed to number
+  ratingphoto?: string;
+  rating?: string;
+  route: string;
+  datecompleted?: string;
   date?: string;
-  paymentmethod?: string;
-  ratingphoto?: string; // Make this optional
-  rating?: number | string;
-  sender?: string; // used in "Completed Deliveries"
   reason?: string;
+  noofstops?: string;
+  pickuptime?: string;
 }
 
-interface DeliveriesTableProps {
+interface RideTableProps {
   columns: Column[];
-  data: Delivery[];
-  renderRowDeliveries: (item: Delivery) => React.ReactNode;
+  data: Ride[];
+  renderRowRides: (item: Ride) => React.ReactNode;
   searchTerm: string;
   onSearchChange: (value: string) => void;
   onFilterClick: (filter: FilterCriteria) => void; // Use FilterCriteria here
@@ -38,10 +38,10 @@ interface DeliveriesTableProps {
   isAnyFilterApplied: boolean;
 }
 
-export const DeliveriesTable: React.FC<DeliveriesTableProps> = ({
+export const RidesTable: React.FC<RideTableProps> = ({
   columns,
   data,
-  renderRowDeliveries,
+  renderRowRides,
   searchTerm,
   onSearchChange,
   onFilterClick,
@@ -67,7 +67,7 @@ export const DeliveriesTable: React.FC<DeliveriesTableProps> = ({
           Clear filters
         </button>
       )}
-        <TableControlsDeliveries
+        <TableControlsRides
           searchTerm={searchTerm}
           onSearchChange={onSearchChange}
           onFilterClick={onFilterClick}
@@ -80,7 +80,7 @@ export const DeliveriesTable: React.FC<DeliveriesTableProps> = ({
 
       {/* Table */}
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[1110px] md:min-w-[920px] ">
+        <table className="w-full min-w-[920px]  ">
           {/* Table Header */}
           <thead className="bg-[#F5F5F5] dark:bg-[#2A2A2A]">
             <tr className="py-4">
@@ -98,7 +98,7 @@ export const DeliveriesTable: React.FC<DeliveriesTableProps> = ({
           {/* Table Body */}
           <tbody>
             {data.length > 0 ? (
-              data.map((item) => renderRowDeliveries(item)) // Use the renderRow function passed as a prop
+              data.map((item) => renderRowRides(item)) // Use the renderRow function passed as a prop
             ) : (
               <tr>
                 <td

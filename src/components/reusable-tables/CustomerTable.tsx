@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import TableControlsCustomer from "./TableControlsCustomer"; // Import TableControlsCustomer
+import TableControlsCustomer from "../tablecontrols/TableControlsCustomer"; // Import TableControlsCustomer
 import { FilterCriteria } from "@/utils/filterData"; // Import the type
 interface Column {
   header: string;

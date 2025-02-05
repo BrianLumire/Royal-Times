@@ -1,8 +1,8 @@
 "use client";
 
 import MainCard from "@/components/MainCard";
-import { DeliveriesTable } from "@/components/DeliveriesTable"; 
-import { renderRowDeliveries } from "@/utils/renderRowDeliveries";
+import { DeliveriesTable } from "@/components/reusable-tables/DeliveriesTable"; 
+import { renderRowDeliveries } from "@/utils/renderRow-functions/renderRowDeliveries";
 import { filterData, FilterCriteria } from "@/utils/filterData";
 import { sortData } from "@/utils/sortData";
 import { useState } from "react";

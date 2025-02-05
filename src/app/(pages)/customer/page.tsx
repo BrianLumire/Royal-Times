@@ -1,8 +1,8 @@
 "use client";
 
 import MainCard from "@/components/MainCard";
-import { CustomerTable } from "@/components/CustomerTable"; // Named import
-import { renderRowCustomer } from "@/utils/renderRowCustomer";
+import { CustomerTable } from "@/components/reusable-tables/CustomerTable"; // Named import
+import { renderRowCustomer } from "@/utils/renderRow-functions/renderRowCustomer";
 import { filterData, FilterCriteria } from "@/utils/filterData";
 import { sortData } from "@/utils/sortData";
 import { useState } from "react";

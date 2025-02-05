@@ -1,7 +1,7 @@
 "use client";
 
 import { Menu, PanelLeftOpen, PanelLeftClose } from "lucide-react"; // Import Lucide icons
-import { ModeToggle } from "./Mode-toggle";
+import { ModeToggle } from "../Mode-toggle";
 import Image from "next/image";
 
 interface NavbarProps {

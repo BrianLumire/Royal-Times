@@ -175,6 +175,7 @@ export const offlineColumns = [
       age: 28,
       location: "Nairobi",
       date: "Dec 30,2024 05.18",
+      action:"Approve",
     },
     {
       id: 12,
@@ -185,6 +186,7 @@ export const offlineColumns = [
       age: 35,
       location: "Mombasa",
       date: "Jan 10,2025 11.18",
+      action:"Approve",
     },
     {
       id: 13,
@@ -195,6 +197,7 @@ export const offlineColumns = [
       age: 30,
       location: "Kisumu",
       date: "Jan 15,2025 09.00",
+      action:"Approve",
     },
     {
       id: 14,
@@ -205,6 +208,7 @@ export const offlineColumns = [
       age: 32,
       location: "Nakuru",
       date: "Jan 20,2025 14.30",
+      action:"Approve",
     },
   ];
   
@@ -215,6 +219,7 @@ export const offlineColumns = [
     { header: "Age", accessor: "age" },
     { header: "Location", accessor: "location" },
     { header: "Date", accessor: "date" },
+    { header: "Action", accessor: "action" },
   ];
   
   

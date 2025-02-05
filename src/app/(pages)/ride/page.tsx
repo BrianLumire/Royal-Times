@@ -1,8 +1,8 @@
 "use client";
 
 import MainCard from "@/components/MainCard";
-import { RidesTable } from "@/components/RidesTable"; // Use named import
-import { renderRowRides } from "@/utils/renderRowRides";
+import { RidesTable } from "@/components/reusable-tables/RidesTable"; // Use named import
+import { renderRowRides } from "@/utils/renderRow-functions/renderRowRides";
 import { filterData, FilterCriteria } from "@/utils/filterData";
 import { sortData } from "@/utils/sortData";
 import { useState } from "react";

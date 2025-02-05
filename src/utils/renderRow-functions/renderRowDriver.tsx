@@ -22,6 +22,7 @@ interface Driver {
   date?: string;
   reason?: string;
   Status?: string;
+  action?: string;
 }
 
 export const renderRowDriver = (item: Driver, selectedButton: string) => {
@@ -82,9 +83,6 @@ export const renderRowDriver = (item: Driver, selectedButton: string) => {
               ))}
             </div>
           </td>
-
-
-
         </tr>
       );
 
@@ -228,6 +226,13 @@ export const renderRowDriver = (item: Driver, selectedButton: string) => {
           </td>
           <td className="font-sans pl-1  text-sm font-medium whitespace-nowrap sm:whitespace-normal text-[#1E1E1E]">
             {item.date}
+          </td>
+          <td className="font-sans pl-2 text-sm font-medium whitespace-nowrap sm:whitespace-normal text-[#1E1E1E]">
+            <button
+              className="flex items-center px-4 py-1 border-[#F58735] border-2 rounded-[12px] gap-3"
+            >
+              <span className="font-san text-[#F58735] text-sm font-medium">{item.action}</span>
+            </button>
           </td>
         </tr>
       );

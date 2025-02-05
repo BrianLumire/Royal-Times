@@ -2,7 +2,7 @@
 import { useState } from "react";
 
 import AppSidebar from "../../components/app-sidebar";
-import Navbar from "../../components/Navbar";
+import Navbar from "../../components/nav-files/Navbar";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
