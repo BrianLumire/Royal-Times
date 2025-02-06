@@ -41,9 +41,6 @@ const ApprovalChoicePage = ({ params }: ApprovalChoicePageProps) => {
           verification_status,
           user_accounts (
             full_name
-          ),
-          vehicles (
-            
           )
         `
       )
@@ -82,10 +79,28 @@ const ApprovalChoicePage = ({ params }: ApprovalChoicePageProps) => {
       .neq("verification_status", "approved");
 
     if (error) {
-      toast.error("An error occured while approving the driver.");
+      toast.error("An error occured. Please try again.");
     } else {
-      toast.success("Driver approved!");
-      router.push("/drivers");
+      toast.success("Driver approved.");
+      router.push("/driver");
+    }
+  }
+
+  //reject application
+  async function rejectrDriver() {
+    const { error } = await supabase
+      .from("drivers")
+      .update({
+        verification_status: "rejected",
+      })
+      .eq("id", id)
+      .neq("verification_status", "rejected");
+
+    if (error) {
+      toast.error("An error occured. Please try again.");
+    } else {
+      toast.success("Driver rejected.");
+      router.push(`/${id}/application-rejection`);
     }
   }
 
@@ -249,7 +264,7 @@ const ApprovalChoicePage = ({ params }: ApprovalChoicePageProps) => {
             {/* Reject Application navigates to Application Rejection page */}
             <button
               className="text-[#F58735] border border-[#F58735] rounded-xl px-4 py-2 font-sans font-medium text-sm hover:bg-[#F58735] hover:text-white transition-colors"
-              onClick={() => router.push(`/${id}/application-rejection`)}
+              onClick={rejectrDriver}
             >
               Reject Application
             </button>

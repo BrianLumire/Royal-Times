@@ -38,6 +38,32 @@ export type Database = {
           },
         ]
       }
+      application_rejections: {
+        Row: {
+          driver_id: string | null
+          id: string
+          reason: string
+        }
+        Insert: {
+          driver_id?: string | null
+          id?: string
+          reason: string
+        }
+        Update: {
+          driver_id?: string | null
+          id?: string
+          reason?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "application_rejections_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "drivers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       bank_payouts: {
         Row: {
           account_name: string
@@ -860,12 +886,18 @@ export type Database = {
       }
     }
     Enums: {
-      driver_status: "pending" | "approved" | "deactivated" | "deleted"
+      driver_status:
+        | "pending"
+        | "approved"
+        | "deactivated"
+        | "deleted"
+        | "rejected"
       driving_status:
         | "driving_to_pickup"
         | "driving_to_first_stop"
         | "driving_to_second_stop"
         | "driving_to_destination"
+        | "arrived_at_destination"
       notification_status: "pending" | "sent" | "failed"
       notification_variants: "ride_request" | "cancel_ride"
       payment_methods: "cash" | "card" | "mpesa"
