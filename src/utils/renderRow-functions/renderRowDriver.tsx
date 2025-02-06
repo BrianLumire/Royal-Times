@@ -1,6 +1,7 @@
-// utils/renderRow.tsx
+"use client";
 import Image from "next/image";
 import React from "react";
+import { useRouter } from 'next/navigation';
 
 interface Driver {
   id: number;
@@ -26,6 +27,7 @@ interface Driver {
 }
 
 export const renderRowDriver = (item: Driver, selectedButton: string) => {
+  const router = useRouter();
   switch (selectedButton) {
 
     case "Free":
@@ -228,12 +230,14 @@ export const renderRowDriver = (item: Driver, selectedButton: string) => {
             {item.date}
           </td>
           <td className="font-sans pl-2 text-sm font-medium whitespace-nowrap sm:whitespace-normal text-[#1E1E1E]">
-            <button
-              className="flex items-center px-4 py-1 border-[#F58735] border-2 rounded-[12px] gap-3"
-            >
-              <span className="font-san text-[#F58735] text-sm font-medium">{item.action}</span>
-            </button>
-          </td>
+  <button
+    className="flex items-center px-4 py-1 border-[#F58735] border-2 rounded-[12px] gap-3"
+    onClick={() => router.push(`/${item.id}/driver-approval`)}  
+  >
+    <span className="font-san text-[#F58735] text-sm font-medium">{item.action}</span>
+  </button>
+</td>
+
         </tr>
       );
 
