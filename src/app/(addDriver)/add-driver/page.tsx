@@ -5,7 +5,10 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useRouter } from "next/navigation";
-// import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/client";
+import { toast } from "react-toastify";
+import { storeIdImages } from "@/app/actions";
+import { convertToFullISO } from "@/utils/utils";
 
 // Define the schema for validation
 const schema = z.object({
@@ -27,7 +30,13 @@ const schema = z.object({
     .email({ message: "Invalid email format" }),
   frontPageImage: z
     .any()
-    .refine((file) => file, { message: "Front Page Image is required" }),
+    .refine((file) => file, { message: "Front Page Image is required" })
+    .refine(
+      (file) => {
+        return file.size <= 1024 * 1024 * 5;
+      },
+      { message: "Max image size is 5MB." }
+    ),
   backPageImage: z
     .any()
     .refine((file) => file, { message: "Back Page Image is required" }),
@@ -51,14 +60,61 @@ const AddDriverPage = () => {
   const [frontPageImage, setFrontPageImage] = useState<string | null>(null);
   const [backPageImage, setBackPageImage] = useState<string | null>(null);
 
+  const driverData = new FormData();
+
   const onSubmit = async (data: FormData) => {
-    console.log(data);
-    // const supabase = createClient();
+    const supabase = createClient();
 
-    // const {data, error} = await supabase.from("drivers").insert({
+    // invoke function that creates a new user
+    const { data: user_id, error: error_creating_user } =
+      await supabase.functions.invoke("create_driver_user_account", {
+        body: {
+          name: data.fullName,
+          email: data.email,
+          phone_number: data.phoneNumber,
+        },
+      });
 
-    // })
-    // router.push('/add-information'); // Navigate to the next page
+    if (error_creating_user) {
+      toast.error("An error occured. Please try again.");
+    } else {
+      driverData.append("user_id", user_id);
+      driverData.append("front_id_image", data.frontPageImage);
+      driverData.append("back_id_image", data.backPageImage);
+    }
+
+    if (user_id) {
+      localStorage.setItem("user_id", user_id);
+      const storeDriverIdImages = await storeIdImages(driverData);
+
+      if (storeDriverIdImages.success) {
+        // store name
+        const { error: user_data_update_error } = await supabase
+          .from("user_accounts")
+          .update({ full_name: data.fullName, phone: data.phoneNumber })
+          .eq("id", user_id);
+
+        toast.success("New user created");
+
+        //store driver dob, user_id ref and sex
+        const { error: driver_data_update_error } = await supabase
+          .from("drivers")
+          .upsert(
+            {
+              date_of_birth: convertToFullISO(data.dateOfBirth),
+              user_id,
+              sex: data.sex == "Male" ? "male" : "female",
+            },
+            { onConflict: "user_id" }
+          );
+
+        toast.success("Driver created.");
+
+        if (user_data_update_error || driver_data_update_error) {
+          toast.error("An error occured.");
+        } else router.push("/add-information");
+      } else toast.error("An error occured.");
+    }
   };
 
   const handleImageUpload = (

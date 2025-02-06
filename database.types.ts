@@ -250,7 +250,7 @@ export type Database = {
           is_valid: boolean | null
           license_expiration_date: string | null
           location: unknown | null
-          national_id: string
+          national_id: string | null
           rating: number | null
           requested_ride_id: string | null
           sex: Database["public"]["Enums"]["sex"]
@@ -277,7 +277,7 @@ export type Database = {
           is_valid?: boolean | null
           license_expiration_date?: string | null
           location?: unknown | null
-          national_id: string
+          national_id?: string | null
           rating?: number | null
           requested_ride_id?: string | null
           sex: Database["public"]["Enums"]["sex"]
@@ -304,7 +304,7 @@ export type Database = {
           is_valid?: boolean | null
           license_expiration_date?: string | null
           location?: unknown | null
-          national_id?: string
+          national_id?: string | null
           rating?: number | null
           requested_ride_id?: string | null
           sex?: Database["public"]["Enums"]["sex"]

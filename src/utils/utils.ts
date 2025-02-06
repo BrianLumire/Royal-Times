@@ -14,3 +14,9 @@ export function encodedRedirect(
 ) {
   return redirect(`${path}?${type}=${encodeURIComponent(message)}`);
 }
+
+//convert DD/MM/YYYY dates tp ISO 8601
+export function convertToFullISO(dateString: string) {
+  const [day, month, year] = dateString.split("/").map(Number);
+  return new Date(year, month - 1, day).toISOString();
+}

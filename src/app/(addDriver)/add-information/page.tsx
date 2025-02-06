@@ -1,24 +1,36 @@
 "use client";
-import Image from 'next/image';
-import React, { useState, ChangeEvent } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { useRouter } from 'next/navigation';
+import Image from "next/image";
+import React, { useState, ChangeEvent } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/utils/supabase/client";
+import { storepsvBadgeImage } from "@/app/actions";
+import { convertToFullISO } from "@/utils/utils";
+import { toast } from "react-toastify";
 
 // Define the schema for validation
 const schema = z.object({
-  driverLicenseNumber: z.string().min(1, { message: 'Driver License Number is required' }),
+  driverLicenseNumber: z
+    .string()
+    .min(1, { message: "Driver License Number is required" }),
   driverLicenseExpiration: z
     .string()
-    .min(1, { message: 'Expiration Date is required' })
-    .regex(/^\d{2}\/\d{2}\/\d{4}$/, { message: 'Date must be in DD/MM/YYYY format' }),
-  psvNumber: z.string().min(1, { message: 'PSV Number is required' }),
+    .min(1, { message: "Expiration Date is required" })
+    .regex(/^\d{2}\/\d{2}\/\d{4}$/, {
+      message: "Date must be in DD/MM/YYYY format",
+    }),
+  psvNumber: z.string().min(1, { message: "PSV Number is required" }),
   psvExpiration: z
     .string()
-    .min(1, { message: 'Expiration Date is required' })
-    .regex(/^\d{2}\/\d{2}\/\d{4}$/, { message: 'Date must be in DD/MM/YYYY format' }),
-  psvBadgeImage: z.any().refine((file) => file, { message: 'PSV Badge Image is required' }),
+    .min(1, { message: "Expiration Date is required" })
+    .regex(/^\d{2}\/\d{2}\/\d{4}$/, {
+      message: "Date must be in DD/MM/YYYY format",
+    }),
+  psvBadgeImage: z
+    .any()
+    .refine((file) => file, { message: "PSV Badge Image is required" }),
 });
 
 // Infer the form data type from the schema
@@ -36,10 +48,55 @@ const AddInformationPage = () => {
   });
 
   const [psvBadgeImage, setPsvBadgeImage] = useState<string | null>(null);
+  const [disabled, setDisabled] = useState(false);
 
-  const onSubmit = (data: FormData) => {
-    console.log(data);
-    router.push('/next-page'); // Navigate to the next page
+  const driverData = new FormData();
+
+  const onSubmit = async (data: FormData) => {
+    setDisabled(true);
+    const supabase = createClient();
+    const user_id = localStorage.getItem("user_id");
+
+    if (user_id) {
+      driverData.append("psv_badge_image", data.psvBadgeImage);
+      driverData.append("user_id", user_id);
+      //store psv badge image
+      const storePsvBadge = await storepsvBadgeImage(driverData);
+
+      if (storePsvBadge.success) {
+        //store license info
+        const { data: driver_data, error: error_adding_driver_license } =
+          await supabase
+            .from("drivers")
+            .update({
+              driver_license_number: data.driverLicenseNumber,
+              license_expiration_date: convertToFullISO(
+                data.driverLicenseExpiration
+              ),
+            })
+            .eq("user_id", user_id)
+            .select("id");
+
+        //store psv badge info
+        const { error: error_updating_vehicle } = await supabase
+          .from("vehicles")
+          .upsert(
+            {
+              psv_number: data.psvNumber,
+              psv_expiration_date: convertToFullISO(data.psvExpiration),
+              driver_id: driver_data?.[0]?.id as string,
+            },
+            { onConflict: "driver_id" }
+          );
+        toast.success("License and PSV info saved.");
+        if (error_adding_driver_license || error_updating_vehicle) {
+          toast.error("An error occured while storing driver details.");
+        } else {
+          setDisabled(false);
+          router.push("/add-verification");
+        }
+      } else toast.error("An error occured.");
+    } else router.push("/add-driver");
   };
 
   const handleImageUpload = (
@@ -48,12 +105,12 @@ const AddInformationPage = () => {
     fieldName: keyof FormData
   ) => {
     const file = event.target.files?.[0];
-    if (file && (file.type === 'image/jpeg' || file.type === 'image/png')) {
+    if (file && (file.type === "image/jpeg" || file.type === "image/png")) {
       const imageUrl = URL.createObjectURL(file);
       setImage(imageUrl);
       setValue(fieldName, file); // Set the file in react-hook-form
     } else {
-      alert('Please upload a valid image file (JPG or PNG).');
+      alert("Please upload a valid image file (JPG or PNG).");
     }
   };
 
@@ -64,9 +121,14 @@ const AddInformationPage = () => {
           <div className="flex items-center gap-2">
             <button
               className="p-2 md:p-3 border border-gray-300 rounded-full"
-              onClick={() => router.push('/add-driver')}
+              onClick={() => router.push("/add-driver")}
             >
-              <Image src="/driver-arrow.svg" alt="Driver Arrow" width={16} height={16} />
+              <Image
+                src="/driver-arrow.svg"
+                alt="Driver Arrow"
+                width={16}
+                height={16}
+              />
             </button>
             <span className="font-sans font-semibold text-[18px] md:text-xl">
               Add Driving Information
@@ -74,7 +136,7 @@ const AddInformationPage = () => {
           </div>
           <button
             className="font-sans flex items-center text-gray-700 text-lg font-semibold px-6 rounded-[10px] py-[3px] bg-[#F5F5F5]"
-            onClick={() => router.push('/driver')}
+            onClick={() => router.push("/driver")}
           >
             X
           </button>
@@ -203,19 +265,28 @@ const AddInformationPage = () => {
             {/* Upload Image Div */}
             <div className="flex flex-col p-5 w-full h-[350px]  border border-gray-300 rounded-xl">
               <div className="flex flex-col items-center mb-3">
-                <p className="text-sm font-sans font-medium">Upload Your Image</p>
+                <p className="text-sm font-sans font-medium">
+                  Upload Your Image
+                </p>
                 <span className="text-sm font-sans text-[#9E9E9E]">
                   File should be JPG, PNG or Raw
                 </span>
               </div>
               <div className="flex flex-col gap-4 border-2 border-dashed py-14 items-center justify-center border-gray-300 rounded-xl">
-                <Image src="/tabler_upload.svg" alt="Upload Icon" width={30} height={30} />
+                <Image
+                  src="/tabler_upload.svg"
+                  alt="Upload Icon"
+                  width={30}
+                  height={30}
+                />
                 <p className="font-sans text-sm">Drag & Drop your file or</p>
                 <input
                   type="file"
                   id="file-upload"
                   className="hidden"
-                  onChange={(e) => handleImageUpload(e, setPsvBadgeImage, 'psvBadgeImage')}
+                  onChange={(e) =>
+                    handleImageUpload(e, setPsvBadgeImage, "psvBadgeImage")
+                  }
                 />
                 <label
                   htmlFor="file-upload"
@@ -250,29 +321,34 @@ const AddInformationPage = () => {
                     )}
                   </div>
                   <div className="flex items-center gap-3 md:mb-5">
-                    <Image src="/ic_round-plus.svg" alt="Plus Icon" width={17} height={17} />
+                    <Image
+                      src="/ic_round-plus.svg"
+                      alt="Plus Icon"
+                      width={17}
+                      height={17}
+                    />
                     <span
                       className={`font-sans text-base ${
-                        psvBadgeImage ? 'text-black' : 'text-[#F58735]'
+                        psvBadgeImage ? "text-black" : "text-[#F58735]"
                       }`}
                     >
-                    PSV Badge
+                      PSV Badge
                     </span>
                   </div>
                 </div>
-                
               </div>
-              
+
               <div className="flex items-center gap-4 md:mt-7">
                 <button
                   type="button"
                   className="px-12 py-3 font-sans font-medium text-base border border-[#F58735] bg-white rounded-xl text-[#F58735]"
-                  onClick={() => router.push('/driver')}
+                  onClick={() => router.push("/driver")}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
+                  disabled={disabled}
                   className="px-16 py-[13px] font-sans font-medium text-base bg-[#F58735] rounded-xl text-white"
                 >
                   Next
