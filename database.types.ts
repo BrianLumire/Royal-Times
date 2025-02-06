@@ -207,6 +207,7 @@ export type Database = {
       }
       drivers: {
         Row: {
+          applied_on: string
           date_of_birth: string
           driver_license_back: string | null
           driver_license_front: string | null
@@ -225,6 +226,7 @@ export type Database = {
           location: unknown | null
           national_id: string
           rating: number | null
+          requested_ride_id: string | null
           sex: Database["public"]["Enums"]["sex"]
           user_id: string | null
           verification_status:
@@ -232,6 +234,7 @@ export type Database = {
             | null
         }
         Insert: {
+          applied_on?: string
           date_of_birth: string
           driver_license_back?: string | null
           driver_license_front?: string | null
@@ -250,6 +253,7 @@ export type Database = {
           location?: unknown | null
           national_id: string
           rating?: number | null
+          requested_ride_id?: string | null
           sex: Database["public"]["Enums"]["sex"]
           user_id?: string | null
           verification_status?:
@@ -257,6 +261,7 @@ export type Database = {
             | null
         }
         Update: {
+          applied_on?: string
           date_of_birth?: string
           driver_license_back?: string | null
           driver_license_front?: string | null
@@ -275,6 +280,7 @@ export type Database = {
           location?: unknown | null
           national_id?: string
           rating?: number | null
+          requested_ride_id?: string | null
           sex?: Database["public"]["Enums"]["sex"]
           user_id?: string | null
           verification_status?:
@@ -412,6 +418,7 @@ export type Database = {
       }
       payments: {
         Row: {
+          access_code: string | null
           amount: number
           id: string
           payment_method: Database["public"]["Enums"]["payment_methods"] | null
@@ -420,6 +427,7 @@ export type Database = {
           ride_id: string
         }
         Insert: {
+          access_code?: string | null
           amount: number
           id?: string
           payment_method?: Database["public"]["Enums"]["payment_methods"] | null
@@ -428,6 +436,7 @@ export type Database = {
           ride_id: string
         }
         Update: {
+          access_code?: string | null
           amount?: number
           id?: string
           payment_method?: Database["public"]["Enums"]["payment_methods"] | null
@@ -544,6 +553,7 @@ export type Database = {
           customer_id: string | null
           distance: number | null
           driver_id: string | null
+          driving_status: Database["public"]["Enums"]["driving_status"] | null
           dropoff_location: unknown | null
           dropoff_time: string | null
           id: string
@@ -558,6 +568,7 @@ export type Database = {
           customer_id?: string | null
           distance?: number | null
           driver_id?: string | null
+          driving_status?: Database["public"]["Enums"]["driving_status"] | null
           dropoff_location?: unknown | null
           dropoff_time?: string | null
           id?: string
@@ -572,6 +583,7 @@ export type Database = {
           customer_id?: string | null
           distance?: number | null
           driver_id?: string | null
+          driving_status?: Database["public"]["Enums"]["driving_status"] | null
           dropoff_location?: unknown | null
           dropoff_time?: string | null
           id?: string
@@ -834,6 +846,12 @@ export type Database = {
         }
         Returns: Json
       }
+      get_ride_details: {
+        Args: {
+          ride_id: string
+        }
+        Returns: Json
+      }
       reset_user_password: {
         Args: {
           new_plain_password: string
@@ -843,6 +861,11 @@ export type Database = {
     }
     Enums: {
       driver_status: "pending" | "approved" | "deactivated" | "deleted"
+      driving_status:
+        | "driving_to_pickup"
+        | "driving_to_first_stop"
+        | "driving_to_second_stop"
+        | "driving_to_destination"
       notification_status: "pending" | "sent" | "failed"
       notification_variants: "ride_request" | "cancel_ride"
       payment_methods: "cash" | "card" | "mpesa"

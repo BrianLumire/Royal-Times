@@ -1,25 +1,36 @@
 "use client";
-import Image from 'next/image';
-import React, { useState, ChangeEvent } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { useRouter } from 'next/navigation';
+import Image from "next/image";
+import React, { useState, ChangeEvent } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { useRouter } from "next/navigation";
+// import { createClient } from "@/utils/supabase/client";
 
 // Define the schema for validation
 const schema = z.object({
-  fullName: z.string().min(1, { message: 'Full Name is required' }),
-  sex: z.enum(['Male', 'Female'], { message: 'Sex is required' }),
+  fullName: z.string().min(1, { message: "Full Name is required" }),
+  sex: z.enum(["Male", "Female"], { message: "Sex is required" }),
   dateOfBirth: z
     .string()
-    .min(1, { message: 'Date of Birth is required' })
-    .regex(/^\d{2}\/\d{2}\/\d{4}$/, { message: 'Date must be in DD/MM/YYYY format' }),
+    .min(1, { message: "Date of Birth is required" })
+    .regex(/^\d{2}\/\d{2}\/\d{4}$/, {
+      message: "Date must be in DD/MM/YYYY format",
+    }),
   phoneNumber: z
     .string()
-    .min(10, { message: 'Phone Number must be 10 digits' })
-    .max(10, { message: 'Phone Number must be 10 digits' }),
-  frontPageImage: z.any().refine((file) => file, { message: 'Front Page Image is required' }),
-  backPageImage: z.any().refine((file) => file, { message: 'Back Page Image is required' }),
+    .min(10, { message: "Phone Number must be 10 digits" })
+    .max(10, { message: "Phone Number must be 10 digits" }),
+  email: z
+    .string()
+    .min(1, { message: "Email is required" })
+    .email({ message: "Invalid email format" }),
+  frontPageImage: z
+    .any()
+    .refine((file) => file, { message: "Front Page Image is required" }),
+  backPageImage: z
+    .any()
+    .refine((file) => file, { message: "Back Page Image is required" }),
 });
 
 // Infer the form data type from the schema
@@ -40,9 +51,14 @@ const AddDriverPage = () => {
   const [frontPageImage, setFrontPageImage] = useState<string | null>(null);
   const [backPageImage, setBackPageImage] = useState<string | null>(null);
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = async (data: FormData) => {
     console.log(data);
-    router.push('/add-information'); // Navigate to the next page
+    // const supabase = createClient();
+
+    // const {data, error} = await supabase.from("drivers").insert({
+
+    // })
+    // router.push('/add-information'); // Navigate to the next page
   };
 
   const handleImageUpload = (
@@ -51,12 +67,12 @@ const AddDriverPage = () => {
     fieldName: keyof FormData
   ) => {
     const file = event.target.files?.[0];
-    if (file && (file.type === 'image/jpeg' || file.type === 'image/png')) {
+    if (file && (file.type === "image/jpeg" || file.type === "image/png")) {
       const imageUrl = URL.createObjectURL(file);
       setImage(imageUrl);
       setValue(fieldName, file); // Set the file in react-hook-form
     } else {
-      alert('Please upload a valid image file (JPG or PNG).');
+      alert("Please upload a valid image file (JPG or PNG).");
     }
   };
 
@@ -67,9 +83,14 @@ const AddDriverPage = () => {
           <div className="flex items-center gap-2">
             <button
               className="p-2 md:p-3 border border-gray-300 rounded-full"
-              onClick={() => router.push('/driver')}
+              onClick={() => router.push("/driver")}
             >
-              <Image src="/driver-arrow.svg" alt="Driver Arrow" width={16} height={16} />
+              <Image
+                src="/driver-arrow.svg"
+                alt="Driver Arrow"
+                width={16}
+                height={16}
+              />
             </button>
             <span className="font-sans font-semibold text-[18px] md:text-xl">
               Add a Driver
@@ -77,7 +98,7 @@ const AddDriverPage = () => {
           </div>
           <button
             className="font-sans flex items-center text-gray-700 text-lg font-semibold px-6 rounded-[10px] py-[3px] bg-[#F5F5F5]"
-            onClick={() => router.push('/driver')}
+            onClick={() => router.push("/driver")}
           >
             X
           </button>
@@ -114,17 +135,49 @@ const AddDriverPage = () => {
                   </span>
                 )}
               </div>
+              {/* Email */}
+              <div className="mb-4">
+                <label
+                  className="font-medium text-[16px] md:text-base font-sans"
+                  htmlFor="email"
+                >
+                  Email*
+                </label>
+                <Controller
+                  name="email"
+                  control={control}
+                  defaultValue=""
+                  render={({ field }) => (
+                    <input
+                      {...field}
+                      id="email"
+                      type="text"
+                      placeholder="Email"
+                      className="border border-gray-300 p-3 text-base mt-1 w-full rounded-[10px]"
+                    />
+                  )}
+                />
+                {errors.email && (
+                  <span className="text-red-500 text-sm">
+                    {errors.email.message?.toString()}
+                  </span>
+                )}
+              </div>
               <div className="flex flex-col gap-2 mb-3">
-                <p className="text-[16px] md:text-base font-sans font-medium">Sex*</p>
+                <p className="text-[16px] md:text-base font-sans font-medium">
+                  Sex*
+                </p>
                 <div className="flex items-center gap-4">
                   <button
                     type="button"
                     className={`p-4 border ${
-                      selectedSex === 'Male' ? 'border-[#F58735]' : 'border-gray-300'
+                      selectedSex === "Male"
+                        ? "border-[#F58735]"
+                        : "border-gray-300"
                     } bg-[#F587351A] text-[#F58735] rounded-[24px]`}
                     onClick={() => {
-                      setSelectedSex('Male');
-                      setValue('sex', 'Male'); // Set the value in react-hook-form
+                      setSelectedSex("Male");
+                      setValue("sex", "Male"); // Set the value in react-hook-form
                     }}
                   >
                     Male
@@ -132,11 +185,13 @@ const AddDriverPage = () => {
                   <button
                     type="button"
                     className={`p-4 border ${
-                      selectedSex === 'Female' ? 'border-[#F58735]' : 'border-gray-300'
+                      selectedSex === "Female"
+                        ? "border-[#F58735]"
+                        : "border-gray-300"
                     } bg-[#F587351A] text-[#F58735] rounded-[24px]`}
                     onClick={() => {
-                      setSelectedSex('Female');
-                      setValue('sex', 'Female'); // Set the value in react-hook-form
+                      setSelectedSex("Female");
+                      setValue("sex", "Female"); // Set the value in react-hook-form
                     }}
                   >
                     Female
@@ -213,13 +268,20 @@ const AddDriverPage = () => {
             {/* Upload Image Div */}
             <div className="flex flex-col p-5 w-full h-[350px] border border-gray-300 rounded-xl">
               <div className="flex flex-col items-center mb-3">
-                <p className="text-sm font-sans font-medium">Upload Your Images</p>
+                <p className="text-sm font-sans font-medium">
+                  Upload Your Images
+                </p>
                 <span className="text-sm font-sans text-[#9E9E9E]">
                   File should be JPG, PNG or Raw
                 </span>
               </div>
               <div className="flex flex-col gap-4 border-2 border-dashed py-14 items-center justify-center border-gray-300 rounded-xl  ">
-                <Image src="/tabler_upload.svg" alt="Upload Icon" width={30} height={30} />
+                <Image
+                  src="/tabler_upload.svg"
+                  alt="Upload Icon"
+                  width={30}
+                  height={30}
+                />
                 <p className="font-sans text-sm">Drag & Drop your file or</p>
                 <input
                   type="file"
@@ -227,9 +289,9 @@ const AddDriverPage = () => {
                   className="hidden"
                   onChange={(e) => {
                     if (!frontPageImage) {
-                      handleImageUpload(e, setFrontPageImage, 'frontPageImage');
+                      handleImageUpload(e, setFrontPageImage, "frontPageImage");
                     } else {
-                      handleImageUpload(e, setBackPageImage, 'backPageImage');
+                      handleImageUpload(e, setBackPageImage, "backPageImage");
                     }
                   }}
                 />
@@ -266,10 +328,15 @@ const AddDriverPage = () => {
                     )}
                   </div>
                   <div className="flex items-center gap-3">
-                    <Image src="/ic_round-plus.svg" alt="Plus Icon" width={17} height={17} />
+                    <Image
+                      src="/ic_round-plus.svg"
+                      alt="Plus Icon"
+                      width={17}
+                      height={17}
+                    />
                     <span
                       className={`font-sans text-base ${
-                        frontPageImage ? 'text-black' : 'text-[#F58735]'
+                        frontPageImage ? "text-black" : "text-[#F58735]"
                       }`}
                     >
                       Front Page
@@ -298,10 +365,15 @@ const AddDriverPage = () => {
                     )}
                   </div>
                   <div className="flex items-center gap-3">
-                    <Image src="/ic_round-plus.svg" alt="Plus Icon" width={17} height={17} />
+                    <Image
+                      src="/ic_round-plus.svg"
+                      alt="Plus Icon"
+                      width={17}
+                      height={17}
+                    />
                     <span
                       className={`font-sans text-base ${
-                        backPageImage ? 'text-black' : 'text-[#F58735]'
+                        backPageImage ? "text-black" : "text-[#F58735]"
                       }`}
                     >
                       Back Page
@@ -313,7 +385,7 @@ const AddDriverPage = () => {
                 <button
                   type="button"
                   className="px-12 py-3 font-sans font-medium text-base border border-[#F58735] bg-white rounded-xl text-[#F58735]"
-                  onClick={() => router.push('/driver')}
+                  onClick={() => router.push("/driver")}
                 >
                   Cancel
                 </button>
