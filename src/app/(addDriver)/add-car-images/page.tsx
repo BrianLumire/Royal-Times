@@ -111,6 +111,9 @@ const AddCarImagesPage = () => {
                   Browse File
                 </label>
               </div>
+              {errors.frontViewImage && (
+                <p className="text-red-500 text-sm mt-2">{errors.frontViewImage.message as string}</p>
+              )}
             </div>
 
             {/* Vehicle Views Section */}
@@ -141,6 +144,9 @@ const AddCarImagesPage = () => {
                       <Image src="/ic_round-plus.svg" alt="Plus Icon" width={17} height={17} />
                       <span className="font-sans text-base">Front View</span>
                     </div>
+                    {errors.frontViewImage && (
+                      <p className="text-red-500 text-sm">{errors.frontViewImage.message as string}</p>
+                    )}
                   </div>
 
                   {/* Back View */}
@@ -167,6 +173,9 @@ const AddCarImagesPage = () => {
                       <Image src="/ic_round-plus.svg" alt="Plus Icon" width={17} height={17} />
                       <span className="font-sans text-base">Back View</span>
                     </div>
+                    {errors.backViewImage && (
+                      <p className="text-red-500 text-sm">{errors.backViewImage.message as string}</p>
+                    )}
                   </div>
                 </div>
 
@@ -195,6 +204,9 @@ const AddCarImagesPage = () => {
                       <Image src="/ic_round-plus.svg" alt="Plus Icon" width={17} height={17} />
                       <span className="font-sans text-base">Side View</span>
                     </div>
+                    {errors.sideViewImage && (
+                      <p className="text-red-500 text-sm">{errors.sideViewImage.message as string}</p>
+                    )}
                   </div>
 
                   {/* Other View */}
@@ -221,6 +233,9 @@ const AddCarImagesPage = () => {
                       <Image src="/ic_round-plus.svg" alt="Plus Icon" width={17} height={17} />
                       <span className="font-sans text-base">Other View</span>
                     </div>
+                    {errors.otherViewImage && (
+                      <p className="text-red-500 text-sm">{errors.otherViewImage.message as string}</p>
+                    )}
                   </div>
                 </div>
               </div>

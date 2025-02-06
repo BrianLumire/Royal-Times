@@ -28,13 +28,14 @@ import Pagination from "@/components/Pagination";
 
 const DriverPage = () => {
   const [selectedButton, setSelectedButton] = useState("Occupied");
+  const router = useRouter(); 
   const [searchTerm, setSearchTerm] = useState("");
   const [sortColumn, setSortColumn] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [filters, setFilters] = useState<FilterCriteria>({});
   const [loading, setLoading] = useState(false);
 
-  const router = useRouter(); // Initialize router from next/navigation
+  
 
   const buttons = ["Occupied", "Free", "Offline", "Un-approved", "Inactive", "Deleted", "Blocked"];
 
@@ -83,9 +84,7 @@ const DriverPage = () => {
 
   const isAnyFilterApplied = Boolean(searchTerm || sortColumn || Object.keys(filters).length > 0);
 
-  const handleApproveClick = (driverId: number) => {
-    console.log("Approve driver with ID:", driverId);
-  };
+
 
   const handleAddDriverClick = () => {
     router.push("/add-driver"); // Navigate to the Add Driver page
@@ -139,7 +138,7 @@ const DriverPage = () => {
             key={selectedButton}
             columns={columns}
             data={sortedData}
-            renderRowDriver={(item) => renderRowDriver(item, selectedButton)}
+            renderRowDriver={(item) => renderRowDriver(item, selectedButton, router)}
             searchTerm={searchTerm}
             onSearchChange={setSearchTerm}
             onFilterClick={handleFilterClick}

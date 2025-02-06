@@ -26,8 +26,11 @@ interface Driver {
   action?: string;
 }
 
-export const renderRowDriver = (item: Driver, selectedButton: string) => {
-  const router = useRouter();
+export const renderRowDriver = (
+  item: Driver,
+  selectedButton: string,
+  router: ReturnType<typeof useRouter> 
+) => {
   switch (selectedButton) {
 
     case "Free":
