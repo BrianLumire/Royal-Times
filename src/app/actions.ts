@@ -93,9 +93,8 @@ export async function storeIdImages(formData: FormData) {
   }
 }
 
-
 // resize and upload psv badge to drivers bucket
-export async function storepsvBadgeImage(formData: FormData) {
+export async function storePsvBadgeImage(formData: FormData) {
   const user_id = formData.get("user_id");
   const psv_badge_image = await resizeImage(
     formData.get("psv_badge_image") as File,
@@ -119,3 +118,46 @@ export async function storepsvBadgeImage(formData: FormData) {
     return { success: true };
   }
 }
+
+export async function storeVerificationInfo(formData: FormData) {
+  const user_id = formData.get("user_id");
+
+  // Define images to be processed
+  const images = [
+    { key: "driver_license_front", filename: "driver_license_front_image.jpg" },
+    { key: "driver_license_back", filename: "driver_license_back_image.jpg" },
+    { key: "proof_of_insurance", filename: "insurance_image.jpg" },
+    { key: "license_plate", filename: "license_plate_image.jpg" },
+    { key: "psv_badge", filename: "psv_badge_image.jpg" },
+  ];
+
+  // Resize and store images
+  const resizedImages = await Promise.all(
+    images.map(async (image) => {
+      const file = formData.get(image.key) as File;
+      return file ? { filename: image.filename, data: await resizeImage(file, image.filename) } : null;
+    })
+  );
+
+  const supabase = await createClient();
+
+  // Upload images to Supabase
+  for (const image of resizedImages) {
+    if (image) {
+      const { error } = await supabase.storage
+        .from("drivers")
+        .upload(`${user_id}/${image.filename}`, image.data, {
+          cacheControl: "3600",
+          upsert: true,
+        });
+
+      if (error) {
+        console.log(error);
+        return { error: "An error occurred while uploading" };
+      }
+    }
+  }
+
+  return { success: true };
+}
+

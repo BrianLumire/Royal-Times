@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
-import { storepsvBadgeImage } from "@/app/actions";
+import { storePsvBadgeImage } from "@/app/actions";
 import { convertToFullISO } from "@/utils/utils";
 import { toast } from "react-toastify";
 
@@ -61,7 +61,7 @@ const AddInformationPage = () => {
       driverData.append("psv_badge_image", data.psvBadgeImage);
       driverData.append("user_id", user_id);
       //store psv badge image
-      const storePsvBadge = await storepsvBadgeImage(driverData);
+      const storePsvBadge = await storePsvBadgeImage(driverData);
 
       if (storePsvBadge.success) {
         //store license info
