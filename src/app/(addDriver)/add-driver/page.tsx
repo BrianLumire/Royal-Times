@@ -69,7 +69,7 @@ const AddDriverPage = () => {
     const supabase = createClient();
 
     // invoke function that creates a new user
-    const { data: user_id, error: error_creating_user } =
+    const { data: user, error: error_creating_user } =
       await supabase.functions.invoke("create_driver_user_account", {
         body: {
           name: data.fullName,
@@ -79,15 +79,18 @@ const AddDriverPage = () => {
       });
 
     if (error_creating_user) {
-      toast.error("An error occured. Please try again.");
+      if ((error_creating_user.code = "email_exists"))
+        toast.error("A user with this email exists.");
+      setDisabled(false);
     } else {
-      driverData.append("user_id", user_id);
+      driverData.append("user_id", user?.user_id);
       driverData.append("front_id_image", data.frontPageImage);
       driverData.append("back_id_image", data.backPageImage);
     }
 
-    if (user_id) {
-      localStorage.setItem("user_id", user_id);
+    if (user) {
+      console.log(user);
+      localStorage.setItem("user_id", user?.user_id);
       const storeDriverIdImages = await storeIdImages(driverData);
 
       if (storeDriverIdImages.success) {
@@ -95,9 +98,7 @@ const AddDriverPage = () => {
         const { error: user_data_update_error } = await supabase
           .from("user_accounts")
           .update({ full_name: data.fullName, phone: data.phoneNumber })
-          .eq("id", user_id);
-
-        toast.success("New user created");
+          .eq("id", user?.user_id);
 
         //store driver dob, user_id ref and sex
         const { error: driver_data_update_error } = await supabase
@@ -105,7 +106,7 @@ const AddDriverPage = () => {
           .upsert(
             {
               date_of_birth: convertToFullISO(data.dateOfBirth),
-              user_id,
+              user_id: user?.user_id,
               sex: data.sex == "Male" ? "male" : "female",
             },
             { onConflict: "user_id" }
@@ -115,11 +116,15 @@ const AddDriverPage = () => {
 
         if (user_data_update_error || driver_data_update_error) {
           toast.error("An error occured.");
+          setDisabled(false);
         } else {
           setDisabled(false);
           router.push("/add-information");
         }
-      } else toast.error("An error occured.");
+      } else {
+        toast.error("An error occured.");
+        setDisabled(false);
+      }
     }
   };
 

@@ -90,12 +90,16 @@ const AddInformationPage = () => {
           );
         toast.success("License and PSV info saved.");
         if (error_adding_driver_license || error_updating_vehicle) {
+          setDisabled(false);
           toast.error("An error occured while storing driver details.");
         } else {
           setDisabled(false);
           router.push("/add-verification");
         }
-      } else toast.error("An error occured.");
+      } else {
+        toast.error("An error occured.");
+        setDisabled(false);
+      }
     } else router.push("/add-driver");
   };
 

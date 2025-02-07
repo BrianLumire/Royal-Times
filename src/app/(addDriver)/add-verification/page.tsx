@@ -79,7 +79,10 @@ const AddDriverVerificationInfoPage = () => {
       toast.success("Driver verification info saved.");
       setDisabled(false);
       router.push("/add-license");
-    } else toast.error("An error occured.");
+    } else {
+      toast.error("An error occured.");
+      setDisabled(false);
+    }
 
     // Adjust the route as needed
   };

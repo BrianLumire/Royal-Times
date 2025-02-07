@@ -68,15 +68,21 @@ const AddLicenseInformation = () => {
           .eq("driver_id", driver_data?.[0].id);
 
         if (vehicle_update_error) {
-          console.log(vehicle_class_error, vehicle_update_error);
+          setDisabled(false);
           toast.error("An error occured.");
         } else {
           setDisabled(false);
           toast.success("Driving information saved.");
           router.push("/add-car-images");
         }
-      } else toast.error("An error occured.");
-    } else toast.error("An error occured. ");
+      } else {
+        toast.error("An error occured.");
+        setDisabled(false);
+      }
+    } else {
+      toast.error("An error occured.");
+      setDisabled(false);
+    }
   };
 
   return (

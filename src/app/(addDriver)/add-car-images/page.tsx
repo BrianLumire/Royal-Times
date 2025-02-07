@@ -65,8 +65,15 @@ const AddCarImagesPage = () => {
         .update({ verification_status: "approved" })
         .eq("user_id", user_id);
 
-      if (!approve_driver_error) {
+      const { error: role_change_error } = await supabase
+        .from("user_accounts")
+        .update({ role: "driver" })
+        .eq("id", user_id);
+
+      if (!approve_driver_error && !role_change_error) {
         toast.success("Driver created and approved.");
+        setDisabled(false);
+        localStorage.removeItem("user_id");
         router.push("/driver");
       } else toast.error("An error occured.");
     }
