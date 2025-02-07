@@ -71,7 +71,7 @@ const AddCarImagesPage = () => {
         .eq("id", user_id);
 
       if (!approve_driver_error && !role_change_error) {
-        toast.success("Driver created and approved.");
+        toast.success("The driver has been approved.");
         setDisabled(false);
         localStorage.removeItem("user_id");
         router.push("/driver");
