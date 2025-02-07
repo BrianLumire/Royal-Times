@@ -1,17 +1,28 @@
 "use client";
-import Image from 'next/image';
-import React, { useState, ChangeEvent } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { useRouter } from 'next/navigation';
+import Image from "next/image";
+import React, { useState, ChangeEvent } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { useRouter } from "next/navigation";
+import { storeVehicleImages } from "@/app/actions";
+import { createClient } from "@/utils/supabase/client";
+import { toast } from "react-toastify";
 
 // Define the schema for validation
 const schema = z.object({
-  frontViewImage: z.any().refine((file) => file, { message: 'Front View Image is required' }),
-  backViewImage: z.any().refine((file) => file, { message: 'Back View Image is required' }),
-  sideViewImage: z.any().refine((file) => file, { message: 'Side View Image is required' }),
-  otherViewImage: z.any().refine((file) => file, { message: 'Other View Image is required' }),
+  frontViewImage: z
+    .any()
+    .refine((file) => file, { message: "Front View Image is required" }),
+  backViewImage: z
+    .any()
+    .refine((file) => file, { message: "Back View Image is required" }),
+  sideViewImage: z
+    .any()
+    .refine((file) => file, { message: "Side View Image is required" }),
+  otherViewImage: z
+    .any()
+    .refine((file) => file, { message: "Other View Image is required" }),
 });
 
 // Infer the form data type from the schema
@@ -27,37 +38,61 @@ const AddCarImagesPage = () => {
     resolver: zodResolver(schema),
   });
 
+  const [disabled, setDisabled] = useState(false);
+
   const [frontViewImage, setFrontViewImage] = useState<string | null>(null);
   const [backViewImage, setBackViewImage] = useState<string | null>(null);
   const [sideViewImage, setSideViewImage] = useState<string | null>(null);
   const [otherViewImage, setOtherViewImage] = useState<string | null>(null);
 
-  const onSubmit = (data: FormData) => {
-    console.log(data);
-    router.push('/driver'); // Navigate to the next page
+  const onSubmit = async (data: FormData) => {
+    setDisabled(true);
+    const supabase = await createClient();
+    const driverData = new FormData();
+    const user_id = localStorage.getItem("user_id") as string;
+
+    driverData.append("vehicle_front_view", data.frontViewImage);
+    driverData.append("vehicle_back_view", data.backViewImage);
+    driverData.append("vehicle_left_side_view", data.sideViewImage);
+    driverData.append("vehicle_right_side_view", data.otherViewImage);
+    driverData.append("user_id", user_id);
+
+    const storeVehicleImagesResponse = await storeVehicleImages(driverData);
+
+    if (storeVehicleImagesResponse.success) {
+      const { error: approve_driver_error } = await supabase
+        .from("drivers")
+        .update({ verification_status: "approved" })
+        .eq("user_id", user_id);
+
+      if (!approve_driver_error) {
+        toast.success("Driver created and approved.");
+        router.push("/driver");
+      } else toast.error("An error occured.");
+    }
   };
 
   const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file && (file.type === 'image/jpeg' || file.type === 'image/png')) {
+    if (file && (file.type === "image/jpeg" || file.type === "image/png")) {
       const imageUrl = URL.createObjectURL(file);
 
       // Determine which container to assign the image to
       if (!frontViewImage) {
         setFrontViewImage(imageUrl);
-        setValue('frontViewImage', file);
+        setValue("frontViewImage", file);
       } else if (!backViewImage) {
         setBackViewImage(imageUrl);
-        setValue('backViewImage', file);
+        setValue("backViewImage", file);
       } else if (!sideViewImage) {
         setSideViewImage(imageUrl);
-        setValue('sideViewImage', file);
+        setValue("sideViewImage", file);
       } else if (!otherViewImage) {
         setOtherViewImage(imageUrl);
-        setValue('otherViewImage', file);
+        setValue("otherViewImage", file);
       }
     } else {
-      alert('Please upload a valid image file (JPG or PNG).');
+      alert("Please upload a valid image file (JPG or PNG).");
     }
   };
 
@@ -70,7 +105,12 @@ const AddCarImagesPage = () => {
               className="p-2 md:p-3 border border-gray-300 rounded-full"
               onClick={() => router.back()}
             >
-              <Image src="/driver-arrow.svg" alt="Driver Arrow" width={16} height={16} />
+              <Image
+                src="/driver-arrow.svg"
+                alt="Driver Arrow"
+                width={16}
+                height={16}
+              />
             </button>
             <span className="font-sans font-semibold text-[18px] md:text-xl">
               Add Vehicle Information
@@ -78,7 +118,7 @@ const AddCarImagesPage = () => {
           </div>
           <button
             className="font-sans flex items-center text-gray-700 text-lg font-semibold px-6 rounded-[10px] py-[3px] bg-[#F5F5F5]"
-            onClick={() => router.push('/driver')}
+            onClick={() => router.push("/driver")}
           >
             X
           </button>
@@ -90,13 +130,20 @@ const AddCarImagesPage = () => {
             {/* Upload Image Div */}
             <div className="flex flex-col p-5 w-full h-[350px] border border-gray-300 rounded-xl">
               <div className="flex flex-col items-center mb-3">
-                <p className="text-sm font-sans font-medium">Upload Your Image</p>
+                <p className="text-sm font-sans font-medium">
+                  Upload Your Image
+                </p>
                 <span className="text-sm font-sans text-[#9E9E9E]">
                   File should be JPG, PNG or Raw
                 </span>
               </div>
               <div className="flex flex-col gap-4 border-2 border-dashed py-14 items-center justify-center border-gray-300 rounded-xl">
-                <Image src="/tabler_upload.svg" alt="Upload Icon" width={30} height={30} />
+                <Image
+                  src="/tabler_upload.svg"
+                  alt="Upload Icon"
+                  width={30}
+                  height={30}
+                />
                 <p className="font-sans text-sm">Drag & Drop your file or</p>
                 <input
                   type="file"
@@ -112,7 +159,9 @@ const AddCarImagesPage = () => {
                 </label>
               </div>
               {errors.frontViewImage && (
-                <p className="text-red-500 text-sm mt-2">{errors.frontViewImage.message as string}</p>
+                <p className="text-red-500 text-sm mt-2">
+                  {errors.frontViewImage.message as string}
+                </p>
               )}
             </div>
 
@@ -141,11 +190,18 @@ const AddCarImagesPage = () => {
                       )}
                     </div>
                     <div className="flex items-center gap-3">
-                      <Image src="/ic_round-plus.svg" alt="Plus Icon" width={17} height={17} />
+                      <Image
+                        src="/ic_round-plus.svg"
+                        alt="Plus Icon"
+                        width={17}
+                        height={17}
+                      />
                       <span className="font-sans text-base">Front View</span>
                     </div>
                     {errors.frontViewImage && (
-                      <p className="text-red-500 text-sm">{errors.frontViewImage.message as string}</p>
+                      <p className="text-red-500 text-sm">
+                        {errors.frontViewImage.message as string}
+                      </p>
                     )}
                   </div>
 
@@ -170,11 +226,18 @@ const AddCarImagesPage = () => {
                       )}
                     </div>
                     <div className="flex items-center gap-3">
-                      <Image src="/ic_round-plus.svg" alt="Plus Icon" width={17} height={17} />
+                      <Image
+                        src="/ic_round-plus.svg"
+                        alt="Plus Icon"
+                        width={17}
+                        height={17}
+                      />
                       <span className="font-sans text-base">Back View</span>
                     </div>
                     {errors.backViewImage && (
-                      <p className="text-red-500 text-sm">{errors.backViewImage.message as string}</p>
+                      <p className="text-red-500 text-sm">
+                        {errors.backViewImage.message as string}
+                      </p>
                     )}
                   </div>
                 </div>
@@ -201,11 +264,18 @@ const AddCarImagesPage = () => {
                       )}
                     </div>
                     <div className="flex items-center gap-3">
-                      <Image src="/ic_round-plus.svg" alt="Plus Icon" width={17} height={17} />
+                      <Image
+                        src="/ic_round-plus.svg"
+                        alt="Plus Icon"
+                        width={17}
+                        height={17}
+                      />
                       <span className="font-sans text-base">Side View</span>
                     </div>
                     {errors.sideViewImage && (
-                      <p className="text-red-500 text-sm">{errors.sideViewImage.message as string}</p>
+                      <p className="text-red-500 text-sm">
+                        {errors.sideViewImage.message as string}
+                      </p>
                     )}
                   </div>
 
@@ -230,11 +300,18 @@ const AddCarImagesPage = () => {
                       )}
                     </div>
                     <div className="flex items-center gap-3">
-                      <Image src="/ic_round-plus.svg" alt="Plus Icon" width={17} height={17} />
-                      <span className="font-sans text-base">Other View</span>
+                      <Image
+                        src="/ic_round-plus.svg"
+                        alt="Plus Icon"
+                        width={17}
+                        height={17}
+                      />
+                      <span className="font-sans text-base">Side View</span>
                     </div>
                     {errors.otherViewImage && (
-                      <p className="text-red-500 text-sm">{errors.otherViewImage.message as string}</p>
+                      <p className="text-red-500 text-sm">
+                        {errors.otherViewImage.message as string}
+                      </p>
                     )}
                   </div>
                 </div>
@@ -245,15 +322,16 @@ const AddCarImagesPage = () => {
                 <button
                   type="button"
                   className="px-12 py-3 font-sans font-medium text-base border border-[#F58735] bg-white rounded-xl text-[#F58735]"
-                  onClick={() => router.push('/driver')}
+                  onClick={() => router.push("/driver")}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
+                  disabled={disabled}
                   className="px-16 py-[13px] font-sans font-medium text-base bg-[#F58735] rounded-xl text-white"
                 >
-                  Complete
+                  {disabled === true ? "Saving..." : "Complete"}
                 </button>
               </div>
             </div>

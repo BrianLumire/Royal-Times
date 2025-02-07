@@ -56,6 +56,8 @@ const AddDriverPage = () => {
     resolver: zodResolver(schema),
   });
 
+  const [disabled, setDisabled] = useState(false);
+
   const [selectedSex, setSelectedSex] = useState<string | null>(null);
   const [frontPageImage, setFrontPageImage] = useState<string | null>(null);
   const [backPageImage, setBackPageImage] = useState<string | null>(null);
@@ -63,6 +65,7 @@ const AddDriverPage = () => {
   const driverData = new FormData();
 
   const onSubmit = async (data: FormData) => {
+    setDisabled(true);
     const supabase = createClient();
 
     // invoke function that creates a new user
@@ -112,7 +115,10 @@ const AddDriverPage = () => {
 
         if (user_data_update_error || driver_data_update_error) {
           toast.error("An error occured.");
-        } else router.push("/add-information");
+        } else {
+          setDisabled(false);
+          router.push("/add-information");
+        }
       } else toast.error("An error occured.");
     }
   };
@@ -449,7 +455,7 @@ const AddDriverPage = () => {
                   type="submit"
                   className="px-16 py-[13px] font-sans font-medium text-base bg-[#F58735] rounded-xl text-white"
                 >
-                  Next
+                  {disabled === true ? "Saving..." : "Next"}
                 </button>
               </div>
             </div>
