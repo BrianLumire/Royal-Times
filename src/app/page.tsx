@@ -5,6 +5,8 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation"; // Import useRouter for navigation
 import { signInAction } from "./actions";
 import { createClient } from "../utils/supabase/client";
+import { toast } from "sonner";
+
 
 const SignInPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -16,28 +18,23 @@ const SignInPage = () => {
     setShowPassword(!showPassword);
   };
 
-  // Mock authentication function
   const handleSignIn = async (e: React.FormEvent) => {
-    e.preventDefault(); // Prevent form submission
-
+    e.preventDefault();
+  
     const supabase = await createClient();
-
     const { data, error } = await supabase.auth.signInWithPassword({
       email: email,
       password: password,
     });
-
-    // Mock credentials (replace with actual backend logic later)
-    // const mockEmail = "admin@example.com";
-    // const mockPassword = "password123";
-
+  
     if (data.session) {
-      // Redirect to the dashboard on successful login
+      toast.success("Login successful! Redirecting...");
       router.push("/dashboard");
-    } else if(error) {
-      alert(error.message); // Show error for invalid credentials
+    } else if (error) {
+      toast.error(error.message);
     }
   };
+  
 
   return (
     <div className="h-screen flex">
@@ -80,11 +77,14 @@ const SignInPage = () => {
               </label>
               <p
                 className="font-sans text-sm font-normal text-[#F58735] hover:underline cursor-pointer"
-                onClick={() =>
-                  router.push(
-                    `/auth/confirm-email?email=${encodeURIComponent(email)}`
-                  )
-                }
+                onClick={() => {
+                  if (!email) {
+                    toast.warning("Please enter your email to reset your password.");
+                  } else {
+                    router.push(`/auth/confirm-email?email=${encodeURIComponent(email)}`);
+                  }
+                }}
+                
               >
                 Forgot Password ?
               </p>

@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 // Define schema for validation
 const schema = z.object({

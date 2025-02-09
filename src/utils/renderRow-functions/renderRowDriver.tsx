@@ -37,9 +37,11 @@ export const renderRowDriver = (
       return (
         <tr
           key={item.id}
-          className="border-b border-gray-300 py-3 hover:bg-[#FFF8F5]"
+          className="border-b py-3 hover:bg-[#FFF8F5]"
         >
-          <td className="flex items-center gap-3 font-medium cursor-pointer ml-2 py-3 whitespace-nowrap sm:whitespace-normal">
+          <button className="flex items-center gap-3 b font-medium cursor-pointer ml-2 py-3 whitespace-nowrap sm:whitespace-normal"
+          onClick={() => router.push(`/driver/${item.id}`)} 
+          >
             <Image
               src={item.photo}
               alt={`${item.name}'s photo`}
@@ -50,7 +52,7 @@ export const renderRowDriver = (
             <span className="font-sans text-sm font-medium text-[#1E1E1E]">
               {item.name}
             </span>
-          </td>
+          </button>
           <td className="font-sans text text-sm font-medium whitespace-nowrap sm:whitespace-normal text-[#1E1E1E]">
             {item.completedrides}
           </td>
@@ -97,7 +99,9 @@ export const renderRowDriver = (
             key={item.id}
             className="border-b border-gray-300 py-3 hover:bg-[#FFF8F5]"
           >
-            <td className="flex items-center gap-3 font-medium cursor-pointer ml-2 py-3 whitespace-nowrap sm:whitespace-normal">
+            <button className="flex items-center gap-3 font-medium cursor-pointer ml-2 py-3 whitespace-nowrap sm:whitespace-normal"
+            onClick={() => router.push(`/driver/${item.id}`)} 
+            >
               <Image
                 src={item.photo}
                 alt={`${item.name}'s photo`}
@@ -108,7 +112,7 @@ export const renderRowDriver = (
               <span className="font-sans text-sm font-medium text-[#1E1E1E]">
                 {item.name}
               </span>
-            </td>
+            </button>
             <td className="font-sans pl-3 text-sm font-medium whitespace-nowrap sm:whitespace-normal text-[#1E1E1E]">
               {item.completedrides}
             </td>
@@ -158,7 +162,9 @@ export const renderRowDriver = (
           key={item.id}
           className="border-b border-gray-300 py-3 hover:bg-[#FFF8F5]"
         >
-          <td className="flex items-center gap-3 font-medium cursor-pointer ml-2 py-3 whitespace-nowrap sm:whitespace-normal">
+          <button className="flex items-center gap-3 font-medium cursor-pointer ml-2 py-3 whitespace-nowrap sm:whitespace-normal"
+          onClick={() => router.push(`/driver/${item.id}`)} 
+          >
             <Image
               src={item.photo}
               alt={`${item.name}'s photo`}
@@ -169,7 +175,7 @@ export const renderRowDriver = (
             <span className="font-sans text-sm font-medium text-[#1E1E1E]">
               {item.name}
             </span>
-          </td>
+          </button>
           <td className="font-sans pl-3 text-sm font-medium whitespace-nowrap sm:whitespace-normal text-[#1E1E1E]">
             {item.completedrides}
           </td>
@@ -205,7 +211,9 @@ export const renderRowDriver = (
           key={item.id}
           className="border-b border-gray-300 py-3 hover:bg-[#FFF8F5]"
         >
-          <td className="flex  items-center gap-3 font-medium cursor-pointer ml-2 py-3 whitespace-nowrap sm:whitespace-normal">
+          <button className="flex  items-center gap-3 font-medium cursor-pointer ml-2 py-3 whitespace-nowrap sm:whitespace-normal"
+          onClick={() => router.push(`/driver/${item.id}`)} 
+          >
             <Image
               src={item.photo}
               alt={`${item.name}'s photo`}
@@ -216,7 +224,7 @@ export const renderRowDriver = (
             <span className="font-sans text-sm font-medium text-[#1E1E1E]">
               {item.name}
             </span>
-          </td>
+          </button>
           <td className="font-sans pl-2 text-sm font-medium whitespace-nowrap sm:whitespace-normal text-[#1E1E1E]">
             {item.vehicleclass}
           </td>
@@ -250,7 +258,9 @@ export const renderRowDriver = (
           key={item.id}
           className="border-b border-gray-300 py-3 hover:bg-[#FFF8F5]"
         >
-          <td className="flex items-center gap-3 font-medium cursor-pointer ml-2 py-3 whitespace-nowrap sm:whitespace-normal">
+          <button className="flex items-center gap-3 font-medium cursor-pointer ml-2 py-3 whitespace-nowrap sm:whitespace-normal"
+          onClick={() => router.push(`/driver/${item.id}`)} 
+          >
             <Image
               src={item.photo}
               alt={`${item.name}'s photo`}
@@ -261,7 +271,7 @@ export const renderRowDriver = (
             <span className="font-sans text-sm font-medium text-[#1E1E1E]">
               {item.name}
             </span>
-          </td>
+          </button>
           <td className="font-sans pl-3 text-sm font-medium whitespace-nowrap sm:whitespace-normal text-[#1E1E1E]">
             {item.completedrides}
           </td>
@@ -300,7 +310,9 @@ export const renderRowDriver = (
           key={item.id}
           className="border-b border-gray-300 py-3 hover:bg-[#FFF8F5]"
         >
-          <td className="flex items-center  gap-3 font-medium cursor-pointer ml-2 py-3 whitespace-nowrap sm:whitespace-normal">
+          <button className="flex items-center  gap-3 font-medium cursor-pointer ml-2 py-3 whitespace-nowrap sm:whitespace-normal"
+          onClick={() => router.push(`/driver/${item.id}`)} 
+          >
             <Image
               src={item.photo}
               alt={`${item.name}'s photo`}
@@ -311,7 +323,7 @@ export const renderRowDriver = (
             <span className="font-sans text-sm font-medium text-[#1E1E1E]">
               {item.name}
             </span>
-          </td>
+          </button>
           <td className="font-sans pl-3  text-sm font-medium whitespace-nowrap sm:whitespace-normal text-[#1E1E1E]">
             {item.completedrides}
           </td>
@@ -350,7 +362,9 @@ case "Blocked":
       key={item.id}
       className="border-b border-gray-300 py-3 hover:bg-[#FFF8F5]"
     >
-      <td className="flex items-center gap-3 font-medium cursor-pointer ml-2 py-3 whitespace-nowrap sm:whitespace-normal">
+      <button className="flex items-center gap-3 font-medium cursor-pointer ml-2 py-3 whitespace-nowrap sm:whitespace-normal"
+      onClick={() => router.push(`/driver/${item.id}`)} 
+      >
         <Image
           src={item.photo}
           alt={`${item.name}'s photo`}
@@ -361,7 +375,7 @@ case "Blocked":
         <span className="font-sans text-sm font-medium text-[#1E1E1E]">
           {item.name}
         </span>
-      </td>
+      </button>
       <td className="font-sans pl-3 text-sm font-medium whitespace-nowrap sm:whitespace-normal text-[#1E1E1E]">
         {item.completedrides}
       </td>

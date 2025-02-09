@@ -3,7 +3,9 @@
 import React, { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
-import { createClient } from "../../../utils/supabase/client";
+import { createClient } from "@/utils/supabase/client";
+import { toast } from "sonner";
+
 
 // Create a component with your page content.
 function ConfirmEmailContent() {
@@ -56,32 +58,38 @@ function ConfirmEmailContent() {
 
   const handleConfirmEmail = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
+    if (!email) {
+      toast.error("Please enter a valid email address.");
+      return; // Stop execution if no email is entered
+    }
+  
     if (!canResend) {
-      // Redirect to enter OTP if cannot resend
-      router.push("/auth/enter-otp");
+      toast.warning("Please wait before resending OTP.");
+      return; // Prevent spamming the resend button
+    }
+  
+    setCanResend(false);
+    const cooldownTime = 30; // Cooldown in seconds
+    setTimer(cooldownTime);
+    const expiration = Date.now() + cooldownTime * 1000;
+    const supabase = await createClient();
+  
+    const { data, error } = await supabase.auth.signInWithOtp({
+      email: email,
+    });
+  
+    localStorage.setItem("otpResendTime", expiration.toString());
+    localStorage.setItem("email", email);
+  
+    if (error) {
+      toast.error(error.message);
     } else {
-      setCanResend(false);
-      const cooldownTime = 30; // Cooldown in seconds
-      setTimer(cooldownTime);
-      const expiration = Date.now() + cooldownTime * 1000;
-      const supabase = await createClient();
-
-      const { data, error } = await supabase.auth.signInWithOtp({
-        email: email,
-      });
-
-      localStorage.setItem("otpResendTime", expiration.toString());
-      localStorage.setItem("email", email);
-
-      // If user data is null, navigate to the OTP page
-      if (data.user == null) {
-        router.push("/auth/enter-otp");
-      } else {
-        alert(error?.message);
-      }
+      toast.success("OTP has been sent! Check your email.");
+      router.push("/auth/enter-otp");
     }
   };
+  
 
   return (
     <div className="h-screen flex">

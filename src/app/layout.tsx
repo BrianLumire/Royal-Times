@@ -3,9 +3,8 @@ import { Inter, DM_Sans } from "next/font/google"; // Import DM Sans
 import "./globals.css"; // Ensure this is imported
 import { ThemeProvider } from "../components/Theme-provider";
 
-// Import Toastify
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+// Import Sonner
+import { Toaster } from "@/components/ui/sonner";
 
 import { SWRConfig } from "swr";
 
@@ -32,8 +31,6 @@ export default function RootLayout({
     >
       <html lang="en">
         <body className={`${inter.className} ${dmSans.variable}`}>
-          {" "}
-          {/* Apply DM Sans */}
           <ThemeProvider
             attribute="class"
             defaultTheme="light"
@@ -42,14 +39,8 @@ export default function RootLayout({
           >
             {children}
           </ThemeProvider>
-          {/* Global Toast Container */}
-          <ToastContainer
-            position="bottom-right"
-            theme="dark"
-            toastClassName="custom-toast" /* Custom class for toasts */
-            progressClassName="Toastify__progress-bar" /* Custom class for progress bar */
-            className="Toastify__toast-icon" /* Custom class for tick icon */
-          />
+          {/* Global Toaster */}
+          <Toaster />
         </body>
       </html>
     </SWRConfig>

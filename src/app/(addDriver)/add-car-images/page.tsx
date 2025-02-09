@@ -7,7 +7,7 @@ import * as z from "zod";
 import { useRouter } from "next/navigation";
 import { storeVehicleImages } from "@/app/actions";
 import { createClient } from "@/utils/supabase/client";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 // Define the schema for validation
 const schema = z.object({

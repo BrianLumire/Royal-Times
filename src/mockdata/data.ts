@@ -401,6 +401,152 @@ export const offlineColumns = [
     { header: "Status", accessor: "Status" },
     { header: "Reason", accessor: "reason" },
   ];
+  //single driver tables
+  export const ridesData = [
+    {
+      id: 1,
+      route: "From Archives to Adams",
+      tripCost: 1200,
+      date: "22/07/2025",
+      rating: 4.5,
+      paymentMethod: "Mpesa",
+      status: "Completed",
+    },
+    {
+      id: 2,
+      route: "From Westlands to Thika",
+      tripCost: 800,
+      date: "23/07/2025",
+      rating: 3.8,
+      paymentMethod: "Cash",
+      status: "Ongoing",
+    },
+  ];
+  
+  export const ridesColumns = [
+    { header: "Route", accessor: "route" },
+    { header: "Trip Cost", accessor: "tripCost" },
+    { header: "Date", accessor: "date" },
+    { header: "Rating", accessor: "rating" },
+    { header: "Payment Method", accessor: "paymentMethod" },
+    { header: "Status", accessor: "status" },
+  ];export const deliveriesData = [
+    {
+      id: 1,
+      route: "From Archives to Adams",
+      deliveryCost: 1500,
+      date: "22/07/2025",
+      rating: 4.2,
+      paymentMethod: "Mpesa",
+      status: "Completed",
+    },
+    {
+      id: 2,
+      route: "From Westlands to Thika",
+      deliveryCost: 1000,
+      date: "23/07/2025",
+      rating: 3.5,
+      paymentMethod: "Cash",
+      status: "Ongoing",
+    },
+  ];
+  
+  export const deliveriesColumns = [
+    { header: "Route", accessor: "route" },
+    { header: "Delivery Cost", accessor: "deliveryCost" },
+    { header: "Date", accessor: "date" },
+    { header: "Rating", accessor: "rating" },
+    { header: "Payment Method", accessor: "paymentMethod" },
+    { header: "Status", accessor: "status" },
+  ];
+
+  export const disputesData = [
+    {
+      id: 1,
+      customer: {
+        photo: "/driverpic.svg",
+        name: "John Doe",
+      },
+      tripCost: 1200,
+      tripType: "Ride",
+      route: "From Archives to Adams",
+      date: "22/07/2025",
+      comment: "Customer declined to pay",
+    },
+    {
+      id: 2,
+      customer: {
+        photo: "/driverpic.svg",
+        name: "Jane Smith",
+      },
+      tripCost: 800,
+      tripType: "Parcel Delivery",
+      route: "From Westlands to Thika",
+      date: "23/07/2025",
+      comment: "Driver took a longer route",
+    },
+  ];
+  
+  export const disputesColumns = [
+    { header: "Customer", accessor: "customer" },
+    { header: "Trip Cost", accessor: "tripCost" },
+    { header: "Trip Type", accessor: "tripType" },
+    { header: "Route", accessor: "route" },
+    { header: "Date", accessor: "date" },
+    { header: "Comment", accessor: "comment" },
+  ];
+  export const reviewsData = [
+    {
+      id: 1,
+      customer: {
+        photo: "/driverpic.svg",
+        name: "John Doe",
+      },
+      tripCost: 1200,
+      date: "22/07/2025",
+      rating: 4.5,
+      tip: 400,
+      comment: "Driver was conversational",
+    },
+    {
+      id: 2,
+      customer: {
+        photo: "/driverpic.svg",
+        name: "Jane Smith",
+      },
+      tripCost: 800,
+      date: "23/07/2025",
+      rating: 3.8,
+      tip: 200,
+      comment: "Driver was late",
+    },
+  ];
+  
+  export const reviewsColumns = [
+    { header: "Customer", accessor: "customer" },
+    { header: "Trip Cost", accessor: "tripCost" },
+    { header: "Date", accessor: "date" },
+    { header: "Rating", accessor: "rating" },
+    { header: "Tip", accessor: "tip" },
+    { header: "Comment", accessor: "comment" },
+  ];
+  export const uploadedDocuments = [
+    {
+      id: 1,
+      name: "Driver License",
+      fileUrl: "/driver-license.pdf",
+    },
+    {
+      id: 2,
+      name: "Vehicle Insurance",
+      fileUrl: "/vehicle-insurance.pdf",
+    },
+    {
+      id: 3,
+      name: "Profile Photo",
+      fileUrl: "/profile-photo.jpg",
+    },
+  ];
   // for  customer Tables
   export const OnlineCustomers = [
     {

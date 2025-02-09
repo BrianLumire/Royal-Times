@@ -4,6 +4,7 @@ import React, { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { createClient } from "../../../utils/supabase/client";
+import { toast } from "sonner";
 
 // Main content of the Enter OTP page
 function EnterOtpContent() {
@@ -24,9 +25,19 @@ function EnterOtpContent() {
     e.preventDefault();
     const enteredOtp = otp.join(""); // Combine OTP digits into a single string
 
+    if (!enteredOtp || enteredOtp.length !== 6) {
+      toast.error("Please enter a valid 6-digit OTP.");
+      return;
+    }
+
     const supabase = await createClient();
-    // Retrieve email from localStorage (as saved on the previous page)
     const emailFromLocal = localStorage.getItem("email") as string;
+    
+    if (!emailFromLocal) {
+      toast.error("Email not found. Please go back and re-enter your email.");
+      return;
+    }
+
     const { error } = await supabase.auth.verifyOtp({
       email: emailFromLocal,
       token: enteredOtp,
@@ -34,14 +45,16 @@ function EnterOtpContent() {
     });
 
     if (error) {
-      alert(error.message);
+      toast.error(error.message);
+    } else {
+      toast.success("OTP verified successfully!");
+      // Navigate to the next step after successful verification
+      router.push("/dashboard"); // Change this to the actual next page
     }
-    // Optionally, navigate to the next page upon successful verification
   };
 
   const handleOtpChange = (index: number, value: string) => {
     if (/^\d*$/.test(value) && value.length <= 1) {
-      // Allow only digits and limit to 1 character per box
       const newOtp = [...otp];
       newOtp[index] = value;
       setOtp(newOtp);
@@ -88,7 +101,10 @@ function EnterOtpContent() {
   }, [timer]);
 
   const resendCode = async () => {
-    if (!canResend) return;
+    if (!canResend) {
+      toast.warning(`Please wait for ${timer}s before resending.`);
+      return;
+    }
 
     try {
       setCanResend(false);
@@ -99,24 +115,25 @@ function EnterOtpContent() {
       localStorage.setItem("otpResendTime", expiration.toString());
       const emailFromLocal = localStorage.getItem("email");
 
-      if (emailFromLocal == null) {
+      if (!emailFromLocal) {
         router.push("/auth/confirm-email");
+        return;
       }
 
       const supabase = createClient();
       const { error } = await supabase.auth.signInWithOtp({
-        email: emailFromLocal as string,
+        email: emailFromLocal,
       });
 
       if (error) {
-        alert(error.message);
+        toast.error(error.message);
       } else {
-        alert("OTP sent.");
+        toast.success("OTP resent successfully! Check your email.");
       }
-      alert("OTP resent successfully!");
     } catch (error) {
       console.error("Error resending OTP:", error);
-      setCanResend(true); // Allow retry if failed
+      toast.error("Failed to resend OTP. Try again later.");
+      setCanResend(true);
     }
   };
 
@@ -140,8 +157,7 @@ function EnterOtpContent() {
               Enter Verification Code
             </h1>
             <p className="font-sans text-xs text-[#202224]">
-              Enter the code sent to{" "}
-              <span className="font-semibold">{email}</span>
+              Enter the code sent to <span className="font-semibold">{email}</span>
             </p>
           </div>
 
