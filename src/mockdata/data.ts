@@ -421,6 +421,24 @@ export const offlineColumns = [
       paymentMethod: "Cash",
       status: "Ongoing",
     },
+    {
+      id: 3,
+      route: "From Westlands to Thika",
+      tripCost: 800,
+      date: "23/07/2025",
+      rating: 3.8,
+      paymentMethod: "Cash",
+      status: "Ongoing",
+    },
+    {
+      id: 4,
+      route: "From Westlands to Thika",
+      tripCost: 800,
+      date: "23/07/2025",
+      rating: 3.8,
+      paymentMethod: "Cash",
+      status: "Ongoing",
+    },
   ];
   
   export const ridesColumns = [
@@ -442,6 +460,24 @@ export const offlineColumns = [
     },
     {
       id: 2,
+      route: "From Westlands to Thika",
+      deliveryCost: 1000,
+      date: "23/07/2025",
+      rating: 3.5,
+      paymentMethod: "Cash",
+      status: "Ongoing",
+    },
+    {
+      id: 3,
+      route: "From Westlands to Thika",
+      deliveryCost: 1000,
+      date: "23/07/2025",
+      rating: 3.5,
+      paymentMethod: "Cash",
+      status: "Ongoing",
+    },
+    {
+      id: 4,
       route: "From Westlands to Thika",
       deliveryCost: 1000,
       date: "23/07/2025",
@@ -475,6 +511,30 @@ export const offlineColumns = [
     },
     {
       id: 2,
+      customer: {
+        photo: "/driverpic.svg",
+        name: "John Doe",
+      },
+      tripCost: 1200,
+      tripType: "Ride",
+      route: "From Archives to Adams",
+      date: "22/07/2025",
+      comment: "Customer declined to pay",
+    },
+    {
+      id: 3,
+      customer: {
+        photo: "/driverpic.svg",
+        name: "John Doe",
+      },
+      tripCost: 1200,
+      tripType: "Ride",
+      route: "From Archives to Adams",
+      date: "22/07/2025",
+      comment: "Customer declined to pay",
+    },
+    {
+      id: 4,
       customer: {
         photo: "/driverpic.svg",
         name: "Jane Smith",
@@ -520,6 +580,30 @@ export const offlineColumns = [
       tip: 200,
       comment: "Driver was late",
     },
+    {
+      id: 3,
+      customer: {
+        photo: "/driverpic.svg",
+        name: "Jane Smith",
+      },
+      tripCost: 800,
+      date: "23/07/2025",
+      rating: 3.8,
+      tip: 200,
+      comment: "Driver was late",
+    },
+    {
+      id: 4,
+      customer: {
+        photo: "/driverpic.svg",
+        name: "Jane Smith",
+      },
+      tripCost: 800,
+      date: "23/07/2025",
+      rating: 3.8,
+      tip: 200,
+      comment: "Driver was late",
+    },
   ];
   
   export const reviewsColumns = [
@@ -534,17 +618,17 @@ export const offlineColumns = [
     {
       id: 1,
       name: "Driver License",
-      fileUrl: "/driver-license.pdf",
+      fileUrl: "/Rectangle 1040.png", 
     },
     {
       id: 2,
-      name: "Vehicle Insurance",
-      fileUrl: "/vehicle-insurance.pdf",
+      name: "Proof of Insurance",
+      fileUrl: "/Rectangle 1040.png", 
     },
     {
       id: 3,
-      name: "Profile Photo",
-      fileUrl: "/profile-photo.jpg",
+      name: "License Plate",
+      fileUrl: "/Rectangle 1040.png", 
     },
   ];
   // for  customer Tables

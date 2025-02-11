@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { signOutAction } from "@/app/actions";
+import { toast } from "sonner";
 
 interface SidebarProps {
   isMobileSidebarOpen: boolean;
@@ -98,7 +99,8 @@ export default function Sidebar({
 
   // Handle Cancel Logout
   const handleCancelLogout = () => {
-    setShowLogoutModal(false); // Hide the logout modal
+    setShowLogoutModal(false);
+    toast.info("Logout canceled."); 
   };
 
   return (

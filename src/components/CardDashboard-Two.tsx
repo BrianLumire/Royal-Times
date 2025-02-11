@@ -16,7 +16,7 @@ const CardDashboard2: React.FC<CardDashboard2Props> = ({
   value,
 }) => {
   return (
-    <div className="flex items-center gap-4 border border-gray-100  shadow-lg rounded-xl p-4 h-full">
+    <div className="flex items-center gap-4 border border-gray-100 shadow-lg rounded-xl p-4 h-full transition-all duration-300 ease-in-out hover:shadow-xl hover:-translate-y-2 hover:scale-105">
       {/* Icon section */}
       <div className="flex items-center">
         <div
