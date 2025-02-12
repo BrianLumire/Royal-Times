@@ -23,7 +23,7 @@ interface Column {
   interface TableProps {
     columns: Column[];
     data: Driver[];
-    renderRow: (item: any) => React.ReactNode;
+    renderRow: (item: Driver) => React.ReactNode;
     title?: string; // Optional title prop
   }
   
