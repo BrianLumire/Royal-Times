@@ -66,7 +66,7 @@ interface Column {
                     colSpan={columns.length}
                     className="px-4 py-6 text-center text-red-400 dark:text-red-400"
                   >
-                    No results found!
+                    No results found!?
                   </td>
                 </tr>
               )}
