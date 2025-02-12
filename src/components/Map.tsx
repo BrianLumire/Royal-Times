@@ -8,7 +8,7 @@ import {
   Polyline,
   Libraries,
 } from "@react-google-maps/api";
-import SearchBar from "./SearchBar";
+
 
 interface MapContainerStyle {
   width: string;
@@ -142,7 +142,7 @@ const Map: React.FC = () => {
     >
       <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
         <h1 style={{ textAlign: "center", color: "#333" }}>Interactive Taxi Map</h1>
-        <SearchBar onPlaceSelected={handlePlaceSelect} />
+       
         <GoogleMap
           mapContainerStyle={containerStyle}
           center={center}
