@@ -3,9 +3,26 @@ interface Column {
     accessor: string;
   }
   
+  interface Driver  {
+    id: number;
+    route?: string;
+    tripCost?: number; // Optional since deliveries use deliveryCost instead
+    deliveryCost?: number; // Optional since rides use tripCost
+    date?: string;
+    rating?: number; // Rating should be a number, not a string
+    ratingphoto?: string;
+    paymentMethod?: string;
+    status?: string; // Restrict to expected values
+    comment?: string;
+    tip?: number; // Tip should be a number
+    customer?: string;
+    photo?: string;
+    tripType?: string; // Restrict to expected values
+  }
+
   interface TableProps {
     columns: Column[];
-    data: any[];
+    data: Driver[];
     renderRow: (item: any) => React.ReactNode;
     title?: string; // Optional title prop
   }

@@ -75,9 +75,10 @@ function ConfirmEmailContent() {
     const expiration = Date.now() + cooldownTime * 1000;
     const supabase = await createClient();
   
-    const { data, error } = await supabase.auth.signInWithOtp({
+    const { error } = await supabase.auth.signInWithOtp({
       email: email,
     });
+    
   
     localStorage.setItem("otpResendTime", expiration.toString());
     localStorage.setItem("email", email);

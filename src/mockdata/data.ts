@@ -437,7 +437,7 @@ export const offlineColumns = [
       date: "23/07/2025",
       rating: 3.8,
       paymentMethod: "Cash",
-      status: "Ongoing",
+      status: "Cancelled",
     },
   ];
   
@@ -499,10 +499,8 @@ export const offlineColumns = [
   export const disputesData = [
     {
       id: 1,
-      customer: {
-        photo: "/driverpic.svg",
-        name: "John Doe",
-      },
+      photo: "/driverpic.svg",
+      customer: "John Doe",
       tripCost: 1200,
       tripType: "Ride",
       route: "From Archives to Adams",
@@ -511,10 +509,10 @@ export const offlineColumns = [
     },
     {
       id: 2,
-      customer: {
+      
         photo: "/driverpic.svg",
-        name: "John Doe",
-      },
+        customer: "John Doe",
+     
       tripCost: 1200,
       tripType: "Ride",
       route: "From Archives to Adams",
@@ -523,10 +521,10 @@ export const offlineColumns = [
     },
     {
       id: 3,
-      customer: {
+      
         photo: "/driverpic.svg",
-        name: "John Doe",
-      },
+        customer: "John Doe",
+      
       tripCost: 1200,
       tripType: "Ride",
       route: "From Archives to Adams",
@@ -535,10 +533,10 @@ export const offlineColumns = [
     },
     {
       id: 4,
-      customer: {
+     
         photo: "/driverpic.svg",
-        name: "Jane Smith",
-      },
+        customer: "Jane Smith",
+      
       tripCost: 800,
       tripType: "Parcel Delivery",
       route: "From Westlands to Thika",
@@ -558,10 +556,10 @@ export const offlineColumns = [
   export const reviewsData = [
     {
       id: 1,
-      customer: {
+    
         photo: "/driverpic.svg",
-        name: "John Doe",
-      },
+        customer: "John Doe",
+      
       tripCost: 1200,
       date: "22/07/2025",
       rating: 4.5,
@@ -570,10 +568,10 @@ export const offlineColumns = [
     },
     {
       id: 2,
-      customer: {
+      
         photo: "/driverpic.svg",
-        name: "Jane Smith",
-      },
+        customer: "Jane Smith",
+      
       tripCost: 800,
       date: "23/07/2025",
       rating: 3.8,
@@ -582,10 +580,8 @@ export const offlineColumns = [
     },
     {
       id: 3,
-      customer: {
-        photo: "/driverpic.svg",
-        name: "Jane Smith",
-      },
+      photo: "/driverpic.svg",
+      customer: "Jane Smith",
       tripCost: 800,
       date: "23/07/2025",
       rating: 3.8,
@@ -594,10 +590,8 @@ export const offlineColumns = [
     },
     {
       id: 4,
-      customer: {
-        photo: "/driverpic.svg",
-        name: "Jane Smith",
-      },
+      photo: "/driverpic.svg",
+      customer: "Jane Smith",
       tripCost: 800,
       date: "23/07/2025",
       rating: 3.8,
