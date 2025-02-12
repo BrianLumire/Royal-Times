@@ -7,9 +7,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return(
     <div className="flex flex-col md:flex-row gap-3 ">
         {/* Sidecomponent  */}
-        <div className="md:w-1/5 flex flex-col gap-2 pb-3 border-r border-b p-2 border-gray-300 rounded-xl">
+        <div className="md:w-1/5 flex flex-col gap-2 pb-3 border p-2 border-gray-300 rounded-xl">
         {/*section 1 */}
-        <div className="border-r border-b p-2 border-gray-300 rounded-xl">
+        <div className="border p-2 border-gray-300 rounded-xl">
            <div className="flex justify-end ">
             <div className="px-2 py-1 flex items-center justify-center rounded-2xl bg-[#CAE3CE]">
             <span className="text-xs font-sans font-medium text-[#007C0C]">Online</span>

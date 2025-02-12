@@ -18,7 +18,7 @@ const DashboardCard1: React.FC<DashboardCard1Props> = ({
   items,
 }) => {
   return (
-    <div className="flex flex-col shadow-lg border border-gray-100  rounded-xl p-4 h-full">
+    <div className="flex flex-col shadow-lg border border-gray-100 rounded-xl p-4 h-full transition-all duration-300 ease-in-out hover:shadow-xl hover:-translate-y-2 hover:scale-105">
       {/* Main Value */}
       <div className="flex pt-3 justify-center mb-3">
         <p className="font-sans text-3xl font-bold">{mainValue}</p>

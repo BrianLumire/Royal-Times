@@ -14,7 +14,7 @@ export const renderRowSingleDriver = (
     case "Rides":
       return (
         <tr key={item.id} className="border-b py-3 hover:bg-[#FFF8F5]">
-          <td className="font-sans text-sm py-5 font-medium text-[#1E1E1E]">{item.route}</td>
+          <td className="font-sans text-sm py-5 pl-2 font-medium text-[#1E1E1E]">{item.route}</td>
           <td className="font-sans text-sm font-medium pl-2  text-[#1E1E1E]">{item.tripCost}</td>
           <td className="font-sans text-sm font-medium text-[#1E1E1E]">{item.date}</td>
           <td className="font-sans text-sm font-medium text-[#1E1E1E]">
@@ -43,7 +43,7 @@ export const renderRowSingleDriver = (
     case "Deliveries":
       return (
         <tr key={item.id} className="border-b py-3 hover:bg-[#FFF8F5]">
-          <td className="font-sans  py-5 text-sm font-medium text-[#1E1E1E]">{item.route}</td>
+          <td className="font-sans  py-5 text-sm pl-2 font-medium text-[#1E1E1E]">{item.route}</td>
           <td className="font-sans text-sm pl-2 font-medium text-[#1E1E1E]">{item.deliveryCost}</td>
           <td className="font-sans text-sm font-medium text-[#1E1E1E]">{item.date}</td>
           <td className="font-sans text-sm font-medium text-[#1E1E1E]">
