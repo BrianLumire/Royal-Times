@@ -9,6 +9,36 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      _commentsTorides: {
+        Row: {
+          A: string
+          B: string
+        }
+        Insert: {
+          A: string
+          B: string
+        }
+        Update: {
+          A?: string
+          B?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "_commentsTorides_A_fkey"
+            columns: ["A"]
+            isOneToOne: false
+            referencedRelation: "comments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "_commentsTorides_B_fkey"
+            columns: ["B"]
+            isOneToOne: false
+            referencedRelation: "rides"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       addresses: {
         Row: {
           customer_id: string
@@ -68,6 +98,7 @@ export type Database = {
         Row: {
           account_name: string
           account_number: string
+          created_at: string
           driversId: string | null
           id: string
           is_default: boolean
@@ -75,6 +106,7 @@ export type Database = {
         Insert: {
           account_name: string
           account_number: string
+          created_at?: string
           driversId?: string | null
           id?: string
           is_default?: boolean
@@ -82,6 +114,7 @@ export type Database = {
         Update: {
           account_name?: string
           account_number?: string
+          created_at?: string
           driversId?: string | null
           id?: string
           is_default?: boolean
@@ -170,20 +203,41 @@ export type Database = {
           },
         ]
       }
+      comments: {
+        Row: {
+          body: string
+          comment_type: Database["public"]["Enums"]["comment_type"]
+          id: string
+        }
+        Insert: {
+          body: string
+          comment_type: Database["public"]["Enums"]["comment_type"]
+          id?: string
+        }
+        Update: {
+          body?: string
+          comment_type?: Database["public"]["Enums"]["comment_type"]
+          id?: string
+        }
+        Relationships: []
+      }
       customers: {
         Row: {
           id: string
           location: unknown | null
+          rating: number | null
           user_id: string
         }
         Insert: {
           id?: string
           location?: unknown | null
+          rating?: number | null
           user_id: string
         }
         Update: {
           id?: string
           location?: unknown | null
+          rating?: number | null
           user_id?: string
         }
         Relationships: [
@@ -192,6 +246,67 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "user_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      discount: {
+        Row: {
+          customer_id: string | null
+          id: string
+          percentage: number | null
+        }
+        Insert: {
+          customer_id?: string | null
+          id?: string
+          percentage?: number | null
+        }
+        Update: {
+          customer_id?: string | null
+          id?: string
+          percentage?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "discount_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      driver_owed_commissions: {
+        Row: {
+          amount: number
+          created_at: string
+          driver_id: string | null
+          id: string
+          settlement_date: string | null
+          status: Database["public"]["Enums"]["commission_status"]
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          driver_id?: string | null
+          id?: string
+          settlement_date?: string | null
+          status?: Database["public"]["Enums"]["commission_status"]
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          driver_id?: string | null
+          id?: string
+          settlement_date?: string | null
+          status?: Database["public"]["Enums"]["commission_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "driver_owed_commissions_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "drivers"
             referencedColumns: ["id"]
           },
         ]
@@ -234,6 +349,8 @@ export type Database = {
       drivers: {
         Row: {
           applied_on: string
+          comission_due: number | null
+          current_order: Database["public"]["Enums"]["current_order"] | null
           date_of_birth: string
           driver_license_back: string | null
           driver_license_front: string | null
@@ -254,6 +371,7 @@ export type Database = {
           rating: number | null
           requested_ride_id: string | null
           sex: Database["public"]["Enums"]["sex"]
+          updated_at: string
           user_id: string | null
           verification_status:
             | Database["public"]["Enums"]["driver_status"]
@@ -261,6 +379,8 @@ export type Database = {
         }
         Insert: {
           applied_on?: string
+          comission_due?: number | null
+          current_order?: Database["public"]["Enums"]["current_order"] | null
           date_of_birth: string
           driver_license_back?: string | null
           driver_license_front?: string | null
@@ -281,6 +401,7 @@ export type Database = {
           rating?: number | null
           requested_ride_id?: string | null
           sex: Database["public"]["Enums"]["sex"]
+          updated_at?: string
           user_id?: string | null
           verification_status?:
             | Database["public"]["Enums"]["driver_status"]
@@ -288,6 +409,8 @@ export type Database = {
         }
         Update: {
           applied_on?: string
+          comission_due?: number | null
+          current_order?: Database["public"]["Enums"]["current_order"] | null
           date_of_birth?: string
           driver_license_back?: string | null
           driver_license_front?: string | null
@@ -308,6 +431,7 @@ export type Database = {
           rating?: number | null
           requested_ride_id?: string | null
           sex?: Database["public"]["Enums"]["sex"]
+          updated_at?: string
           user_id?: string | null
           verification_status?:
             | Database["public"]["Enums"]["driver_status"]
@@ -389,7 +513,6 @@ export type Database = {
           status: Database["public"]["Enums"]["notification_status"] | null
           title: string
           user_id: string | null
-          variant: Database["public"]["Enums"]["notification_variants"] | null
         }
         Insert: {
           body?: string
@@ -398,7 +521,6 @@ export type Database = {
           status?: Database["public"]["Enums"]["notification_status"] | null
           title?: string
           user_id?: string | null
-          variant?: Database["public"]["Enums"]["notification_variants"] | null
         }
         Update: {
           body?: string
@@ -407,7 +529,6 @@ export type Database = {
           status?: Database["public"]["Enums"]["notification_status"] | null
           title?: string
           user_id?: string | null
-          variant?: Database["public"]["Enums"]["notification_variants"] | null
         }
         Relationships: [
           {
@@ -547,28 +668,37 @@ export type Database = {
           },
         ]
       }
-      ratings: {
+      platform_owed_commissions: {
         Row: {
+          amount: number
+          created_at: string
+          driver_id: string | null
           id: string
-          rating_value: Database["public"]["Enums"]["rating"] | null
-          ride_id: string
+          settlement_date: string | null
+          status: Database["public"]["Enums"]["commission_status"]
         }
         Insert: {
+          amount: number
+          created_at?: string
+          driver_id?: string | null
           id?: string
-          rating_value?: Database["public"]["Enums"]["rating"] | null
-          ride_id: string
+          settlement_date?: string | null
+          status?: Database["public"]["Enums"]["commission_status"]
         }
         Update: {
+          amount?: number
+          created_at?: string
+          driver_id?: string | null
           id?: string
-          rating_value?: Database["public"]["Enums"]["rating"] | null
-          ride_id?: string
+          settlement_date?: string | null
+          status?: Database["public"]["Enums"]["commission_status"]
         }
         Relationships: [
           {
-            foreignKeyName: "ratings_ride_id_fkey"
-            columns: ["ride_id"]
+            foreignKeyName: "platform_owed_commissions_driver_id_fkey"
+            columns: ["driver_id"]
             isOneToOne: false
-            referencedRelation: "rides"
+            referencedRelation: "drivers"
             referencedColumns: ["id"]
           },
         ]
@@ -577,8 +707,10 @@ export type Database = {
         Row: {
           created_at: string
           customer_id: string | null
+          customer_rating: number | null
           distance: number | null
           driver_id: string | null
+          driver_rating: number | null
           driving_status: Database["public"]["Enums"]["driving_status"] | null
           dropoff_location: unknown | null
           dropoff_time: string | null
@@ -592,8 +724,10 @@ export type Database = {
         Insert: {
           created_at?: string
           customer_id?: string | null
+          customer_rating?: number | null
           distance?: number | null
           driver_id?: string | null
+          driver_rating?: number | null
           driving_status?: Database["public"]["Enums"]["driving_status"] | null
           dropoff_location?: unknown | null
           dropoff_time?: string | null
@@ -607,8 +741,10 @@ export type Database = {
         Update: {
           created_at?: string
           customer_id?: string | null
+          customer_rating?: number | null
           distance?: number | null
           driver_id?: string | null
+          driver_rating?: number | null
           driving_status?: Database["public"]["Enums"]["driving_status"] | null
           dropoff_location?: unknown | null
           dropoff_time?: string | null
@@ -863,6 +999,14 @@ export type Database = {
         }
         Returns: Json
       }
+      get_coordinates: {
+        Args: {
+          row_id: string
+          field_name: string
+          table_name: string
+        }
+        Returns: Json
+      }
       get_drivers_within_radius: {
         Args: {
           center_latitude: number
@@ -872,9 +1016,73 @@ export type Database = {
         }
         Returns: Json
       }
+      get_drivers_within_radius_development: {
+        Args: {
+          center_latitude: number
+          center_longitude: number
+          radius: number
+          trip_type: string
+        }
+        Returns: Json
+      }
+      get_occupied_drivers: {
+        Args: {
+          page_number?: number
+          page_size?: number
+        }
+        Returns: Json
+      }
+      get_online_drivers: {
+        Args: {
+          page_number?: number
+          page_size?: number
+        }
+        Returns: Json
+      }
+      get_paginated_drivers: {
+        Args: {
+          page_number?: number
+          page_size?: number
+        }
+        Returns: Json
+      }
+      get_ride_coordinates:
+        | {
+            Args: {
+              ride_id: string
+            }
+            Returns: Json
+          }
+        | {
+            Args: {
+              ride_id: string
+            }
+            Returns: Json
+          }
+        | {
+            Args: {
+              row_id: string
+              field_name: string
+            }
+            Returns: Json
+          }
       get_ride_details: {
         Args: {
           ride_id: string
+        }
+        Returns: Json
+      }
+      get_unapproved_drivers: {
+        Args: {
+          page_number?: number
+          page_size?: number
+        }
+        Returns: Json
+      }
+      get_unapproved_drivers_dev: {
+        Args: {
+          page_number?: number
+          page_size?: number
         }
         Returns: Json
       }
@@ -886,10 +1094,13 @@ export type Database = {
       }
     }
     Enums: {
+      comment_type: "customer" | "driver"
+      commission_status: "pending" | "paid" | "cancelled"
+      current_order: "ride" | "delivery"
       driver_status:
         | "pending"
         | "approved"
-        | "deactivated"
+        | "suspended"
         | "deleted"
         | "rejected"
       driving_status:
@@ -899,12 +1110,10 @@ export type Database = {
         | "driving_to_destination"
         | "arrived_at_destination"
       notification_status: "pending" | "sent" | "failed"
-      notification_variants: "ride_request" | "cancel_ride"
       payment_methods: "cash" | "card" | "mpesa"
       payment_status: "pending" | "approved" | "rejected"
       phone_payout_method: "mpesa" | "airtel"
       propulsion: "fuel" | "electric"
-      rating: "one" | "two" | "three" | "four" | "five" | "none"
       ride_status:
         | "pending"
         | "accepted"
