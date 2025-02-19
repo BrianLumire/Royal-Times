@@ -76,3 +76,71 @@ export interface Driver {
   action?: string;
   [key: string]: unknown;
 }
+// @/types/YourTypes.ts
+// @/types/DriverTypes.ts
+
+export type CurrentOrder = "ride" | "delivery" | "none";
+export type DriverStatus = "approved" | "suspended" | "pending";
+
+export interface DriverData {
+  id: string;
+  user_id: string | null;
+  applied_on: string;
+  comission_due: number | null;
+  current_order: CurrentOrder | null;
+  date_of_birth: string;
+  driver_license_back: string | null;
+  driver_license_front: string | null;
+  driver_license_number: string | null;
+  driver_license_expiry?: string | null;
+  national_id?: string | null;
+  national_id_front?: string | null;
+  national_id_back?: string | null;
+  verification_status: DriverStatus | null;
+  // Additional optional fields used in the layout:
+  is_online?: boolean;
+  rating?: number;
+  sex?: string;
+  created_at?: string;
+  updated_at?: string;
+  vehicle_id?: string;
+}
+
+export interface VehicleClassData {
+  id: string;
+  name: string;
+  description?: string;
+}
+
+export interface VehicleData {
+  id: string;
+  driver_id: string;
+  license_plate: string | null;
+  license_plate_image: string | null;
+  front_view: string | null;
+  back_view: string | null;
+  left_view: string | null;
+  right_view?: string | null;
+  make?: string | null;
+  model?: string | null;
+  year?: number | string | null;
+  color?: string | null;
+  mileage?: number;
+  registration_date?: string;
+  insurance_validity?: string;
+  propulsion?: string;
+  vehicle_classes: VehicleClassData | null;
+}
+
+export interface UserData {
+  id: string;
+  full_name: string | null;
+  avatar_url: string | null;
+  bio: string | null;
+  email: string | null;
+  phone: string | null;
+  fcm_token: string | null;
+  created_at: string;
+  updated_at: string | null;
+  role: "admin" | "driver" | "customer" | "executive" | "supervisor" | "operator";
+}

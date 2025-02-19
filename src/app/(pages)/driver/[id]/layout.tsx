@@ -6,10 +6,19 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
-import { toast } from "sonner"; // Import toast from sonner
+import { toast } from "sonner";
 
-// Helper to format dates as "Jan 06 2000"
+// Import updated types
+import { 
+  DriverData, 
+  UserData, 
+  VehicleData, 
+  VehicleClassData 
+} from "@/types/DriverTypes";
+
+// Helper function to format dates as "Jan 06, 2000"
 function formatDate(dateStr: string): string {
+  if (!dateStr) return "N/A";
   const date = new Date(dateStr);
   return date.toLocaleDateString("en-US", {
     month: "short",
@@ -20,12 +29,14 @@ function formatDate(dateStr: string): string {
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { id } = useParams();
+  // Ensure we have a string id (if it's an array, take the first)
   const driverId: string = typeof id === "string" ? id : id[0];
   const supabase = createClient();
 
-  const [driver, setDriver] = useState<any>(null);
-  const [user, setUser] = useState<any>(null);
-  const [vehicle, setVehicle] = useState<any>(null);
+  // State for driver, user and vehicle data
+  const [driver, setDriver] = useState<DriverData | null>(null);
+  const [user, setUser] = useState<UserData | null>(null);
+  const [vehicle, setVehicle] = useState<VehicleData | null>(null);
   const [loading, setLoading] = useState(true);
   const [isSuspended, setIsSuspended] = useState(false);
 
@@ -40,10 +51,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           .single();
 
         if (driverError) throw driverError;
-        setDriver(driverData);
+        // Cast driverData to our type (note: user_id may be null per our type)
+        setDriver(driverData as DriverData);
         setIsSuspended(driverData.verification_status === "suspended");
 
-        // Fetch user data
+        // Fetch user data – use non-null assertion since we expect driverData.user_id to be present
         const { data: userData, error: userError } = await supabase
           .from("user_accounts")
           .select("*")
@@ -51,17 +63,17 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           .single();
 
         if (userError) throw userError;
-        setUser(userData);
+        setUser(userData as UserData);
 
-        // Fetch vehicle data
+        // Fetch vehicle data – updated query to select both id and name from vehicle_classes
         const { data: vehicleData, error: vehicleError } = await supabase
           .from("vehicles")
-          .select(`*, vehicle_classes (name)`)
+          .select(`*, vehicle_classes (id, name)`)
           .eq("driver_id", driverData.id)
           .single();
 
         if (vehicleError) throw vehicleError;
-        setVehicle(vehicleData);
+        setVehicle(vehicleData as VehicleData);
 
         setLoading(false);
       } catch (err) {
@@ -84,7 +96,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
       if (updateError) throw updateError;
 
-      setDriver({ ...driver, verification_status: newStatus });
+      // Update driver state with a callback to preserve other fields
+      setDriver((prev) => (prev ? { ...prev, verification_status: newStatus } : prev));
       setIsSuspended(!isSuspended);
       toast.success(
         `Driver ${newStatus === "suspended" ? "suspended" : "unsuspended"} successfully!`
@@ -108,21 +121,21 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <div className="flex justify-end">
             <div
               className={`px-2 py-1 flex items-center justify-center rounded-2xl ${
-                driver.is_online ? "bg-[#CAE3CE]" : "bg-gray-300"
+                driver?.is_online ? "bg-[#CAE3CE]" : "bg-gray-300"
               }`}
             >
               <span
                 className={`text-xs font-sans font-medium ${
-                  driver.is_online ? "text-[#007C0C]" : "text-black"
+                  driver?.is_online ? "text-[#007C0C]" : "text-black"
                 }`}
               >
-                {driver.is_online ? "Online" : "Offline"}
+                {driver?.is_online ? "Online" : "Offline"}
               </span>
             </div>
           </div>
           <div className="flex flex-col items-center">
             <Image
-              src={user.avatar_url || "/driverpic.svg"}
+              src={user?.avatar_url || "/driverpic.svg"}
               alt="Driver profile picture"
               width={50}
               height={50}
@@ -130,14 +143,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             />
             <div className="flex items-center gap-2 mb-2">
               <span className="text-sm md:text-[16px] font-sans font-medium">
-                {user.full_name}
+                {user?.full_name || "Unknown"}
               </span>
               <Image src="/photo-5.svg" alt="Verified badge" width={21} height={21} />
             </div>
             <div className="flex items-center gap-1 pr-2">
               <Image src="/rating.svg" alt="Rating" width={15} height={15} />
               <span className="font-sans text-xs">
-                {driver.rating ? driver.rating.toFixed(1) : "N/A"}
+                {driver?.rating ? driver.rating.toFixed(1) : "N/A"}
               </span>
               <span className="font-sans text-xs underline">50 Reviews</span>
             </div>
@@ -145,115 +158,106 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </div>
 
         {/* Personal Information */}
-         <div className="pb-4">
-                  <h2 className="font-sans mb-2 pb-1 border-b border-gray-300 md:text-sm">
-                    Personal Information
-                  </h2>
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-2">
-                      <Image src="/gender.svg" alt="" width={15} height={15} />
-                      <span className="font-sans text-sm md:text-xs">Gender</span>
-                    </div>
-                    <span className="font-sans text-sm md:text-xs">
-                      {driver.sex}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-2">
-                      <Image src="/date.svg" alt="" width={15} height={15} />
-                      <span className="font-sans text-sm md:text-xs">
-                        Date of Birth
-                      </span>
-                    </div>
-                    <span className="font-sans text-sm md:text-xs">
-                      {formatDate(driver.date_of_birth)}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-2">
-                      <Image src="/date.svg" alt="" width={15} height={15} />
-                      <span className="font-sans text-sm md:text-xs">
-                        Registered On
-                      </span>
-                    </div>
-                    <span className="font-sans text-sm md:text-xs">
-                      {formatDate(user.created_at)}
-                    </span>
-                  </div>
-                </div>
+        <div className="pb-4">
+          <h2 className="font-sans mb-2 pb-1 border-b border-gray-300 md:text-sm">
+            Personal Information
+          </h2>
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <Image src="/gender.svg" alt="Gender" width={15} height={15} />
+              <span className="font-sans text-sm md:text-xs">Gender</span>
+            </div>
+            <span className="font-sans text-sm md:text-xs">
+              {driver?.sex || "Not specified"}
+            </span>
+          </div>
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <Image src="/date.svg" alt="DOB" width={15} height={15} />
+              <span className="font-sans text-sm md:text-xs">Date of Birth</span>
+            </div>
+            <span className="font-sans text-sm md:text-xs">
+              {formatDate(driver?.date_of_birth || "")}
+            </span>
+          </div>
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <Image src="/date.svg" alt="Registered On" width={15} height={15} />
+              <span className="font-sans text-sm md:text-xs">Registered On</span>
+            </div>
+            <span className="font-sans text-sm md:text-xs">
+              {formatDate(user?.created_at || "")}
+            </span>
+          </div>
+        </div>
 
         {/* Contact Information */}
         <div className="pb-4">
-                  <h2 className="font-sans mb-2 pb-1 border-b border-gray-300 md:text-sm">
-                    Contact Information
-                  </h2>
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-2">
-                      <Image src="/mobile.svg" alt="" width={17} height={17} />
-                      <span className="font-sans text-sm md:text-xs">Mobile</span>
-                    </div>
-                    <span className="font-sans text-sm md:text-xs">
-                      {user.phone}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-2">
-                      <Image src="/e-mail.svg" alt="" width={17} height={17} />
-                      <span className="font-sans text-sm md:text-xs">E-mail</span>
-                    </div>
-                    <span className="font-sans text-sm md:text-xs">
-                      {user.email}
-                    </span>
-                  </div>
-                </div>
+          <h2 className="font-sans mb-2 pb-1 border-b border-gray-300 md:text-sm">
+            Contact Information
+          </h2>
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <Image src="/mobile.svg" alt="Mobile" width={17} height={17} />
+              <span className="font-sans text-sm md:text-xs">Mobile</span>
+            </div>
+            <span className="font-sans text-sm md:text-xs">
+              {user?.phone || "N/A"}
+            </span>
+          </div>
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <Image src="/e-mail.svg" alt="E-mail" width={17} height={17} />
+              <span className="font-sans text-sm md:text-xs">E-mail</span>
+            </div>
+            <span className="font-sans text-sm md:text-xs">
+              {user?.email || "N/A"}
+            </span>
+          </div>
+        </div>
 
         {/* Vehicle Information */}
-       <div className="pb-4">
-       
-                 <h2 className="font-sans mb-2 pb-1 border-b border-gray-300 md:text-sm">
-                   Vehicle Information
-                 </h2>
-                 <div className="flex items-center justify-between mb-3">
-                   <div className="flex items-center gap-2">
-                     <Image src="/class.svg" alt="" width={17} height={17} />
-                     <span className="font-sans text-sm md:text-xs">Class</span>
-                   </div>
-                   <span className="font-sans text-sm md:text-xs">
-                   {vehicle?.vehicle_classes?.name || "N/A"}
-                   </span>
-                 </div>
-                 <div className="flex items-center justify-between mb-3">
-                   <div className="flex items-center gap-2">
-                     <Image src="/make.svg" alt="" width={17} height={17} />
-                     <span className="font-sans text-sm md:text-xs">Make</span>
-                   </div>
-                   <span className="font-sans text-sm md:text-xs">
-                     {vehicle.make}
-                   </span>
-                 </div>
-                 <div className="flex items-center justify-between mb-3">
-                   <div className="flex items-center gap-2">
-                     <Image src="/plate.svg" alt="" width={17} height={17} />
-                     <span className="font-sans text-sm md:text-xs">L.Plate</span>
-                   </div>
-                   <span className="font-sans text-sm md:text-xs">
-                     {vehicle.license_plate}
-                   </span>
-                 </div>
-                 <div className="flex items-center justify-between mb-3">
-                   <div className="flex items-center gap-2">
-                     <Image src="/vehicle.svg" alt="" width={17} height={17} />
-                     <span className="font-sans text-sm md:text-xs">
-                       Vehicle Propulsion
-                     </span>
-                   </div>
-                   <span className="font-sans text-sm md:text-xs">
-                     {vehicle.propulsion}
-                   </span>
-                 </div>
-                 
-               </div>
-       
+        <div className="pb-4">
+          <h2 className="font-sans mb-2 pb-1 border-b border-gray-300 md:text-sm">
+            Vehicle Information
+          </h2>
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <Image src="/class.svg" alt="Class" width={17} height={17} />
+              <span className="font-sans text-sm md:text-xs">Class</span>
+            </div>
+            <span className="font-sans text-sm md:text-xs">
+              {vehicle?.vehicle_classes?.name || "N/A"}
+            </span>
+          </div>
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <Image src="/make.svg" alt="Make" width={17} height={17} />
+              <span className="font-sans text-sm md:text-xs">Make</span>
+            </div>
+            <span className="font-sans text-sm md:text-xs">
+              {vehicle?.make || "N/A"}
+            </span>
+          </div>
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <Image src="/plate.svg" alt="L.Plate" width={17} height={17} />
+              <span className="font-sans text-sm md:text-xs">L.Plate</span>
+            </div>
+            <span className="font-sans text-sm md:text-xs">
+              {vehicle?.license_plate || "N/A"}
+            </span>
+          </div>
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <Image src="/vehicle.svg" alt="Propulsion" width={17} height={17} />
+              <span className="font-sans text-sm md:text-xs">Vehicle Propulsion</span>
+            </div>
+            <span className="font-sans text-sm md:text-xs">
+              {vehicle?.propulsion || "N/A"}
+            </span>
+          </div>
+        </div>
 
         {/* Suspend/Unsuspend Button */}
         <button

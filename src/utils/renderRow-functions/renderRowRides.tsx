@@ -3,7 +3,7 @@ import Image from "next/image";
 import React from "react";
 
 interface Ride {
-  id: number;
+  id: string;
   photo: string;
   driver: string;
   customer: string;

@@ -15,7 +15,7 @@ import {
   liveTripsColumns,
   
 } from "@/mockdata/data";
-import Pagination from "@/components/Pagination";
+
 
 const RidePage = () => {
   const [selectedButton, setSelectedButton] = useState("Live Trips");

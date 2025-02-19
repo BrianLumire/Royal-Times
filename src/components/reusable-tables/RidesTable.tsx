@@ -9,7 +9,7 @@ interface Column {
 }
 
 interface Ride {
-  id: number;
+  id: string;
   photo: string;
   driver: string;
   customer: string;
