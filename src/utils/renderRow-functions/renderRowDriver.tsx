@@ -4,7 +4,7 @@ import React from "react";
 import { useRouter } from 'next/navigation';
 
 interface Driver {
-  id: number;
+  id: string;
   photo: string;
   name: string;
   completedrides?: number; // Optional
@@ -205,52 +205,48 @@ export const renderRowDriver = (
         </tr>
       );
 
-    case "Un-approved":
-      return (
-        <tr
-          key={item.id}
-          className="border-b border-gray-300 py-3 hover:bg-[#FFF8F5]"
+  // In renderRowDriver.tsx, within the "Un-approved" case:
+case "Un-approved":
+  return (
+    <tr key={item.id} className="border-b border-gray-300 py-3 hover:bg-[#FFF8F5]">
+      <button
+        className="flex items-center gap-3 font-medium cursor-pointer ml-2 py-3 whitespace-nowrap sm:whitespace-normal"
+        onClick={() => router.push(`/driver/${item.id}`)}
+      >
+        <Image
+          src={item.photo || "/default-avatar.svg"}
+          alt={`${item.name}'s photo`}
+          height={40}
+          width={40}
+          className="object-cover w-10 h-10 rounded-full"
+        />
+        <span className="font-sans text-sm font-medium text-[#1E1E1E]">{item.name}</span>
+      </button>
+      <td className="font-sans pl-2 text-sm font-medium whitespace-nowrap sm:whitespace-normal text-[#1E1E1E]">
+        {item.vehicleclass}
+      </td>
+      <td className="font-sans pl-2 text-sm font-medium whitespace-nowrap sm:whitespace-normal text-[#1E1E1E]">
+        {item.propulsion || "N/A"}
+      </td>
+      <td className="font-sans pl-2 text-sm font-medium whitespace-nowrap sm:whitespace-normal text-[#1E1E1E]">
+        {item.age !== undefined ? item.age : "N/A"}
+      </td>
+      <td className="font-sans pl-3 text-sm font-medium whitespace-nowrap sm:whitespace-normal text-[#1E1E1E]">
+        {item.location || "N/A"}
+      </td>
+      <td className="font-sans pl-1 text-sm font-medium whitespace-nowrap sm:whitespace-normal text-[#1E1E1E]">
+        {item.date}
+      </td>
+      <td className="font-sans pl-2 text-sm font-medium whitespace-nowrap sm:whitespace-normal">
+        <button
+          className="flex items-center px-6 py-1 border-[#F58735] border-2 rounded-[12px] gap-3"
+          onClick={() => router.push(`/${item.id}/driver-approval`)}
         >
-          <button className="flex  items-center gap-3 font-medium cursor-pointer ml-2 py-3 whitespace-nowrap sm:whitespace-normal"
-          onClick={() => router.push(`/driver/${item.id}`)} 
-          >
-            <Image
-              src={item.photo}
-              alt={`${item.name}'s photo`}
-              height={40}
-              width={40}
-              className="object-cover w-10 h-10 rounded-full"
-            />
-            <span className="font-sans text-sm font-medium text-[#1E1E1E]">
-              {item.name}
-            </span>
-          </button>
-          <td className="font-sans pl-2 text-sm font-medium whitespace-nowrap sm:whitespace-normal text-[#1E1E1E]">
-            {item.vehicleclass}
-          </td>
-          <td className="font-sans pl-2  text-sm font-medium whitespace-nowrap sm:whitespace-normal text-[#1E1E1E]">
-            {item.propulsion}
-          </td>
-          <td className="font-sans pl-2 text-sm font-medium whitespace-nowrap sm:whitespace-normal text-[#1E1E1E]">
-            {item.age}
-          </td>
-          <td className="font-sans pl-3 text-sm font-medium whitespace-nowrap sm:whitespace-normal text-[#1E1E1E]">
-            {item.location}
-          </td>
-          <td className="font-sans pl-1  text-sm font-medium whitespace-nowrap sm:whitespace-normal text-[#1E1E1E]">
-            {item.date}
-          </td>
-          <td className="font-sans pl-2 text-sm font-medium whitespace-nowrap sm:whitespace-normal text-[#1E1E1E]">
-  <button
-    className="flex items-center px-4 py-1 border-[#F58735] border-2 rounded-[12px] gap-3"
-    onClick={() => router.push(`/${item.id}/driver-approval`)}  
-  >
-    <span className="font-san text-[#F58735] text-sm font-medium">{item.action}</span>
-  </button>
-</td>
-
-        </tr>
-      );
+          <span className="font-san text-[#F58735] text-sm font-medium">{item.action}</span>
+        </button>
+      </td>
+    </tr>
+  );
 
     case "Inactive":
       return (

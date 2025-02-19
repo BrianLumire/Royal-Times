@@ -9,7 +9,7 @@ interface Column {
 }
 
 interface Driver {
-  id: number;
+  id: string;
   photo: string;
   name: string;
   completedrides?: number; // Optional

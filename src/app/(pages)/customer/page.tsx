@@ -5,6 +5,7 @@ import { CustomerTable } from "@/components/reusable-tables/CustomerTable"; // N
 import { renderRowCustomer } from "@/utils/renderRow-functions/renderRowCustomer";
 import { filterData, FilterCriteria } from "@/utils/filterData";
 import { sortData } from "@/utils/sortData";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import {
   OnlineCustomers,
@@ -22,6 +23,7 @@ import Pagination from "@/components/Pagination";
 const CustomerPage = () => {
   const [selectedButton, setSelectedButton] = useState("Online");
   const [searchTerm, setSearchTerm] = useState("");
+  const router = useRouter();
   const [sortColumn, setSortColumn] = useState<string | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   // Use the exported FilterCriteria type for filters
@@ -137,7 +139,7 @@ const CustomerPage = () => {
             key={selectedButton}
             columns={columns}
             data={sortedData}
-            renderRowCustomer={(item) => renderRowCustomer(item, selectedButton)}
+            renderRowCustomer={(item) => renderRowCustomer(item, selectedButton,router)}
             searchTerm={searchTerm}
             onSearchChange={setSearchTerm}
             onFilterClick={handleFilterClick}
@@ -154,7 +156,7 @@ const CustomerPage = () => {
         )}
       </div>
 
-      <Pagination />
+      
     </div>
   );
 };

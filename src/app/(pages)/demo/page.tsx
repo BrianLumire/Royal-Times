@@ -7,9 +7,9 @@ const Page = () => {
   const supabase = createClient();
 
   async function getUnapprovedDrivers() {
-    const { data, error } = await supabase.rpc("get_online_drivers", {
+    const { data, error } = await supabase.rpc("get_unapproved_drivers", {
       page_number: 1,
-      page_size: 7,
+      page_size: 5,
     });
     if (error) console.error(error);
     else console.log(data);

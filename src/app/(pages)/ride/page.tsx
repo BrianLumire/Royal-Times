@@ -126,7 +126,7 @@ const getTableData = () => {
         )}
       </div>
 
-      <Pagination />
+     
     </div>
   );
 };

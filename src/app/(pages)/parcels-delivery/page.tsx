@@ -126,7 +126,7 @@ const DeliveriesPage = () => {
         )}
       </div>
 
-      <Pagination />
+     
     </div>
   );
 };
