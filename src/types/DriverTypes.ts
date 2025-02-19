@@ -42,9 +42,22 @@ export const transformUnapprovedDriver = (driver: SupabaseDriver): Driver => {
   };
 };
 
+// Define raw data type for Occupied Drivers
+export interface OccupiedDriverRaw {
+  id: string;
+  name: string;
+  photo: string | null;
+  completed_rides: number;
+  rating: number | null;
+  commission_due: number;
+  pending_payouts: number;
+  license_plate: string;
+  current_trip: string | null;
+}
+
 // NEW: Transformation for Occupied Drivers
 // This function maps the raw SQL response for occupied drivers to our UI-friendly Driver interface.
-export const transformOccupiedDriver = (driver: any): Driver => {
+export const transformOccupiedDriver = (driver: OccupiedDriverRaw): Driver => {
   return {
     id: driver.id,
     photo: driver.photo || '/default-photo.svg',
@@ -58,8 +71,22 @@ export const transformOccupiedDriver = (driver: any): Driver => {
   };
 };
 
+// Define raw data type for Online/Free Drivers
+export interface OnlineDriverRaw {
+  id: string;
+  name: string;
+  photo: string | null;
+  completed_rides: number;
+  rating: number | null;
+  commission_due: number;
+  pending_payouts: number;
+  license_plate: string;
+  is_available_for_rides: boolean;
+  is_available_for_deliveries: boolean;
+}
+
 // NEW: Transformation for Online/Free Drivers
-export const transformOnlineDriver = (driver: any): Driver => {
+export const transformOnlineDriver = (driver: OnlineDriverRaw): Driver => {
   // Combine availability fields into an array for the UI.
   const availableFor: string[] = [];
   if (driver.is_available_for_rides) {

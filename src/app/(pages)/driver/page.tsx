@@ -35,9 +35,12 @@ import {
   transformOccupiedDriver,
   transformOnlineDriver,
   DriverResponse,
-  Driver, // <-- Add this import
+  Driver, 
 } from "@/types/DriverTypes";
-
+import {
+  OccupiedDriverResponse,
+  OnlineDriverResponse,
+} from "@/types/TypesDriver";
 // Import PostgrestError for type safety
 import { PostgrestError } from "@supabase/supabase-js";
 
@@ -59,7 +62,7 @@ const DriverPage = () => {
   const [freeDriversData, setFreeDriversData] = useState<Driver[]>([]);
   const [freeTotalCount, setFreeTotalCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
-  const [pageSize] = useState(7); // Ensure this is within allowed limits
+  const [pageSize] = useState(10); // Ensure this is within allowed limits
 
   const supabase = createClient();
 
@@ -128,12 +131,11 @@ const DriverPage = () => {
       const { data, error } = (await supabase.rpc("get_occupied_drivers", {
         page_number: pageNumber,
         page_size: pageSize,
-      })) as unknown as { data: any; error: any };
-
+      })) as unknown as { data: OccupiedDriverResponse; error: PostgrestError | null };
+  
       if (error) {
         console.error("Error fetching occupied drivers:", error);
       } else if (data) {
-        // Transform the raw data using the new transform function
         const transformed = data.drivers.map(transformOccupiedDriver);
         setOccupiedDriversData(transformed);
         setOccupiedTotalCount(data.total_count);
@@ -142,28 +144,29 @@ const DriverPage = () => {
     }
     fetchOccupiedDrivers();
   }, [selectedButton, pageNumber, pageSize, supabase]);
+  
 
-  useEffect(() => {
-    if (selectedButton !== "Free") return;
-    async function fetchOnlineDrivers() {
-      setLoading(true);
-      const { data, error } = (await supabase.rpc("get_online_drivers", {
-        page_number: pageNumber,
-        page_size: pageSize,
-      })) as unknown as { data: any; error: any };
+  // Free (Online) drivers
+useEffect(() => {
+  if (selectedButton !== "Free") return;
+  async function fetchOnlineDrivers() {
+    setLoading(true);
+    const { data, error } = (await supabase.rpc("get_online_drivers", {
+      page_number: pageNumber,
+      page_size: pageSize,
+    })) as unknown as { data: OnlineDriverResponse; error: PostgrestError | null };
 
-      if (error) {
-        console.error("Error fetching online drivers:", error);
-      } else if (data) {
-        const transformed = data.drivers.map(transformOnlineDriver);
-        setFreeDriversData(transformed);
-        setFreeTotalCount(data.total_count);
-      }
-      setLoading(false);
+    if (error) {
+      console.error("Error fetching online drivers:", error);
+    } else if (data) {
+      const transformed = data.drivers.map(transformOnlineDriver);
+      setFreeDriversData(transformed);
+      setFreeTotalCount(data.total_count);
     }
-    fetchOnlineDrivers();
-  }, [selectedButton, pageNumber, pageSize, supabase]);
-
+    setLoading(false);
+  }
+  fetchOnlineDrivers();
+}, [selectedButton, pageNumber, pageSize, supabase]);
 
 
   // Update getTableData to conditionally use Supabase data for un-approved drivers

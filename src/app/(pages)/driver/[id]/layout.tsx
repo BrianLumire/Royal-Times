@@ -48,32 +48,32 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           .select("*")
           .eq("id", driverId)
           .single();
-
+  
         if (driverError) throw driverError;
         // Cast driverData to our type (note: user_id may be null per our type)
         setDriver(driverData as DriverData);
         setIsSuspended(driverData.verification_status === "suspended");
-
+  
         // Fetch user data – use non-null assertion since we expect driverData.user_id to be present
         const { data: userData, error: userError } = await supabase
           .from("user_accounts")
           .select("*")
           .eq("id", driverData.user_id!)
           .single();
-
+  
         if (userError) throw userError;
         setUser(userData as UserData);
-
+  
         // Fetch vehicle data – updated query to select both id and name from vehicle_classes
         const { data: vehicleData, error: vehicleError } = await supabase
           .from("vehicles")
           .select(`*, vehicle_classes (id, name)`)
           .eq("driver_id", driverData.id)
           .single();
-
+  
         if (vehicleError) throw vehicleError;
         setVehicle(vehicleData as VehicleData);
-
+  
         setLoading(false);
       } catch (err) {
         console.error("Error fetching data:", err);
@@ -81,9 +81,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         setLoading(false);
       }
     }
-
-    if (id) fetchData();
-  }, [id, supabase]);
+  
+    if (driverId) {
+      fetchData();
+    }
+  }, [driverId, supabase]);
 
   const handleSuspendDriver = async () => {
     try {
