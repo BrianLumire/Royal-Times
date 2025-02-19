@@ -13,7 +13,6 @@ import {
   DriverData, 
   UserData, 
   VehicleData, 
-  VehicleClassData 
 } from "@/types/DriverTypes";
 
 // Helper function to format dates as "Jan 06, 2000"

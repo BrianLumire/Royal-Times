@@ -1,4 +1,3 @@
-// pages/DriverPage.tsx
 "use client";
 
 import MainCard from "@/components/MainCard";
@@ -11,7 +10,6 @@ import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Pagination from "@/components/Pagination";
-
 
 // Import mockdata for other tabs
 import {
@@ -33,13 +31,13 @@ import {
 
 // Import our new types and transformation helper
 import {
-  
   transformUnapprovedDriver,
   DriverResponse,
-  
   Driver, // <-- Add this import
 } from "@/types/DriverTypes";
 
+// Import PostgrestError for type safety
+import { PostgrestError } from "@supabase/supabase-js";
 
 const DriverPage = () => {
   const [selectedButton, setSelectedButton] = useState("Occupied");
@@ -52,10 +50,9 @@ const DriverPage = () => {
 
   // New state for un-approved drivers integration
   const [unapprovedDriversData, setUnapprovedDriversData] = useState<Driver[]>([]);
-
   const [unapprovedTotalCount, setUnapprovedTotalCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
-  const [pageSize, ] = useState(7); // Ensure this is within allowed limits
+  const [pageSize] = useState(7); // Ensure this is within allowed limits
 
   const supabase = createClient();
 
@@ -102,10 +99,7 @@ const DriverPage = () => {
       const { data, error } = (await supabase.rpc("get_unapproved_drivers", {
         page_number: pageNumber,
         page_size: pageSize,
-      })) as unknown as { data: DriverResponse; error: any };
-      
-      
-      
+      })) as unknown as { data: DriverResponse; error: PostgrestError | null };
 
       if (error) {
         console.error("Error fetching un-approved drivers:", error);
