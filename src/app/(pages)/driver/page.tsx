@@ -13,8 +13,8 @@ import Pagination from "@/components/Pagination";
 
 // Import mockdata for other tabs
 import {
-  occupiedDrivers,
-  freeDrivers,
+  // occupiedDrivers, <- no longer used for un-approved tab
+  // freeDrivers, <- no longer used for un-approved tab
   offlineDrivers,
   // unapprovedDrivers, <- no longer used for un-approved tab
   inactiveDrivers,
@@ -32,6 +32,8 @@ import {
 // Import our new types and transformation helper
 import {
   transformUnapprovedDriver,
+  transformOccupiedDriver,
+  transformOnlineDriver,
   DriverResponse,
   Driver, // <-- Add this import
 } from "@/types/DriverTypes";
@@ -48,9 +50,14 @@ const DriverPage = () => {
   const [filters, setFilters] = useState<FilterCriteria>({});
   const [loading, setLoading] = useState(false);
 
-  // New state for un-approved drivers integration
+  // New state for un-approved and occupied drivers integration
   const [unapprovedDriversData, setUnapprovedDriversData] = useState<Driver[]>([]);
   const [unapprovedTotalCount, setUnapprovedTotalCount] = useState(0);
+  const [occupiedDriversData, setOccupiedDriversData] = useState<Driver[]>([]);
+  const [occupiedTotalCount, setOccupiedTotalCount] = useState(0);
+  // NEW: Free (Online) drivers state
+  const [freeDriversData, setFreeDriversData] = useState<Driver[]>([]);
+  const [freeTotalCount, setFreeTotalCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize] = useState(7); // Ensure this is within allowed limits
 
@@ -113,13 +120,59 @@ const DriverPage = () => {
     fetchUnapprovedDrivers();
   }, [selectedButton, pageNumber, pageSize, supabase]);
 
+  // Fetch occupied drivers when selectedButton is "occupied" or pagination changes
+  useEffect(() => {
+    if (selectedButton !== "Occupied") return;
+    async function fetchOccupiedDrivers() {
+      setLoading(true);
+      const { data, error } = (await supabase.rpc("get_occupied_drivers", {
+        page_number: pageNumber,
+        page_size: pageSize,
+      })) as unknown as { data: any; error: any };
+
+      if (error) {
+        console.error("Error fetching occupied drivers:", error);
+      } else if (data) {
+        // Transform the raw data using the new transform function
+        const transformed = data.drivers.map(transformOccupiedDriver);
+        setOccupiedDriversData(transformed);
+        setOccupiedTotalCount(data.total_count);
+      }
+      setLoading(false);
+    }
+    fetchOccupiedDrivers();
+  }, [selectedButton, pageNumber, pageSize, supabase]);
+
+  useEffect(() => {
+    if (selectedButton !== "Free") return;
+    async function fetchOnlineDrivers() {
+      setLoading(true);
+      const { data, error } = (await supabase.rpc("get_online_drivers", {
+        page_number: pageNumber,
+        page_size: pageSize,
+      })) as unknown as { data: any; error: any };
+
+      if (error) {
+        console.error("Error fetching online drivers:", error);
+      } else if (data) {
+        const transformed = data.drivers.map(transformOnlineDriver);
+        setFreeDriversData(transformed);
+        setFreeTotalCount(data.total_count);
+      }
+      setLoading(false);
+    }
+    fetchOnlineDrivers();
+  }, [selectedButton, pageNumber, pageSize, supabase]);
+
+
+
   // Update getTableData to conditionally use Supabase data for un-approved drivers
   const getTableData = () => {
     switch (selectedButton) {
       case "Occupied":
-        return { data: occupiedDrivers, columns: occupiedColumns };
+        return { data: occupiedDriversData, columns: occupiedColumns };
       case "Free":
-        return { data: freeDrivers, columns: freeColumns };
+        return { data: freeDriversData, columns: freeColumns };
       case "Offline":
         return { data: offlineDrivers, columns: offlineColumns };
       case "Un-approved":
@@ -235,6 +288,22 @@ const DriverPage = () => {
         <Pagination 
           currentPage={pageNumber}
           totalCount={unapprovedTotalCount}
+          pageSize={pageSize}
+          onPageChange={(newPage) => setPageNumber(newPage)}
+        />
+      )}
+      {selectedButton === "Occupied" && (
+        <Pagination 
+          currentPage={pageNumber}
+          totalCount={occupiedTotalCount}
+          pageSize={pageSize}
+          onPageChange={(newPage) => setPageNumber(newPage)}
+        />
+      )}
+       {selectedButton === "Free" && (
+        <Pagination 
+          currentPage={pageNumber}
+          totalCount={freeTotalCount}
           pageSize={pageSize}
           onPageChange={(newPage) => setPageNumber(newPage)}
         />

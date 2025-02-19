@@ -20,31 +20,68 @@ export interface UnapprovedDriver extends SupabaseDriver {
 }
 
 export interface DriverResponse {
-  drivers: SupabaseDriver[]; // Matches the raw response from Supabase
+  drivers: SupabaseDriver[]; // Matches the raw response from Supabase (for un-approved drivers)
   total_count: number;
 }
 
 export const transformUnapprovedDriver = (driver: SupabaseDriver): Driver => {
-    const formattedDate = format(new Date(driver.applied_on), 'MMM dd, yyyy HH:mm');
-  
-    return {
-      ...driver,
-      id: driver.id,
-      photo: driver.photo || '/default-photo.svg',
-      // Convert rating from null to undefined if necessary:
-      rating: driver.rating ?? undefined,
-      vehicleclass: driver.vehicle_class,
-      date: formattedDate,
-      propulsion: "",
-      age: undefined,
-      location: "",
-      action: "Approve",
-    };
-  };
-  
+  const formattedDate = format(new Date(driver.applied_on), 'MMM dd, yyyy HH:mm');
 
-  
-  
+  return {
+    ...driver,
+    id: driver.id,
+    photo: driver.photo || '/default-photo.svg',
+    // Convert rating from null to undefined if necessary:
+    rating: driver.rating ?? undefined,
+    vehicleclass: driver.vehicle_class,
+    date: formattedDate,
+    propulsion: "",
+    age: undefined,
+    location: "",
+    action: "Approve",
+  };
+};
+
+// NEW: Transformation for Occupied Drivers
+// This function maps the raw SQL response for occupied drivers to our UI-friendly Driver interface.
+export const transformOccupiedDriver = (driver: any): Driver => {
+  return {
+    id: driver.id,
+    photo: driver.photo || '/default-photo.svg',
+    name: driver.name,
+    completedrides: driver.completed_rides,           // Map "completed_rides" to "completedrides"
+    rating: driver.rating ?? undefined,
+    commissiondue: driver.commission_due,               // Map "commission_due" to "commissiondue"
+    pendingpayout: driver.pending_payouts?.toString(),    // Convert number to string if needed
+    vehicle: driver.license_plate,                      // Use "license_plate" as vehicle info
+    currentorder: driver.current_trip ? [driver.current_trip] : [], // Wrap current_trip in an array
+  };
+};
+
+// NEW: Transformation for Online/Free Drivers
+export const transformOnlineDriver = (driver: any): Driver => {
+  // Combine availability fields into an array for the UI.
+  const availableFor: string[] = [];
+  if (driver.is_available_for_rides) {
+    availableFor.push("Rides");
+  }
+  if (driver.is_available_for_deliveries) {
+    availableFor.push("Deliveries");
+  }
+
+  return {
+    id: driver.id,
+    photo: driver.photo || '/default-photo.svg',
+    name: driver.name,
+    completedrides: driver.completed_rides,            // Map SQL field "completed_rides"
+    rating: driver.rating ?? undefined,
+    commissiondue: driver.commission_due,                // Map "commission_due"
+    pendingpayout: driver.pending_payouts?.toString(),     // Convert numeric value to string if needed
+    vehicle: driver.license_plate,                       // Use "license_plate" as vehicle info
+    availablefor: availableFor,                          // Derived array from availability booleans
+    currentorder: [],                                    // Free drivers have no active trip
+  };
+};
 
 export interface UnapprovedDriverParams {
   page_number: number;
@@ -52,7 +89,7 @@ export interface UnapprovedDriverParams {
 }
 
 // Define our UI's Driver interface (used in tables)
-// This should match what the transformation function returns.
+// This should match what the transformation functions return.
 export interface Driver {
   id: string;
   photo: string;
@@ -76,9 +113,8 @@ export interface Driver {
   action?: string;
   [key: string]: unknown;
 }
-// @/types/YourTypes.ts
-// @/types/DriverTypes.ts
 
+// @/types/YourTypes.ts for layout.ts for single driver page 
 export type CurrentOrder = "ride" | "delivery" | "none";
 export type DriverStatus = "approved" | "suspended" | "pending";
 

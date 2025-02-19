@@ -27,7 +27,7 @@ const TableControlsDriver: React.FC<TableControlsDriverProps> = ({
 
   // Define filterable tables and their filter options
   const filterableTables: Record<string, { key: string; options: string[] }> = {
-    Occupied: { key: "currentorder", options: ["Deliveries", "Rides"] },
+    Occupied: { key: "currentorder", options: ["delivery", "ride"] },
     Free: { key: "availablefor", options: ["Deliveries", "Rides"] },
     "Un-approved": { key: "propulsion", options: ["Electrical", "Fuel"] },
     Inactive: { key: "reason", options: ["Due to commission", "At rest"] },

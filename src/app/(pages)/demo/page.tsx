@@ -6,8 +6,8 @@ import React from "react";
 const Page = () => {
   const supabase = createClient();
 
-  async function getUnapprovedDrivers() {
-    const { data, error } = await supabase.rpc("get_unapproved_drivers", {
+  async function get_online_drivers() {
+    const { data, error } = await supabase.rpc("get_online_drivers", {
       page_number: 1,
       page_size: 5,
     });
@@ -17,7 +17,7 @@ const Page = () => {
 
   return (
     <div>
-      <Button onClick={getUnapprovedDrivers}>Hello Drivers</Button>
+      <Button onClick={get_online_drivers}>Hello Drivers</Button>
     </div>
   );
 };
