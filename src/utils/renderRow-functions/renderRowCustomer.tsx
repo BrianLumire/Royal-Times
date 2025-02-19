@@ -3,7 +3,7 @@ import React from "react";
 import { useRouter } from 'next/navigation';
 
 interface Customer {
-  id: number;
+  id: string;
   name: string;
   completedrides: number;
   photo: string;

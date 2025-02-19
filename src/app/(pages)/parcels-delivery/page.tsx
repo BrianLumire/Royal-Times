@@ -15,7 +15,7 @@ import {
   cancelledDeliveriesColumns,
   
 } from "@/mockdata/data";
-import Pagination from "@/components/Pagination";
+
 
 const DeliveriesPage = () => {
   const [selectedButton, setSelectedButton] = useState("Live Deliveries");

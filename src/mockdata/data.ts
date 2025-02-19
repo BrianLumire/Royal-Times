@@ -621,7 +621,7 @@ export const uploadedDocuments = [
 // Rides Table
 export const singleCustomerRidesData = [
   {
-    id: 1,
+    id: "1",
     route: "From Archives to Adams",
     tripCost: 1200,
     date: "Dec30, 2024 05:18",
@@ -631,7 +631,7 @@ export const singleCustomerRidesData = [
     status: "Completed",
   },
   {
-    id: 2,
+    id: "2",
     route: "From Westlands to Thika",
     tripCost: 800,
     date: "Dec31, 2024 06:20",
@@ -641,7 +641,7 @@ export const singleCustomerRidesData = [
     status: "Ongoing",
   },
   {
-    id: 3,
+    id: "3",
     route: "From Adams to Archives",
     tripCost: 1000,
     date: "Jan1, 2025 07:00",
@@ -651,7 +651,7 @@ export const singleCustomerRidesData = [
     status: "Cancelled",
   },
   {
-    id: 4,
+    id: "4",
     route: "From Thika to Westlands",
     tripCost: 950,
     date: "Jan2, 2025 08:15",
@@ -675,7 +675,7 @@ export const singleCustomerRidesColumns = [
 // Deliveries Table
 export const singleCustomerDeliveriesData = [
   {
-    id: 1,
+    id: "1",
     route: "From Archives to Adams",
     deliveryCost: 1200,
     date: "Dec30, 2024 05:18",
@@ -685,7 +685,7 @@ export const singleCustomerDeliveriesData = [
     status: "Completed",
   },
   {
-    id: 2,
+    id: "2",
     route: "From Westlands to Thika",
     deliveryCost: 900,
     date: "Dec31, 2024 06:30",
@@ -695,7 +695,7 @@ export const singleCustomerDeliveriesData = [
     status: "Ongoing",
   },
   {
-    id: 3,
+    id: "3",
     route: "From Adams to Westlands",
     deliveryCost: 1100,
     date: "Jan1, 2025 07:45",
@@ -705,7 +705,7 @@ export const singleCustomerDeliveriesData = [
     status: "Completed",
   },
   {
-    id: 4,
+    id: "4",
     route: "From Thika to Adams",
     deliveryCost: 1000,
     date: "Jan2, 2025 08:50",
@@ -729,7 +729,7 @@ export const singleCustomerDeliveriesColumns = [
 // Transactions Table
 export const singleCustomerTransactionsData = [
   {
-    id: 1,
+    id: "1",
     photo: "/driverpic.svg",
     driver: "Jane Smith",
     amount: 1200,
@@ -737,7 +737,7 @@ export const singleCustomerTransactionsData = [
     date: "Dec30, 2024 05:18",
   },
   {
-    id: 2,
+    id: "2",
     photo: "/driverpic.svg",
     driver: "Jane Smith",
     amount: 800,
@@ -745,7 +745,7 @@ export const singleCustomerTransactionsData = [
     date: "Dec31, 2024 06:30",
   },
   {
-    id: 3,
+    id: "3",
     photo: "/driverpic.svg",
     driver: "Jane Smith",
     amount: 950,
@@ -753,7 +753,7 @@ export const singleCustomerTransactionsData = [
     date: "Jan1, 2025 07:45",
   },
   {
-    id: 4,
+    id: "4",
     photo: "/driverpic.svg",
     driver: "Jane Smith",
     amount: 1100,
@@ -772,7 +772,7 @@ export const singleCustomerTransactionsColumns = [
 // Reviews Table
 export const singleCustomerReviewsData = [
   {
-    id: 1,
+    id: "1",
     photo: "/driverpic.svg",
     driver: "Jane Smith",
     tripCost: 1200,
@@ -782,7 +782,7 @@ export const singleCustomerReviewsData = [
     comment: "Customer offered a tip",
   },
   {
-    id: 2,
+    id: "2",
     photo: "/driverpic.svg",
     driver: "Jane Smith",
     tripCost: 800,
@@ -792,7 +792,7 @@ export const singleCustomerReviewsData = [
     comment: "Smooth ride",
   },
   {
-    id: 3,
+    id: "3",
     photo: "/driverpic.svg",
     driver: "Jane Smith",
     tripCost: 950,
@@ -802,7 +802,7 @@ export const singleCustomerReviewsData = [
     comment: "Could be better",
   },
   {
-    id: 4,
+    id: "4",
     photo: "/driverpic.svg",
     driver: "Jane Smith",
     tripCost: 1100,
@@ -823,72 +823,70 @@ export const singleCustomerReviewsColumns = [
 ];
 
 
-  // for  customer Tables
-  export const OnlineCustomers = [
-    {
-      id: 1,
-      name: "John Kamau",
-      completedrides: 80,
-      completeddeliveries: 80,
-      photo: "/driverpic.svg",
-      rating: "4.0",
-      ratingphoto: "/rating.svg",
-      inaride: "Yes",
-    },
-    {
-      id: 2,
-      name: "Alex Yeye",
-      completedrides: 80,
-      completeddeliveries: 80,
-      photo: "/driverpic.svg",
-      rating: "4.0",
-      ratingphoto: "/rating.svg",
-      inaride: "No",
-    },
-    // Add more data here
-  ];
+// for customer Tables
+export const OnlineCustomers = [
+  {
+    id: "1",
+    name: "John Kamau",
+    completedrides: 80,
+    completeddeliveries: 80,
+    photo: "/driverpic.svg",
+    rating: "4.0",
+    ratingphoto: "/rating.svg",
+    inaride: "Yes",
+  },
+  {
+    id: "2",
+    name: "Alex Yeye",
+    completedrides: 80,
+    completeddeliveries: 80,
+    photo: "/driverpic.svg",
+    rating: "4.0",
+    ratingphoto: "/rating.svg",
+    inaride: "No",
+  },
+  // Add more data here
+];
 
-  
 export const OnlineColumnscustomers = [
-    { header: "Name", accessor: "name" },
-    { header: "Completed Rides", accessor: "completedrides" },
-    { header: "Completed Deliveries", accessor: "completeddeliveries" },
-    { header: "Rating", accessor: "rating" },
-    { header: "In a Ride?", accessor: "inaride" },
-  ];
+  { header: "Name", accessor: "name" },
+  { header: "Completed Rides", accessor: "completedrides" },
+  { header: "Completed Deliveries", accessor: "completeddeliveries" },
+  { header: "Rating", accessor: "rating" },
+  { header: "In a Ride?", accessor: "inaride" },
+];
 
-  export const inactiveCustomers = [
-    {
-      id: 3,
-      name: "John Kamau",
-      completedrides: 80,
-      photo: "/driverpic.svg",
-      rating: "4.0",
-      ratingphoto: "/rating.svg",
-      reason: "Account Abandonment",
-      lastseen: "Dec 30,2024 05:48",
-    },
-    {
-      id: 4,
-      name: "Alex Yeye",
-      completedrides: 80,
-      photo: "/driverpic.svg",
-      rating: "4.0",
-      ratingphoto: "/rating.svg",
-      reason: "No booking",
-      lastseen: "Dec 30,2024 05:48",
-    },
-    // Add more data here
-  ];
+export const inactiveCustomers = [
+  {
+    id: "3",
+    name: "John Kamau",
+    completedrides: 80,
+    photo: "/driverpic.svg",
+    rating: "4.0",
+    ratingphoto: "/rating.svg",
+    reason: "Account Abandonment",
+    lastseen: "Dec 30,2024 05:48",
+  },
+  {
+    id: "4",
+    name: "Alex Yeye",
+    completedrides: 80,
+    photo: "/driverpic.svg",
+    rating: "4.0",
+    ratingphoto: "/rating.svg",
+    reason: "No booking",
+    lastseen: "Dec 30,2024 05:48",
+  },
+  // Add more data here
+];
 
-  
 export const inactiveColumnscustomers = [
-    { header: "Name", accessor: "name" },
-    { header: "Completed Rides", accessor: "completedrides" },
-    { header: "Rating", accessor: "rating" },
-    { header: "Last Seen", accessor: "lastseen" },
-    { header: "Reason", accessor: "reason" },
-  ];
+  { header: "Name", accessor: "name" },
+  { header: "Completed Rides", accessor: "completedrides" },
+  { header: "Rating", accessor: "rating" },
+  { header: "Last Seen", accessor: "lastseen" },
+  { header: "Reason", accessor: "reason" },
+];
 
   export const deletedCustomers = [
     {

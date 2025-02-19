@@ -18,7 +18,7 @@ import {
   deletedColumnscustomers,
 } from "@/mockdata/data";
 import Image from "next/image";
-import Pagination from "@/components/Pagination";
+
 
 const CustomerPage = () => {
   const [selectedButton, setSelectedButton] = useState("Online");

@@ -2,7 +2,7 @@ import Image from "next/image";
 import React from "react";
 
 interface Customer {
-    id: number;
+    id: string;
     route?: string;
     tripCost?: number;
     deliveryCost?: number;

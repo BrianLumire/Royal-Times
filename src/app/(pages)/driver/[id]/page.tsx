@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Table from "@/components/reusable-tables/SingleDriverTable";
-import Pagination from "@/components/Pagination";
 import { useRouter, useParams } from "next/navigation";
 import { renderRowSingleDriver } from "@/utils/renderRow-functions/renderRowSingleDriver";
 import {

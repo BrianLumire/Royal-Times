@@ -10,7 +10,7 @@ interface Column {
 
 // Updated Customer interface
 interface Customer {
-  id: number;
+  id: string;
   name: string;
   completedrides: number;
   photo: string;

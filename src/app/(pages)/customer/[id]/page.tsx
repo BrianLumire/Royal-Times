@@ -1,9 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image";
 import Table from "@/components/reusable-tables/SingleCustomerTable";
-import Pagination from "@/components/Pagination";
 import { renderRowSingleCustomer } from "@/utils/renderRow-functions/renderRowSingleCustomer";
 import {
   singleCustomerRidesData,

@@ -33,11 +33,10 @@ import {
 
 // Import our new types and transformation helper
 import {
-  SupabaseDriver,
-  UnapprovedDriver,
+  
   transformUnapprovedDriver,
   DriverResponse,
-  UnapprovedDriverParams,
+  
   Driver, // <-- Add this import
 } from "@/types/DriverTypes";
 
@@ -56,7 +55,7 @@ const DriverPage = () => {
 
   const [unapprovedTotalCount, setUnapprovedTotalCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
-  const [pageSize, setPageSize] = useState(7); // Ensure this is within allowed limits
+  const [pageSize, ] = useState(7); // Ensure this is within allowed limits
 
   const supabase = createClient();
 
