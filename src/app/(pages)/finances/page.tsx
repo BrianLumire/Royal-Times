@@ -424,16 +424,16 @@ const FinancePage = () => {
       {selectedTopButton === "Overview" && (
         <>
           <div className="flex flex-col md:flex-row gap-4 md:justify-between mb-6">
-            <MainCard title="Cumulative Income" value="12,500,000" imageSrc="/live-parcel2.svg" imageBgColor="#FFF3D6" />
-            <MainCard title="Cumulative Driver Revenue" value="2,000,000" imageSrc="/total-trips.svg" imageBgColor="#E5E4FF" />
-            <MainCard title="Pending Payouts" value="10,000,000" imageSrc="/total-rides2.svg" imageBgColor="#D9F7E8" />
-            <MainCard title="Expected Commission Income" value="55,000,000" imageSrc="/total-cancelled.svg" imageBgColor="#FFDED1" />
+            <MainCard title="Cumulative Income" value="12,500,000" imageSrc="/material-symbols_money-bag-rounded.svg" imageBgColor="#E5E4FF" />
+            <MainCard title="Cumulative Driver Revenue" value="2,000,000" imageSrc="/Group.svg" imageBgColor="#FFF3D6" />
+            <MainCard title="Pending Payouts" value="10,000,000" imageSrc="/dashicons_money.svg" imageBgColor="#D9F7E8" />
+            <MainCard title="Expected Commission Income" value="55,000,000" imageSrc="/solar_hand-money-bold (1).svg" imageBgColor="#FFDED1" />
           </div>
 
           <div className="flex flex-col md:flex-row gap-4 md:justify-between mb-6">
-            <MainCard title="Spent On Promotions" value="2,000,000" imageSrc="/total-trips.svg" imageBgColor="#E5E4FF" />
-            <MainCard title="Total Rides Income" value="1,500,000" imageSrc="/live-parcel2.svg" imageBgColor="#FFF3D6" />
-            <MainCard title="Total Parcel Income" value="10,000,000" imageSrc="/total-rides2.svg" imageBgColor="#D9F7E8" />
+            <MainCard title="Spent On Promotions" value="2,000,000" imageSrc="/majesticons_money-hand.svg" imageBgColor="#E5E4FF" />
+            <MainCard title="Total Rides Income" value="1,500,000" imageSrc="/solar_money-bag-bold.svg" imageBgColor="#FFF3D6" />
+            <MainCard title="Total Parcel Income" value="10,000,000" imageSrc="/carbon_delivery-parcel.svg" imageBgColor="#D9F7E8" />
             <div className="hidden md:block w-[calc(25%-1rem)]"></div>
           </div>
 
@@ -649,10 +649,10 @@ const FinancePage = () => {
       {selectedTopButton === "Commissions & Payouts" && (
         <>
           <div className="flex flex-col md:flex-row gap-4 md:justify-between mb-6">
-            <MainCard title="Submitted Commission" value="2,000,000" imageSrc="/live-parcel2.svg" imageBgColor="#FFF3D6" />
-            <MainCard title="Dispatched Payouts" value="12,500,000" imageSrc="/total-trips.svg" imageBgColor="#E5E4FF" />
-            <MainCard title="Expected Commission" value="10,000,000" imageSrc="/total-rides2.svg" imageBgColor="#D9F7E8" />
-            <MainCard title="Pending Payouts" value="500,000" imageSrc="/total-rides2.svg" imageBgColor="#D9F7E8" />
+            <MainCard title="Submitted Commission" value="2,000,000" imageSrc="/material-symbols_money-bag-rounded.svg" imageBgColor="#E5E4FF" />
+            <MainCard title="Dispatched Payouts" value="12,500,000" imageSrc="/solar_hand-money-bold (2).svg" imageBgColor="#FFF3D6" />
+            <MainCard title="Expected Commission" value="10,000,000" imageSrc="/solar_hand-money-bold.svg" imageBgColor="#D9F7E8" />
+            <MainCard title="Pending Payouts" value="500,000" imageSrc="/Vector (2).svg" imageBgColor="#FFDED1" />
           </div>
 
       {/* Hidden file input for "This Device" export */}
@@ -931,10 +931,10 @@ const FinancePage = () => {
       {selectedTopButton === "Promotions" && (
         <>
           <div className="flex flex-col md:flex-row gap-4 md:justify-between mb-6">
-            <MainCard title="Submitted Commission" value="2,000,000" imageSrc="/live-parcel2.svg" imageBgColor="#FFF3D6" />
-            <MainCard title="Dispatched Payouts" value="12,500,000" imageSrc="/total-trips.svg" imageBgColor="#E5E4FF" />
-            <MainCard title="Expected Commission" value="10,000,000" imageSrc="/total-rides2.svg" imageBgColor="#D9F7E8" />
-            <MainCard title="Pending Payouts" value="500,000" imageSrc="/total-rides2.svg" imageBgColor="#D9F7E8" />
+            <MainCard title="Submitted Commission" value="58,000" imageSrc="/lsicon_badge-promotion-filled.svg" imageBgColor="#E5E4FF" />
+            <MainCard title="Dispatched Payouts" value="4" imageSrc="/Group (1).svg" imageBgColor="#FFF3D6" />
+            <MainCard title="Expected Commission" value="7,004" imageSrc="/Vector (1).svg" imageBgColor="#D9F7E8" />
+            <MainCard title="Pending Payouts" value="6,540" imageSrc="/ic_round-discount.svg" imageBgColor="#FFDED1" />
           </div>
 
           <div className="flex flex-col md:flex-row gap-4 md:justify-between items-center mb-6">
